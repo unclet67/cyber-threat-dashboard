@@ -17,6 +17,9 @@ concurrency:
 
 jobs:
   sync:
+    # Only run on main — the github-pages environment rejects deployments from other
+    # branches, so a scheduled/dispatched run on a feature branch would fail fast.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
