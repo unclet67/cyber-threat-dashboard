@@ -55,6 +55,17 @@
     .status{font-size:12px;color:var(--muted);margin-left:auto}.hidden{display:none!important}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}.footer{margin-top:24px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:16px}.warn-box{background:rgba(255,211,110,.09);border:1px solid rgba(255,211,110,.35);border-radius:16px;padding:12px;margin:12px 0;color:#ffe7ad;font-size:13px}.source-list{columns:2;column-gap:24px}.source-list li{break-inside:avoid;margin:0 0 8px}
     @media(max-width:1100px){.grid{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.news-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:720px){.grid,.news-grid{grid-template-columns:1fr}.controls{position:static}.source-list{columns:1}.titlebar{display:block}.updated{display:inline-block;margin-top:12px}}
     @media print{body{background:#fff;color:#111}.card,.controls,.table-wrap,.news-card,.small-card{box-shadow:none;background:#fff;color:#111}.controls{display:none}a{color:#0645ad}.source-list{columns:1}}
+    tr.clickable{cursor:pointer}tr.clickable:hover td{background:rgba(121,183,255,.08)}
+    .cw-overlay{position:fixed;inset:0;z-index:50;background:rgba(4,7,14,.66);display:flex;align-items:flex-start;justify-content:center;padding:5vh 16px;overflow:auto}
+    .cw-dialog{position:relative;width:min(820px,100%);background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 22px 18px}
+    .cw-close{position:absolute;top:10px;right:12px;background:transparent;border:none;color:var(--muted);font-size:26px;line-height:1;cursor:pointer;padding:2px 8px}
+    .cw-close:hover{color:var(--ink)}
+    .cw-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 30px 4px 0}
+    .cw-head .flag{font-size:30px}.cw-name{font-size:22px;font-weight:800}
+    .cw-prov{display:grid;grid-template-columns:170px 1fr;gap:6px 14px;margin:14px 0;font-size:13.5px}
+    .cw-prov .p{color:var(--accent);font-weight:700}
+    .cw-lex{font-size:12px;color:var(--muted);margin:2px 0 0}
+    .cw-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
   </style>
 </head>
 <body>
@@ -75,6 +86,7 @@
       <span class="tab active" data-tab="overview">Overview</span>
       <span class="tab" data-tab="news">Recent News</span>
       <span class="tab" data-tab="actors">APT / Actor Catalog</span>
+      <span class="tab" data-tab="crosswalk">Name Crosswalk</span>
       <span class="tab" data-tab="kev">KEV (Exploited)</span>
       <span class="tab" data-tab="sources">Sources & Caveats</span>
     </div>
@@ -120,6 +132,17 @@
     <h2>APT / Threat Actor Catalog</h2>
     <p class="section-note">The catalog attempts to live-load all CN/RU/IR/KP country-tagged actors from MISP Galaxy Threat Actor and Microsoft Activity Group data. If live sources fail, it displays the built-in curated fallback list.</p>
     <div class="table-wrap"><table id="actorTable"><thead><tr><th>Country</th><th>Actor / Group</th><th>Aliases / Vendor Names</th><th>Notes</th><th>Source</th></tr></thead><tbody></tbody></table></div>
+    <p class="section-note" style="margin-top:8px">Tip: click any actor row to open its <strong>name crosswalk</strong> — every vendor's name for that actor.</p>
+  </section>
+
+  <section id="crosswalkPanel" class="hidden">
+    <h2>Threat Actor Name Crosswalk</h2>
+    <p class="section-note">Answer one question fast: <em>"this vendor calls the actor X — what does everyone else call it?"</em> Search a name or alias below; each row maps the actor across vendor naming schemes (derived from the loaded catalog + the provider conventions). Click a row for the full breakdown.</p>
+    <div class="table-wrap"><table id="crosswalkTable"><thead><tr><th>Actor</th><th>Providers</th><th>Origin</th><th>Other names &amp; aliases</th></tr></thead><tbody></tbody></table></div>
+    <div class="card" style="margin-top:16px">
+      <h3>Provider naming conventions</h3>
+      <div class="side-list" id="crosswalkLegend"></div>
+    </div>
   </section>
 
   <section id="kevPanel" class="hidden">
@@ -172,6 +195,13 @@
     Created as a standalone local dashboard. Open this file in a browser; internet access is required only for live news and live actor refresh. Built-in fallback data remains available offline.
   </div>
 </main>
+
+<div id="crosswalkModal" class="cw-overlay hidden">
+  <div class="cw-dialog" role="dialog" aria-modal="true" aria-labelledby="cwTitle">
+    <button class="cw-close" id="cwClose" aria-label="Close">&times;</button>
+    <div id="cwBody"></div>
+  </div>
+</div>
 <script>
 let COUNTRIES={  // inline fallback; canonical config in data/sources.json (loaded by loadSources)
   CN:{name:'China',flag:'🇨🇳',short:'PRC',color:'CN',terms:['China','PRC','Chinese','Beijing','PLA','MSS','Salt Typhoon','Volt Typhoon','Flax Typhoon','APT41','APT40','Mustang Panda','Storm-0558'],focus:'Telecom, critical infrastructure, strategic espionage, IP theft, Taiwan/US targeting, influence activity.'},
@@ -370,6 +400,7 @@ function renderActors(){
     const tr=document.createElement('tr');
     const refs=(a.refs||[]).slice(0,2).map((r,i)=>`<a href="${r}" target="_blank" rel="noreferrer">ref ${i+1}</a>`).join(' ');
     tr.innerHTML=`<td><span class="pill ${a.c}">${COUNTRIES[a.c].flag} ${COUNTRIES[a.c].name}</span></td><td><div class="actor-name">${escapeHtml(a.n)}</div></td><td class="aliases">${(a.a||[]).slice(0,18).map(escapeHtml).join(', ')||'<span class="muted">—</span>'}</td><td>${escapeHtml((a.d||'').slice(0,360))}${a.d&&a.d.length>360?'…':''}</td><td>${escapeHtml(a.source||'')}${refs?'<br>'+refs:''}</td>`;
+    tr.className='clickable'; tr.title='Open name crosswalk'; tr.addEventListener('click',()=>openCrosswalk(a));
     tbody.appendChild(tr);
   }
 }
@@ -593,12 +624,72 @@ function renderKev(){
     tbody.appendChild(tr);
   }
 }
-function renderAll(){renderCards(); renderSnapshot(); renderActors(); renderNews(); renderFeedHealth(); renderKev(); const pm=byId('newsSource').value==='prebuilt'&&prebuiltMeta&&prebuiltMeta.generated; byId('updatedStamp').textContent=pm?('Feed updated '+relTime(prebuiltMeta.generated)):('Last rendered: '+new Date().toLocaleString());}
+// ---- Threat Actor Name Crosswalk: derived live from the loaded catalog + provider conventions ----
+let CROSSWALK={providers:[
+  {name:'Microsoft',lexicon:'Weather + nation: Typhoon=China, Blizzard=Russia, Sandstorm=Iran, Sleet=North Korea; Storm-#### emerging.',suffixes:['Typhoon','Blizzard','Sandstorm','Sleet','Tempest'],prefixes:['Storm-','DEV-'],names:['Barium','Strontium','Phosphorus','Nobelium','Zinc','Thallium','Hafnium','Mercury']},
+  {name:'CrowdStrike',lexicon:'Animal = sponsor: Panda=China, Bear=Russia, Kitten=Iran, Chollima=North Korea, Spider=eCrime.',suffixes:['Panda','Bear','Kitten','Chollima','Spider','Jackal']},
+  {name:'Mandiant',lexicon:'APT##, FIN##, UNC####, TEMP.*',regex:['^APT[ -]?\\d+$','^FIN\\d+$','^UNC\\d+','^TEMP\\.']},
+  {name:'MITRE ATT&CK',lexicon:'G#### group IDs.',regex:['^G\\d{3,4}$']},
+  {name:'Secureworks',lexicon:'BRONZE/IRON/GOLD/COBALT + word; TG-####.',prefixes:['BRONZE ','IRON ','GOLD ','COBALT ','TG-']},
+  {name:'Palo Alto Unit 42',lexicon:'Constellations: *Taurus, *Ursa.',suffixes:['Taurus','Ursa']},
+  {name:'Recorded Future',lexicon:'TAG-## and color clusters.',prefixes:['TAG-']}
+]};
+async function loadCrosswalk(){
+  try{ const r=await fetch('data/crosswalk.json?_='+Date.now(),{cache:'no-store'}); if(r.ok){ const d=await r.json(); if(d&&Array.isArray(d.providers)&&d.providers.length) CROSSWALK=d; } }catch(e){}
+  renderCrosswalkLegend(); renderCrosswalk();
+}
+function classifyProvider(tok){
+  const t=String(tok||'').trim(); const tl=t.toLowerCase();
+  for(const p of CROSSWALK.providers){
+    if(p.regex&&p.regex.some(r=>new RegExp(r,'i').test(t))) return p.name;
+    if(p.prefixes&&p.prefixes.some(pre=>tl.startsWith(pre.toLowerCase()))) return p.name;
+    if(p.suffixes&&p.suffixes.some(s=>tl===s.toLowerCase()||tl.endsWith(' '+s.toLowerCase()))) return p.name;
+    if(p.names&&p.names.some(n=>n.toLowerCase()===tl)) return p.name;
+  }
+  return 'Common / other';
+}
+function crosswalkGroups(actor){
+  const names=[actor.n,...(actor.a||[])].filter(Boolean);
+  const order=[...CROSSWALK.providers.map(p=>p.name),'Common / other'];
+  const map=new Map(order.map(o=>[o,[]])); const seen=new Set();
+  for(const nm of names){ const key=nm.toLowerCase(); if(seen.has(key))continue; seen.add(key); const prov=classifyProvider(nm); (map.get(prov)||map.get('Common / other')).push(nm); }
+  return order.filter(o=>map.get(o).length).map(o=>({provider:o,names:map.get(o),lexicon:(CROSSWALK.providers.find(p=>p.name===o)||{}).lexicon||''}));
+}
+function openCrosswalk(actor){
+  const c=COUNTRIES[actor.c]||{flag:'',name:actor.c}; const groups=crosswalkGroups(actor);
+  const rows=groups.map(g=>`<div class="p">${escapeHtml(g.provider)}</div><div>${g.names.map(escapeHtml).join(', ')}${g.lexicon?`<div class="cw-lex">${escapeHtml(g.lexicon)}</div>`:''}</div>`).join('');
+  byId('cwBody').innerHTML=`<div class="cw-head"><span class="flag">${c.flag}</span><span class="cw-name" id="cwTitle">${escapeHtml(actor.n)}</span><span class="pill ${actor.c}">${escapeHtml(c.name)}</span></div>`
+    +(actor.d?`<p class="section-note">${escapeHtml(actor.d)}</p>`:'')
+    +`<div class="cw-prov">${rows}</div>`
+    +`<div class="cw-actions"><button id="cwNews">📰 News mentioning ${escapeHtml(actor.n)}</button>${(actor.refs&&actor.refs[0])?`<a class="tab" href="${actor.refs[0]}" target="_blank" rel="noreferrer">Source ↗</a>`:''}<a class="tab" href="https://attack.mitre.org/groups/" target="_blank" rel="noreferrer">MITRE ATT&amp;CK ↗</a></div>`;
+  byId('cwNews').addEventListener('click',()=>{ byId('search').value=actor.n; byId('countryFilter').value='ALL'; closeCrosswalk(); activate('news'); renderAll(); });
+  byId('crosswalkModal').classList.remove('hidden');
+}
+function closeCrosswalk(){ byId('crosswalkModal').classList.add('hidden'); }
+function renderCrosswalkLegend(){
+  const el=byId('crosswalkLegend'); if(!el) return; el.innerHTML='';
+  for(const p of CROSSWALK.providers){ const d=document.createElement('div'); d.className='small-card'; d.innerHTML=`<h3>${escapeHtml(p.name)}</h3><p>${escapeHtml(p.lexicon||'')}</p>`; el.appendChild(d); }
+}
+function renderCrosswalk(){
+  const table=byId('crosswalkTable'); if(!table) return; const tbody=table.querySelector('tbody'); tbody.innerHTML='';
+  const q=byId('search').value.toLowerCase();
+  const list=actors.filter(a=>{ if(!q) return true; return [a.n,(a.a||[]).join(' '),a.d,COUNTRIES[a.c]?.name].join(' ').toLowerCase().includes(q); });
+  for(const a of list){
+    const provs=crosswalkGroups(a).filter(g=>g.provider!=='Common / other').map(g=>g.provider);
+    const c=COUNTRIES[a.c]||{flag:'',name:a.c};
+    const tr=document.createElement('tr'); tr.className='clickable'; tr.title='Open name crosswalk';
+    tr.innerHTML=`<td><div class="actor-name">${escapeHtml(a.n)}</div></td><td>${provs.map(escapeHtml).join(', ')||'<span class="muted">—</span>'}</td><td><span class="pill ${a.c}">${c.flag} ${escapeHtml(c.name)}</span></td><td class="aliases">${(a.a||[]).slice(0,14).map(escapeHtml).join(', ')||'—'}</td>`;
+    tr.addEventListener('click',()=>openCrosswalk(a));
+    tbody.appendChild(tr);
+  }
+}
+function renderAll(){renderCards(); renderSnapshot(); renderActors(); renderNews(); renderFeedHealth(); renderKev(); renderCrosswalk(); const pm=byId('newsSource').value==='prebuilt'&&prebuiltMeta&&prebuiltMeta.generated; byId('updatedStamp').textContent=pm?('Feed updated '+relTime(prebuiltMeta.generated)):('Last rendered: '+new Date().toLocaleString());}
 function activate(tab){
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));
   byId('overviewPanel').classList.toggle('hidden',tab!=='overview');
   byId('newsPanel').classList.toggle('hidden',tab!=='news');
   byId('actorsPanel').classList.toggle('hidden',tab!=='actors');
+  byId('crosswalkPanel').classList.toggle('hidden',tab!=='crosswalk');
   byId('kevPanel').classList.toggle('hidden',tab!=='kev');
   byId('sourcesPanel').classList.toggle('hidden',tab!=='sources');
 }
@@ -671,6 +762,11 @@ loadSources().then(()=>{
 });
 // Load the CISA KEV catalog (independent of country config).
 loadKev();
+loadCrosswalk();
+// Crosswalk modal close: button, backdrop click, Escape.
+byId('cwClose').addEventListener('click',closeCrosswalk);
+byId('crosswalkModal').addEventListener('click',e=>{ if(e.target===byId('crosswalkModal')) closeCrosswalk(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeCrosswalk(); });
 </script>
 </body>
 </html>

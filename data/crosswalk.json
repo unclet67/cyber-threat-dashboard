@@ -1,0 +1,43 @@
+{
+  "generated": null,
+  "source": "Curated provider naming conventions. Actor cross-references are derived live from the loaded MISP Galaxy + curated Big 4 catalog.",
+  "providers": [
+    {
+      "name": "Microsoft",
+      "lexicon": "Weather + nation-state: Typhoon = China, Blizzard = Russia, Sandstorm = Iran, Sleet = North Korea. Storm-#### marks emerging/unattributed clusters; the legacy scheme used chemical elements (e.g., Strontium, Phosphorus).",
+      "suffixes": ["Typhoon", "Blizzard", "Sandstorm", "Sleet", "Tempest", "Hail", "Cyclone", "Tsunami", "Dust", "Flood", "Hurricane", "Rain", "Monsoon"],
+      "prefixes": ["Storm-", "DEV-"],
+      "names": ["Barium", "Strontium", "Phosphorus", "Nobelium", "Zinc", "Thallium", "Manganese", "Holmium", "Mercury", "Hafnium", "Krypton", "Iridium", "Bismuth", "Cadmium", "Americium", "Rubidium", "Potassium"]
+    },
+    {
+      "name": "CrowdStrike",
+      "lexicon": "Animal denotes the suspected sponsor: Panda = China, Bear = Russia, Kitten = Iran, Chollima = North Korea, Spider = eCrime, Jackal = hacktivist.",
+      "suffixes": ["Panda", "Bear", "Kitten", "Chollima", "Spider", "Jackal", "Buffalo", "Tiger", "Leopard", "Crane", "Lynx", "Ocelot"]
+    },
+    {
+      "name": "Mandiant",
+      "lexicon": "Numbered clusters: APT## (state-nexus), FIN## (financially motivated), UNC#### (uncategorized), TEMP.* (temporary).",
+      "regex": ["^APT[ -]?\\d+$", "^FIN\\d+$", "^UNC\\d+", "^TEMP\\."]
+    },
+    {
+      "name": "MITRE ATT&CK",
+      "lexicon": "G#### group identifiers, mapped to a common name and aliases.",
+      "regex": ["^G\\d{3,4}$"]
+    },
+    {
+      "name": "Secureworks",
+      "lexicon": "Metal + word: BRONZE / IRON / GOLD / COBALT (e.g., BRONZE MOHAWK); older Threat Group IDs use TG-####.",
+      "prefixes": ["BRONZE ", "IRON ", "GOLD ", "COBALT ", "TG-"]
+    },
+    {
+      "name": "Palo Alto Unit 42",
+      "lexicon": "Constellations / zodiac: *Taurus, Pensive Ursa, etc.",
+      "suffixes": ["Taurus", "Ursa"]
+    },
+    {
+      "name": "Recorded Future",
+      "lexicon": "TAG-## activity groups and color-coded clusters.",
+      "prefixes": ["TAG-"]
+    }
+  ]
+}

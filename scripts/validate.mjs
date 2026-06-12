@@ -77,6 +77,20 @@ try {
   fail('kev.json schema: ' + e.message);
 }
 
+// 5. data/crosswalk.json schema (provider naming-convention reference).
+try {
+  const cw = JSON.parse(readFileSync('data/crosswalk.json', 'utf8'));
+  if (!Array.isArray(cw.providers) || !cw.providers.length) throw new Error('"providers" empty or not an array');
+  cw.providers.forEach((p, i) => {
+    if (!p.name) throw new Error(`provider ${i} missing "name"`);
+    if (!p.lexicon) throw new Error(`provider ${i} missing "lexicon"`);
+    (p.regex || []).forEach(r => new RegExp(r)); // throws if invalid
+  });
+  ok(`data/crosswalk.json valid (${cw.providers.length} providers)`);
+} catch (e) {
+  fail('data/crosswalk.json schema: ' + e.message);
+}
+
 if (failures) {
   console.error(`\n${failures} check(s) failed`);
   process.exit(1);
