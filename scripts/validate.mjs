@@ -91,6 +91,24 @@ try {
   fail('data/crosswalk.json schema: ' + e.message);
 }
 
+// 6. data/actor-cves.json schema (curated actor -> known exploited CVEs).
+try {
+  const ac = JSON.parse(readFileSync('data/actor-cves.json', 'utf8'));
+  if (!Array.isArray(ac.actors) || !ac.actors.length) throw new Error('"actors" empty or not an array');
+  let cveCount = 0;
+  ac.actors.forEach((a, i) => {
+    if (!Array.isArray(a.names) || !a.names.length) throw new Error(`actor ${i} has no "names"`);
+    if (!Array.isArray(a.cves) || !a.cves.length) throw new Error(`actor ${i} has no "cves"`);
+    a.cves.forEach((v, j) => {
+      if (!/^CVE-\d{4}-\d{4,}$/.test(v.id || '')) throw new Error(`actor ${i} cve ${j} bad id "${v.id}"`);
+      cveCount++;
+    });
+  });
+  ok(`data/actor-cves.json valid (${ac.actors.length} actors, ${cveCount} CVE mappings)`);
+} catch (e) {
+  fail('data/actor-cves.json schema: ' + e.message);
+}
+
 if (failures) {
   console.error(`\n${failures} check(s) failed`);
   process.exit(1);
