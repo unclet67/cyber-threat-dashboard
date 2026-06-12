@@ -51,6 +51,7 @@
     </div>
     <button class="primary" id="refreshNews">Refresh live news</button>
     <button id="refreshActors">Refresh APT catalog</button>
+    <button id="copyBrief" title="Copy the current (filtered) news as a Markdown brief">📋 Copy brief</button>
     <select id="countryFilter" title="Country filter">
       <option value="ALL">All countries</option><option value="CN">China</option><option value="RU">Russia</option><option value="IR">Iran</option><option value="KP">North Korea</option>
     </select>
@@ -572,7 +573,52 @@ function activate(tab){
   byId('sourcesPanel').classList.toggle('hidden',tab!=='sources');
 }
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>activate(t.dataset.tab)));
+// Build a dated, country-grouped Markdown brief from the current (filtered) news.
+function buildBrief(){
+  const matched=news.filter(newsMatches);
+  const byKey=new Map();
+  for(const n of matched){ const k=n.url||n.title; if(!byKey.has(k)) byKey.set(k,{item:n,countries:new Set()}); if(COUNTRIES[n.c]) byKey.get(k).countries.add(n.c); }
+  const groups=[...byKey.values()];
+  const days=byId('timespan').value, cf=byId('countryFilter').value, q=byId('search').value.trim();
+  const today=new Date().toISOString().slice(0,10);
+  let md=`# Big 4 Cyber & IW Threat Brief — ${today}\n\n_Lookback: ${days} days`;
+  if(cf!=='ALL') md+=` · ${COUNTRIES[cf]?COUNTRIES[cf].name:cf}`;
+  if(q) md+=` · filter: "${q}"`;
+  md+=`_\n\n`;
+  let any=false;
+  for(const code of Object.keys(COUNTRIES)){
+    if(cf!=='ALL'&&cf!==code) continue;
+    const inC=groups.filter(g=>g.countries.has(code));
+    if(!inC.length) continue;
+    any=true;
+    inC.sort((a,b)=>String(b.item.seendate||'').localeCompare(String(a.item.seendate||'')));
+    md+=`## ${COUNTRIES[code].flag} ${COUNTRIES[code].name} (${inC.length})\n\n`;
+    for(const g of inC){
+      const n=g.item; const date=n.seendate?String(n.seendate).replace(/(\d{4})(\d{2})(\d{2}).*/,'$1-$2-$3'):'';
+      const also=[...g.countries].filter(c=>c!==code).map(c=>COUNTRIES[c]?COUNTRIES[c].short:c);
+      const title=(n.title||'Untitled').replace(/[\[\]]/g,'');
+      md+=`- [${title}](${n.url}) — ${n.sourceCountry||n.domain||'source'}${date?' ('+date+')':''}${also.length?' _[also: '+also.join(', ')+']_':''}\n`;
+    }
+    md+=`\n`;
+  }
+  if(!any) md+=`_No items match the current filters._\n`;
+  md+=`\n---\n_Generated from the Big 4 Cyber & IW Threat Dashboard. Attribution is probabilistic; treat as a naming/triage index, not a legal determination._\n`;
+  return md;
+}
+async function copyBrief(){
+  const md=buildBrief();
+  try{
+    await navigator.clipboard.writeText(md);
+    setStatus('Brief copied to clipboard as Markdown');
+  }catch(e){
+    const ta=document.createElement('textarea'); ta.value=md; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.focus(); ta.select();
+    let okCopy=false; try{ okCopy=document.execCommand('copy'); }catch(_){}
+    document.body.removeChild(ta);
+    setStatus(okCopy?'Brief copied to clipboard':'Copy blocked — brief logged to console'); if(!okCopy) console.log(md);
+  }
+}
 byId('refreshNews').addEventListener('click',refreshNews); byId('refreshActors').addEventListener('click',refreshActors);
+byId('copyBrief').addEventListener('click',copyBrief);
 byId('countryFilter').addEventListener('change',renderAll); byId('timespan').addEventListener('change',refreshNews); byId('search').addEventListener('input',renderAll);
 byId('newsSource').addEventListener('change',refreshNews);
 renderAll();

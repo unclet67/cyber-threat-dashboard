@@ -29,7 +29,11 @@ designed for COPC-style operational awareness and quick research triage, and it
     [MISP Galaxy](https://github.com/MISP/misp-galaxy) Threat Actor and Microsoft
     Activity Group data, merged with the built-in curated list.
 - **APT / Actor catalog** with aliases, vendor naming, notes, and source links.
-- **Filtering & search** by country and free text (actor names, aliases, news).
+- **KEV tab** — the most recently added [CISA Known Exploited Vulnerabilities](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+  (CVE, vendor/product, due date, ransomware flag). Collected hourly into `kev.json`.
+- **Copy brief** — one click exports the current (filtered) news as a dated,
+  country-grouped Markdown brief, ready to paste into a daily/weekly writeup.
+- **Filtering & search** by country and free text (actor names, aliases, news, CVEs).
 - **Offline fallback** — a curated catalog of Big 4 actors ships in the page, so
   the dashboard remains useful with no network access.
 - **Print-friendly** styling for briefs.
