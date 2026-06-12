@@ -104,7 +104,7 @@
           <li><a href="https://www.cisa.gov/news-events/cybersecurity-advisories" target="_blank" rel="noreferrer">CISA Cybersecurity Advisories</a> — U.S. government advisories.</li>
         </ul>
         <h3>Google News &amp; cyber news feeds (RSS)</h3>
-        <p class="section-note"><strong>Google News</strong> runs the same per-country cyber query (see Overview) against the Google News RSS search endpoint, aggregating thousands of outlets with a <span class="mono">when:</span> recency window tied to the lookback selector. The <strong>Cyber news feeds</strong> source option reads RSS/Atom directly from The Hacker News, BleepingComputer, Krebs on Security, CyberScoop, SecurityWeek, Dark Reading, The Record (Recorded Future), Help Net Security, The Register, WIRED, SANS ISC, and CISA, then keeps items mentioning China, Russia, Iran, or North Korea. Because most outlets do not send CORS headers, feed requests are routed through a public CORS proxy (allorigins / corsproxy.io). If feeds fail to load, the proxy may be rate-limited or down — switch back to the GDELT source. Edit the <span class="mono">CYBER_FEEDS</span> list in the page source to add or remove outlets.</p>
+        <p class="section-note"><strong>Google News</strong> runs the same per-country cyber query (see Overview) against the Google News RSS search endpoint, aggregating thousands of outlets with a <span class="mono">when:</span> recency window tied to the lookback selector. The <strong>Cyber news feeds</strong> source option reads RSS/Atom from cyber-security press (The Hacker News, BleepingComputer, Krebs on Security, CyberScoop, SecurityWeek, Dark Reading, The Record, Help Net Security, The Register, WIRED), vendor threat-research blogs (Mandiant/Google Cloud, Microsoft, Cisco Talos, Palo Alto Unit 42, CrowdStrike, SentinelOne, ESET, Kaspersky Securelist, Check Point, Fortinet, Trend Micro, Proofpoint), and government/community sources (SANS ISC, CISA), then keeps items mentioning China, Russia, Iran, or North Korea. Feeds are fetched with limited concurrency through the proxy. Because most outlets do not send CORS headers, feed requests are routed through a public CORS proxy (allorigins / corsproxy.io). If feeds fail to load, the proxy may be rate-limited or down — switch back to the GDELT source. Edit the <span class="mono">CYBER_FEEDS</span> list in the page source to add or remove outlets.</p>
       </div>
       <div class="card">
         <h3>Analytic caveats</h3>
@@ -157,7 +157,21 @@ const CYBER_FEEDS=[
   {name:'The Register — Security',url:'https://www.theregister.com/security/headlines.atom'},
   {name:'WIRED — Security',url:'https://www.wired.com/feed/category/security/latest/rss'},
   {name:'SANS Internet Storm Center',url:'https://isc.sans.edu/rssfeed_full.xml'},
-  {name:'CISA Advisories',url:'https://www.cisa.gov/cybersecurity-advisories/all.xml'}
+  {name:'CISA Advisories',url:'https://www.cisa.gov/cybersecurity-advisories/all.xml'},
+  // Vendor threat-research blogs.
+  {name:'Mandiant / Google Cloud Threat Intelligence',url:'https://cloud.google.com/blog/topics/threat-intelligence/rss.xml'},
+  {name:'Microsoft Security Blog',url:'https://www.microsoft.com/en-us/security/blog/feed/'},
+  {name:'Cisco Talos',url:'https://blog.talosintelligence.com/feeds/posts/default?alt=rss'},
+  {name:'Palo Alto Unit 42',url:'https://unit42.paloaltonetworks.com/feed/'},
+  {name:'Unit 42 — Threat Research',url:'https://unit42.paloaltonetworks.com/category/threat-research/feed/'},
+  {name:'CrowdStrike Blog',url:'https://www.crowdstrike.com/blog/feed/'},
+  {name:'SentinelOne Blog',url:'https://www.sentinelone.com/blog/feed/'},
+  {name:'ESET WeLiveSecurity',url:'https://feeds.feedburner.com/eset/blog'},
+  {name:'Kaspersky Securelist',url:'https://securelist.com/feed/'},
+  {name:'Check Point Research',url:'https://research.checkpoint.com/feed/'},
+  {name:'Fortinet Threat Research',url:'https://www.fortinet.com/blog/threat-research/rss.xml'},
+  {name:'Trend Micro Research',url:'http://feeds.trendmicro.com/Anti-MalwareBlog/'},
+  {name:'Proofpoint Threat Insight',url:'https://www.proofpoint.com/us/threat-insight-blog.xml'}
 ];
 // Public CORS proxies, tried in order, so the browser can read feeds that lack CORS headers.
 const CORS_PROXIES=[
@@ -378,6 +392,12 @@ async function fetchViaProxy(url){
   }
   throw lastErr||new Error('All CORS proxies failed');
 }
+// Run an async worker over items with limited concurrency (kind to the public CORS proxy).
+async function runPool(items,limit,worker){
+  const queue=items.slice();
+  const next=async()=>{ while(queue.length) await worker(queue.shift()); };
+  await Promise.all(Array.from({length:Math.min(limit,items.length)||1},next));
+}
 function parseFeed(xmlText){
   const doc=new DOMParser().parseFromString(xmlText,'text/xml');
   if(doc.querySelector('parsererror')) return [];
@@ -401,7 +421,7 @@ async function fetchCyberFeeds(){
   setStatus('Reaching out to cyber news sources…');
   const days=parseInt(byId('timespan').value,10)||14; const cutoff=Date.now()-days*86400000;
   const collected=[]; let okFeeds=0;
-  await Promise.all(CYBER_FEEDS.map(async f=>{
+  await runPool(CYBER_FEEDS,5,async f=>{
     try{
       const items=parseFeed(await fetchViaProxy(f.url)); okFeeds++;
       for(const it of items){
@@ -413,7 +433,7 @@ async function fetchCyberFeeds(){
         for(const c of codes) collected.push({title:it.title,url:it.link,domain,seendate,sourceCountry:f.name,c});
       }
     }catch(e){ console.warn('Feed failed',f.name,e); }
-  }));
+  });
   const seen=new Set(); news=[];
   for(const n of collected){ const key=n.c+'|'+norm(n.title); if(!seen.has(key)){seen.add(key); news.push(n);} }
   news.sort((a,b)=>String(b.seendate||'').localeCompare(String(a.seendate||'')));
