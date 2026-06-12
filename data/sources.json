@@ -59,7 +59,6 @@
     { "name": "Kaspersky Securelist", "url": "https://securelist.com/feed/" },
     { "name": "Check Point Research", "url": "https://research.checkpoint.com/feed/" },
     { "name": "Fortinet Threat Research", "url": "https://feeds.fortinet.com/fortinet/blog/threat-research" },
-    { "name": "Trend Micro Research", "url": "https://feeds.trendmicro.com/TrendMicroResearch" },
     { "name": "Proofpoint Threat Insight", "url": "https://www.proofpoint.com/us/threat-insight-blog.xml" }
   ]
 }
