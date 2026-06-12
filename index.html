@@ -4,6 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Big 4 Cyber & Information Warfare Threat Dashboard</title>
+  <script>
+    // Apply saved/OS theme before first paint to avoid a flash.
+    (function(){try{var t=localStorage.getItem('theme');if(t!=='light'&&t!=='dark')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.dataset.theme=t;}catch(e){document.documentElement.dataset.theme='dark';}})();
+  </script>
   <style>
     :root{
       --bg:#0b1020;--panel:#121a2f;--panel2:#18233d;--ink:#eaf0ff;--muted:#aebbd6;--line:#283653;
@@ -11,6 +15,31 @@
       --cn:#e05151;--ru:#7fa0ff;--ir:#6ee7b7;--kp:#f4b860;
       --shadow:0 10px 28px rgba(0,0,0,.35);--radius:18px;
     }
+    :root[data-theme="light"]{
+      --bg:#f3f6fc;--panel:#ffffff;--panel2:#eef2f9;--ink:#172033;--muted:#566076;--line:#d6deec;
+      --accent:#1d5fa8;--chip:#eef2f9;--shadow:0 10px 28px rgba(30,50,90,.10);
+    }
+    [data-theme="light"] body{background:linear-gradient(180deg,#e9eef7 0%,var(--bg) 30%,#e9eef7 100%)}
+    [data-theme="light"] a{color:#1257a6}
+    [data-theme="light"] header{background:radial-gradient(circle at 20% 0%,rgba(29,95,168,.12),transparent 35%),radial-gradient(circle at 85% 10%,rgba(224,81,81,.08),transparent 30%)}
+    [data-theme="light"] .updated{background:rgba(255,255,255,.75)}
+    [data-theme="light"] .card{background:linear-gradient(180deg,#ffffff 0%,#f6f9fd 100%)}
+    [data-theme="light"] .controls{background:rgba(243,246,252,.92)}
+    [data-theme="light"] button{background:#e8eef7;color:var(--ink);border-color:#c6d2e4}
+    [data-theme="light"] button:hover{background:#dbe5f2}
+    [data-theme="light"] .primary{background:#1d5fa8;border-color:#3889df;color:#fff}
+    [data-theme="light"] .primary:hover{background:#2470c3}
+    [data-theme="light"] select,[data-theme="light"] input{background:#ffffff;color:var(--ink);border-color:var(--line)}
+    [data-theme="light"] .tab{color:var(--muted)}
+    [data-theme="light"] .tab.active{color:var(--ink)}
+    [data-theme="light"] .table-wrap{background:#ffffff}
+    [data-theme="light"] th{background:#e8eef7;color:#1d2a44}
+    [data-theme="light"] .news-card{background:linear-gradient(180deg,#ffffff,#f5f8fc)}
+    [data-theme="light"] .small-card{background:#f6f9fd}
+    [data-theme="light"] .pill{background:#eef2f9;color:#27406b}
+    [data-theme="light"] .tag{background:#e8eef7;color:#33415e}
+    [data-theme="light"] .feed-links a{background:#eef2f9}
+    [data-theme="light"] .warn-box{background:rgba(229,180,40,.16);border-color:rgba(180,140,30,.45);color:#6f5300}
     *{box-sizing:border-box}
     body{margin:0;background:linear-gradient(180deg,#070b14 0%,var(--bg) 30%,#080d18 100%);color:var(--ink);font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;line-height:1.45}
     a{color:#9dccff;text-decoration:none} a:hover{text-decoration:underline}
@@ -52,6 +81,7 @@
     <button class="primary" id="refreshNews">Refresh live news</button>
     <button id="refreshActors">Refresh APT catalog</button>
     <button id="copyBrief" title="Copy the current (filtered) news as a Markdown brief">📋 Copy brief</button>
+    <button id="themeToggle" title="Toggle light/dark theme" aria-label="Toggle theme">🌙</button>
     <select id="countryFilter" title="Country filter">
       <option value="ALL">All countries</option><option value="CN">China</option><option value="RU">Russia</option><option value="IR">Iran</option><option value="KP">North Korea</option>
     </select>
@@ -619,6 +649,15 @@ async function copyBrief(){
 }
 byId('refreshNews').addEventListener('click',refreshNews); byId('refreshActors').addEventListener('click',refreshActors);
 byId('copyBrief').addEventListener('click',copyBrief);
+// Light/dark theme toggle (initial theme is applied by the early <head> script).
+function syncThemeIcon(){ byId('themeToggle').textContent=document.documentElement.dataset.theme==='light'?'☀️':'🌙'; }
+syncThemeIcon();
+byId('themeToggle').addEventListener('click',()=>{
+  const next=document.documentElement.dataset.theme==='light'?'dark':'light';
+  document.documentElement.dataset.theme=next;
+  try{ localStorage.setItem('theme',next); }catch(e){}
+  syncThemeIcon();
+});
 byId('countryFilter').addEventListener('change',renderAll); byId('timespan').addEventListener('change',refreshNews); byId('search').addEventListener('input',renderAll);
 byId('newsSource').addEventListener('change',refreshNews);
 renderAll();
