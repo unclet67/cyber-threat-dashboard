@@ -1,0 +1,62 @@
+{
+  "countries": {
+    "CN": {
+      "name": "China",
+      "flag": "🇨🇳",
+      "short": "PRC",
+      "color": "CN",
+      "terms": ["China", "PRC", "Chinese", "Beijing", "PLA", "MSS", "Salt Typhoon", "Volt Typhoon", "Flax Typhoon", "APT41", "APT40", "Mustang Panda", "Storm-0558"],
+      "focus": "Telecom, critical infrastructure, strategic espionage, IP theft, Taiwan/US targeting, influence activity."
+    },
+    "RU": {
+      "name": "Russia",
+      "flag": "🇷🇺",
+      "short": "Russia",
+      "color": "RU",
+      "terms": ["Russia", "Russian", "Moscow", "GRU", "SVR", "FSB", "Sandworm", "APT28", "APT29", "Fancy Bear", "Cozy Bear", "Gamaredon", "Turla", "Star Blizzard"],
+      "focus": "Wartime cyber operations, disruptive attacks, NATO/defense espionage, hack-and-leak, election influence."
+    },
+    "IR": {
+      "name": "Iran",
+      "flag": "🇮🇷",
+      "short": "Iran",
+      "color": "IR",
+      "terms": ["Iran", "Iranian", "Tehran", "IRGC", "MOIS", "APT33", "APT34", "APT35", "APT42", "MuddyWater", "OilRig", "Charming Kitten", "CyberAv3ngers"],
+      "focus": "Regional espionage, hack-and-leak, wipers, ransomware enablement, Israel/Gulf/US targeting."
+    },
+    "KP": {
+      "name": "North Korea",
+      "flag": "🇰🇵",
+      "short": "DPRK",
+      "color": "KP",
+      "terms": ["North Korea", "DPRK", "Lazarus", "Kimsuky", "APT38", "APT37", "APT43", "Andariel", "Bluenoroff", "Emerald Sleet", "Diamond Sleet"],
+      "focus": "Crypto theft, defense/aerospace espionage, IT worker schemes, sanctions evasion, nuclear/missile support."
+    }
+  },
+  "feeds": [
+    { "name": "The Hacker News", "url": "https://thehackernews.com/feeds/posts/default" },
+    { "name": "BleepingComputer", "url": "https://www.bleepingcomputer.com/feed/" },
+    { "name": "Krebs on Security", "url": "https://krebsonsecurity.com/feed/" },
+    { "name": "CyberScoop", "url": "https://cyberscoop.com/feed/" },
+    { "name": "SecurityWeek", "url": "https://www.securityweek.com/feed/atom/" },
+    { "name": "Dark Reading", "url": "https://www.darkreading.com/rss.xml" },
+    { "name": "The Record (Recorded Future)", "url": "https://therecord.media/feed/" },
+    { "name": "Help Net Security", "url": "https://www.helpnetsecurity.com/feed/" },
+    { "name": "The Register — Security", "url": "https://www.theregister.com/security/headlines.atom" },
+    { "name": "WIRED — Security", "url": "https://www.wired.com/feed/category/security/latest/rss" },
+    { "name": "SANS Internet Storm Center", "url": "https://isc.sans.edu/rssfeed_full.xml" },
+    { "name": "CISA Advisories", "url": "https://www.cisa.gov/cybersecurity-advisories/all.xml" },
+    { "name": "Microsoft Security Blog", "url": "https://www.microsoft.com/en-us/security/blog/feed/" },
+    { "name": "Cisco Talos", "url": "https://blog.talosintelligence.com/feeds/posts/default?alt=rss" },
+    { "name": "Palo Alto Unit 42", "url": "https://unit42.paloaltonetworks.com/feed/" },
+    { "name": "Unit 42 — Threat Research", "url": "https://unit42.paloaltonetworks.com/category/threat-research/feed/" },
+    { "name": "CrowdStrike Blog", "url": "https://www.crowdstrike.com/blog/feed/" },
+    { "name": "SentinelOne Blog", "url": "https://www.sentinelone.com/blog/feed/" },
+    { "name": "ESET WeLiveSecurity", "url": "https://feeds.feedburner.com/eset/blog" },
+    { "name": "Kaspersky Securelist", "url": "https://securelist.com/feed/" },
+    { "name": "Check Point Research", "url": "https://research.checkpoint.com/feed/" },
+    { "name": "Fortinet Threat Research", "url": "https://www.fortinet.com/blog/threat-research/rss.xml" },
+    { "name": "Trend Micro Research", "url": "http://feeds.trendmicro.com/Anti-MalwareBlog/" },
+    { "name": "Proofpoint Threat Insight", "url": "https://www.proofpoint.com/us/threat-insight-blog.xml" }
+  ]
+}
