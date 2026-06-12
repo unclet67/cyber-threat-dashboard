@@ -140,13 +140,16 @@ let COUNTRIES={  // inline fallback; canonical config in data/sources.json (load
   KP:{name:'North Korea',flag:'🇰🇵',short:'DPRK',color:'KP',terms:['North Korea','DPRK','Lazarus','Kimsuky','APT38','APT37','APT43','Andariel','Bluenoroff','Emerald Sleet','Diamond Sleet'],focus:'Crypto theft, defense/aerospace espionage, IT worker schemes, sanctions evasion, nuclear/missile support.'}
 };
 function escapeRegex(s){return String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
-// Whole-word matchers used to tag free-text news with Big 4 country codes.
+// Ambiguous short acronyms (e.g. MSS = managed security services) only count in titles; overridden from sources.json.
+let WEAK_TERMS=new Set(['PLA','MSS','GRU','SVR','FSB']);
+function rxFor(terms){return terms.length?new RegExp('\\b('+terms.map(escapeRegex).join('|')+')\\b','i'):null;}
 function buildCountryRx(){return Object.fromEntries(Object.keys(COUNTRIES).map(code=>{
-  const terms=[COUNTRIES[code].name,...COUNTRIES[code].terms];
-  return [code,new RegExp('\\b('+terms.map(escapeRegex).join('|')+')\\b','i')];
+  const all=[COUNTRIES[code].name,...COUNTRIES[code].terms];
+  return [code,{strong:rxFor(all.filter(t=>!WEAK_TERMS.has(t))),weak:rxFor(all.filter(t=>WEAK_TERMS.has(t)))}];
 }));}
 let COUNTRY_RX=buildCountryRx();
-function classifyCountries(text){return Object.keys(COUNTRY_RX).filter(code=>COUNTRY_RX[code].test(text));}
+// Strong terms match anywhere; weak/ambiguous terms only in the title.
+function classifyCountries(title,desc){return Object.keys(COUNTRY_RX).filter(code=>{const{strong,weak}=COUNTRY_RX[code];return (strong&&strong.test(`${title} ${desc||''}`))||(weak&&weak.test(title));});}
 // Feeds load from data/sources.json (single source of truth, shared with the collector).
 let CYBER_FEEDS=[];
 async function loadSources(){
@@ -154,7 +157,7 @@ async function loadSources(){
     const r=await fetch('data/sources.json?_='+Date.now(),{cache:'no-store'});
     if(!r.ok) throw new Error(r.status);
     const d=await r.json();
-    if(d&&d.countries&&Array.isArray(d.feeds)){ COUNTRIES=d.countries; CYBER_FEEDS=d.feeds; COUNTRY_RX=buildCountryRx(); }
+    if(d&&d.countries&&Array.isArray(d.feeds)){ COUNTRIES=d.countries; CYBER_FEEDS=d.feeds; if(Array.isArray(d.weakTerms)) WEAK_TERMS=new Set(d.weakTerms); COUNTRY_RX=buildCountryRx(); }
   }catch(e){ /* offline: keep the inline fallback COUNTRIES; live feeds unavailable */ }
 }
 // Public CORS proxies, tried in order, so the browser can read feeds that lack CORS headers.
@@ -436,7 +439,7 @@ async function fetchCyberFeeds(){
       for(const it of items){
         const dt=it.dateStr?new Date(it.dateStr):null; const valid=dt&&!isNaN(dt);
         if(valid&&dt.getTime()<cutoff) continue;
-        const codes=classifyCountries(`${it.title} ${it.desc}`); if(!codes.length) continue;
+        const codes=classifyCountries(it.title,it.desc); if(!codes.length) continue;
         let domain=''; try{ domain=new URL(it.link).hostname.replace(/^www\./,''); }catch(e){}
         const seendate=valid?dt.toISOString().replace(/[-:T.Z]/g,'').slice(0,14):'';
         for(const c of codes) collected.push({title:it.title,url:it.link,domain,seendate,sourceCountry:f.name,c});
@@ -485,14 +488,22 @@ function newsMatches(n){
 }
 function renderNews(){
   const wrap=byId('newsGrid'); wrap.innerHTML='';
-  const list=news.filter(newsMatches).slice(0,60);
-  if(!list.length){
+  const matched=news.filter(newsMatches);
+  if(!matched.length){
     wrap.innerHTML=`<div class="news-card"><div class="news-title">No live articles loaded yet.</div><p class="section-note">The default <strong>Hourly feed (prebuilt)</strong> loads automatically once the Sync news feed workflow has run. Otherwise pick a live <strong>Source</strong> (GDELT API, Google News, or Cyber news feeds) and click “Refresh live news.” If a local <code>file://</code> page blocks network access, host this file over HTTP (e.g. <code>python3 -m http.server</code>) or use the source links in the Sources tab.</p></div>`; return;
   }
-  for(const n of list){
-    const [sev,cls]=severityFor(n); const date=n.seendate?String(n.seendate).replace(/(\d{4})(\d{2})(\d{2}).*/, '$1-$2-$3'):'Recent';
+  // Group by article URL so a story tagged to multiple countries shows one card with multiple flags.
+  const groups=[]; const byKey=new Map();
+  for(const n of matched){
+    const key=n.url||n.title; let g=byKey.get(key);
+    if(!g){ g={item:n,countries:[]}; groups.push(g); byKey.set(key,g); }
+    if(COUNTRIES[n.c]&&!g.countries.includes(n.c)) g.countries.push(n.c);
+  }
+  for(const g of groups.slice(0,60)){
+    const n=g.item; const [sev,cls]=severityFor(n); const date=n.seendate?String(n.seendate).replace(/(\d{4})(\d{2})(\d{2}).*/, '$1-$2-$3'):'Recent';
+    const pills=g.countries.map(c=>`<span class="pill ${c}">${COUNTRIES[c].flag} ${COUNTRIES[c].name}</span>`).join('');
     const div=document.createElement('div'); div.className='news-card';
-    div.innerHTML=`<div class="news-meta"><span class="pill ${n.c}">${COUNTRIES[n.c].flag} ${COUNTRIES[n.c].name}</span><span>${escapeHtml(date)}</span><span>${escapeHtml(n.domain||'')}</span></div><a class="news-title" href="${n.url}" target="_blank" rel="noreferrer">${escapeHtml(n.title||'Untitled')}</a><div class="tagbar"><span class="tag ${cls}">${sev}</span><span class="tag">${escapeHtml(n.sourceCountry||'source')}</span></div>`;
+    div.innerHTML=`<div class="news-meta">${pills}<span>${escapeHtml(date)}</span><span>${escapeHtml(n.domain||'')}</span></div><a class="news-title" href="${n.url}" target="_blank" rel="noreferrer">${escapeHtml(n.title||'Untitled')}</a><div class="tagbar"><span class="tag ${cls}">${sev}</span><span class="tag">${escapeHtml(n.sourceCountry||'source')}</span></div>`;
     wrap.appendChild(div);
   }
 }

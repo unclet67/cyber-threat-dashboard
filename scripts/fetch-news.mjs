@@ -17,9 +17,18 @@ const MAX_ITEMS = 500;      // cap output size
 const CONCURRENCY = 6;
 
 const escapeRegex = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-const COUNTRY_RX = Object.fromEntries(Object.entries(COUNTRIES).map(([c, v]) =>
-  [c, new RegExp('\\b(' + [v.name, ...v.terms].map(escapeRegex).join('|') + ')\\b', 'i')]));
-const classify = text => Object.keys(COUNTRY_RX).filter(c => COUNTRY_RX[c].test(text));
+const WEAK = new Set(SOURCES.weakTerms || []);
+const rxFor = terms => terms.length ? new RegExp('\\b(' + terms.map(escapeRegex).join('|') + ')\\b', 'i') : null;
+const COUNTRY_RX = Object.fromEntries(Object.entries(COUNTRIES).map(([c, v]) => {
+  const all = [v.name, ...v.terms];
+  return [c, { strong: rxFor(all.filter(t => !WEAK.has(t))), weak: rxFor(all.filter(t => WEAK.has(t))) }];
+}));
+// A country matches on a strong term anywhere, or an ambiguous (weak) term only in the title —
+// this avoids false positives like "MSS" (managed security services) tagging China from body text.
+const classify = (title, desc) => Object.keys(COUNTRY_RX).filter(c => {
+  const { strong, weak } = COUNTRY_RX[c];
+  return (strong && strong.test(`${title} ${desc}`)) || (weak && weak.test(title));
+});
 
 function decode(s) {
   return (s || '')
@@ -100,7 +109,7 @@ await runPool(FEEDS, CONCURRENCY, async ([name, url]) => {
       const dt = it.date ? new Date(it.date) : null;
       const valid = dt && !isNaN(dt);
       if (valid && dt.getTime() < cutoff) continue;
-      const codes = classify(`${it.title} ${it.desc}`);
+      const codes = classify(it.title, it.desc);
       if (!codes.length) continue;
       const seendate = valid ? fmtSeen(dt) : '';
       for (const c of codes) {
@@ -114,14 +123,21 @@ await runPool(FEEDS, CONCURRENCY, async ([name, url]) => {
   }
 });
 
-// Newest first, dedup by country + normalized title, cap size.
+// Significant-word sets for fuzzy, cross-outlet dedup (same story, different headline/outlet).
+const STOP = new Set(['the','and','for','with','from','over','into','that','this','their','have','has','says','new','amid','after','using','used']);
+const sigWords = t => new Set(t.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').split(/\s+/).filter(w => w.length > 3 && !STOP.has(w)));
+const jaccard = (a, b) => { let i = 0; for (const x of a) if (b.has(x)) i++; return i / (a.size + b.size - i || 1); };
+
+// Newest first; within each country drop exact and near-duplicate titles; keep cross-country tags.
 collected.sort((a, b) => String(b.seendate).localeCompare(String(a.seendate)));
-const seen = new Set();
+const keptByCountry = {};
 const items = [];
 for (const n of collected) {
-  const key = n.c + '|' + norm(n.title);
-  if (seen.has(key)) continue;
-  seen.add(key);
+  const kept = (keptByCountry[n.c] ||= []);
+  const words = sigWords(n.title);
+  const dup = kept.some(k => norm(k.title) === norm(n.title) || jaccard(words, k.words) >= 0.7);
+  if (dup) continue;
+  kept.push({ title: n.title, words });
   items.push(n);
   if (items.length >= MAX_ITEMS) break;
 }
