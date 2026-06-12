@@ -1,5 +1,7 @@
 {
   "weakTerms": ["PLA", "MSS", "GRU", "SVR", "FSB"],
+  "kevUrl": "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
+  "kevRecent": 150,
   "countries": {
     "CN": {
       "name": "China",
