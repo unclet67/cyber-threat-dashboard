@@ -56,6 +56,11 @@
     @media(max-width:1100px){.grid{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.news-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:720px){.grid,.news-grid{grid-template-columns:1fr}.controls{position:static}.source-list{columns:1}.titlebar{display:block}.updated{display:inline-block;margin-top:12px}}
     @media print{body{background:#fff;color:#111}.card,.controls,.table-wrap,.news-card,.small-card{box-shadow:none;background:#fff;color:#111}.controls{display:none}a{color:#0645ad}.source-list{columns:1}}
     tr.clickable{cursor:pointer}tr.clickable:hover td{background:rgba(121,183,255,.08)}
+    .actor-tags{display:flex;gap:6px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--line);padding-top:8px;margin-top:2px}
+    .at-label{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+    .at-chip{font-size:11px;padding:2px 8px;border-radius:999px;background:var(--chip);border:1px solid var(--accent);color:#dce7ff;cursor:pointer}
+    .at-chip:hover{background:#2b4169}
+    [data-theme="light"] .at-chip{color:#27406b}
     .cw-overlay{position:fixed;inset:0;z-index:50;background:rgba(4,7,14,.66);display:flex;align-items:flex-start;justify-content:center;padding:5vh 16px;overflow:auto}
     .cw-dialog{position:relative;width:min(820px,100%);background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 22px 18px}
     .cw-close{position:absolute;top:10px;right:12px;background:transparent;border:none;color:var(--muted);font-size:26px;line-height:1;cursor:pointer;padding:2px 8px}
@@ -382,7 +387,7 @@ async function refreshActors(){
     const merged=[...FALLBACK_ACTORS.map(x=>({...x,source:'Curated fallback'})),...loaded];
     const seen=new Map();
     for(const a of merged){ const key=a.c+'|'+norm(a.n); if(!seen.has(key)){seen.set(key,a)} else { const cur=seen.get(key); cur.a=[...new Set([...(cur.a||[]),...(a.a||[])])]; cur.d=cur.d||a.d; cur.source=cur.source.includes(a.source)?cur.source:cur.source+' + '+a.source; cur.refs=[...new Set([...(cur.refs||[]),...(a.refs||[])])]; }}
-    actors=[...seen.values()].sort((x,y)=>x.c.localeCompare(y.c)||x.n.localeCompare(y.n));
+    actors=[...seen.values()].sort((x,y)=>x.c.localeCompare(y.c)||x.n.localeCompare(y.n)); actorIndex=null;
     liveActorLoaded=true; setStatus(`Loaded ${actors.length} actors (${loaded.length} live records merged)`);
   } else { liveActorLoaded=false; setStatus('Live actor sources unavailable; using curated fallback list'); }
   renderAll();
@@ -578,6 +583,27 @@ function newsMatches(n){
   const blob=[n.title,n.domain,n.sourceCountry,COUNTRIES[n.c]?.name,n.url].join(' ').toLowerCase();
   return !q||blob.includes(q);
 }
+// Detect APT/actor names mentioned in an article title (against the loaded catalog + aliases).
+let actorIndex=null;
+const ACTOR_STOP=new Set(['apt','axiom','platinum','silence','machete','confucius','windigo','thrip','sowbug','moafee','group5','mercury','patchwork','elderwood']);
+function buildActorIndex(){
+  const map=new Map(); const toks=[];
+  for(const a of actors){
+    for(const nm of [a.n,...(a.a||[])]){
+      const t=String(nm||'').trim(); if(t.length<4) continue;
+      const key=t.toLowerCase(); if(ACTOR_STOP.has(key)) continue;
+      if(!map.has(key)){ map.set(key,a); toks.push(t); }
+    }
+  }
+  actorIndex={map,rx:toks.length?new RegExp('\\b('+toks.map(escapeRegex).join('|')+')\\b','gi'):null};
+}
+function actorsInText(text){
+  if(!actorIndex) buildActorIndex();
+  const rx=actorIndex.rx; if(!rx||!text) return [];
+  rx.lastIndex=0; const seen=new Map(); let m;
+  while((m=rx.exec(text))){ const a=actorIndex.map.get(m[1].toLowerCase()); if(a&&!seen.has(a.n)) seen.set(a.n,a); }
+  return [...seen.values()];
+}
 function renderNews(){
   const wrap=byId('newsGrid'); wrap.innerHTML='';
   const matched=news.filter(newsMatches);
@@ -596,6 +622,13 @@ function renderNews(){
     const pills=g.countries.map(c=>`<span class="pill ${c}">${COUNTRIES[c].flag} ${COUNTRIES[c].name}</span>`).join('');
     const div=document.createElement('div'); div.className='news-card';
     div.innerHTML=`<div class="news-meta">${pills}<span>${escapeHtml(date)}</span><span>${escapeHtml(n.domain||'')}</span></div><a class="news-title" href="${n.url}" target="_blank" rel="noreferrer">${escapeHtml(n.title||'Untitled')}</a><div class="tagbar"><span class="tag ${cls}">${sev}</span><span class="tag">${escapeHtml(n.sourceCountry||'source')}</span></div>`;
+    const acts=actorsInText(n.title);
+    if(acts.length){
+      const bar=document.createElement('div'); bar.className='actor-tags';
+      const lbl=document.createElement('span'); lbl.className='at-label'; lbl.textContent='Actors:'; bar.appendChild(lbl);
+      for(const a of acts){ const s=document.createElement('span'); s.className='at-chip'; s.textContent=a.n; s.title='Open name crosswalk'; s.addEventListener('click',ev=>{ ev.stopPropagation(); openCrosswalk(a); }); bar.appendChild(s); }
+      div.appendChild(bar);
+    }
     wrap.appendChild(div);
   }
 }
