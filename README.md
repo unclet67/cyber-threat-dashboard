@@ -67,6 +67,26 @@ restrictions, so the live refresh works with no local server.
 **Deploy to GitHub Pages** workflow runs and the site is published at
 `https://<owner>.github.io/cyber-threat-dashboard/`.
 
+## Hourly news collector (recommended)
+
+Fetching ~24 feeds from the browser depends on a public CORS proxy and can be
+rate-limited. To avoid that, a scheduled GitHub Action collects the news
+**server-side** instead:
+
+- **`scripts/fetch-news.mjs`** — a dependency-free Node script that fetches every
+  feed directly (no CORS/proxy), keeps Big-4-relevant items, and writes `news.json`.
+- **`.github/workflows/sync-news.yml`** — runs the script **hourly** (and on manual
+  **Run workflow**), commits `news.json`, and redeploys Pages.
+
+The dashboard's default source, **Hourly feed (prebuilt)**, reads `news.json`
+same-origin — instant, no proxy, no rate limits — and loads automatically on open.
+The live sources (GDELT, Google News, Cyber news feeds) remain available as an
+on-demand fallback.
+
+**To populate it the first time**, run the **Sync news feed** workflow once from
+the **Actions** tab (it otherwise runs hourly). Until then, `news.json` ships as an
+empty placeholder and the dashboard shows a hint to run the workflow.
+
 ## Data sources
 
 - MISP Galaxy Threat Actor & Microsoft Activity Group clusters

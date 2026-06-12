@@ -53,7 +53,7 @@
     <select id="countryFilter" title="Country filter">
       <option value="ALL">All countries</option><option value="CN">China</option><option value="RU">Russia</option><option value="IR">Iran</option><option value="KP">North Korea</option>
     </select>
-    <select id="newsSource" title="News source"><option value="gdelt" selected>Source: GDELT API</option><option value="gnews">Source: Google News</option><option value="feeds">Source: Cyber news feeds</option></select>
+    <select id="newsSource" title="News source"><option value="prebuilt" selected>Source: Hourly feed (prebuilt)</option><option value="gdelt">Source: GDELT API</option><option value="gnews">Source: Google News</option><option value="feeds">Source: Cyber news feeds (live)</option></select>
     <select id="timespan" title="News lookback"><option value="7">7 days</option><option value="14" selected>14 days</option><option value="30">30 days</option><option value="90">90 days</option></select>
     <input id="search" placeholder="Search actors/news/aliases, e.g., Salt Typhoon, GRU, wiper, disinformation" />
     <span class="status" id="status">Ready</span>
@@ -79,7 +79,7 @@
 
   <section id="newsPanel" class="hidden">
     <h2>Recent Cyber & Information Warfare News</h2>
-    <p class="section-note">Pick a <strong>Source</strong>, then click <strong>Refresh live news</strong>. <strong>GDELT API</strong> queries the global news index directly. <strong>Google News</strong> runs the same per-country cyber query against Google News and aggregates thousands of outlets. <strong>Cyber news feeds</strong> reaches out to major cyber-security outlets (The Hacker News, BleepingComputer, Krebs, CyberScoop, The Register, WIRED, and more — see Sources tab) via their RSS feeds and keeps Big&nbsp;4-relevant items. Results are deduplicated and ranked by likely operational relevance.</p>
+    <p class="section-note">Pick a <strong>Source</strong>, then click <strong>Refresh live news</strong>. <strong>Hourly feed (prebuilt)</strong> — the default — loads <span class="mono">news.json</span>, regenerated hourly by a GitHub Action that fetches all feeds server-side (no proxy, instant load). The live sources below fetch on demand from the browser. <strong>GDELT API</strong> queries the global news index directly. <strong>Google News</strong> runs the same per-country cyber query against Google News and aggregates thousands of outlets. <strong>Cyber news feeds</strong> reaches out to major cyber-security outlets (The Hacker News, BleepingComputer, Krebs, CyberScoop, The Register, WIRED, and more — see Sources tab) via their RSS feeds and keeps Big&nbsp;4-relevant items. Results are deduplicated and ranked by likely operational relevance.</p>
     <div id="newsGrid" class="news-grid"></div>
   </section>
 
@@ -103,6 +103,8 @@
           <li><a href="https://malpedia.caad.fkie.fraunhofer.de/actors" target="_blank" rel="noreferrer">Malpedia Actors</a> — actor-to-malware family mappings.</li>
           <li><a href="https://www.cisa.gov/news-events/cybersecurity-advisories" target="_blank" rel="noreferrer">CISA Cybersecurity Advisories</a> — U.S. government advisories.</li>
         </ul>
+        <h3>Hourly prebuilt feed</h3>
+        <p class="section-note">The default <strong>Hourly feed (prebuilt)</strong> source reads <span class="mono">news.json</span>, regenerated every hour by the <span class="mono">Sync news feed</span> GitHub Action (<span class="mono">scripts/fetch-news.mjs</span>). It fetches all feeds server-side — no CORS proxy, no rate limits, instant load — and commits the result. The live sources below remain available as an on-demand fallback.</p>
         <h3>Google News &amp; cyber news feeds (RSS)</h3>
         <p class="section-note"><strong>Google News</strong> runs the same per-country cyber query (see Overview) against the Google News RSS search endpoint, aggregating thousands of outlets with a <span class="mono">when:</span> recency window tied to the lookback selector. The <strong>Cyber news feeds</strong> source option reads RSS/Atom from cyber-security press (The Hacker News, BleepingComputer, Krebs on Security, CyberScoop, SecurityWeek, Dark Reading, The Record, Help Net Security, The Register, WIRED), vendor threat-research blogs (Mandiant/Google Cloud, Microsoft, Cisco Talos, Palo Alto Unit 42, CrowdStrike, SentinelOne, ESET, Kaspersky Securelist, Check Point, Fortinet, Trend Micro, Proofpoint), and government/community sources (SANS ISC, CISA), then keeps items mentioning China, Russia, Iran, or North Korea. Feeds are fetched with limited concurrency through the proxy. Because most outlets do not send CORS headers, feed requests are routed through a public CORS proxy (allorigins / corsproxy.io). If feeds fail to load, the proxy may be rate-limited or down — switch back to the GDELT source. Edit the <span class="mono">CYBER_FEEDS</span> list in the page source to add or remove outlets.</p>
       </div>
@@ -380,9 +382,34 @@ async function refreshNewsGdelt(){
 // Dispatch to the selected news source.
 function refreshNews(){
   const src=byId('newsSource').value;
+  if(src==='prebuilt') return fetchPrebuilt();
   if(src==='feeds') return fetchCyberFeeds();
   if(src==='gnews') return fetchGoogleNews();
   return refreshNewsGdelt();
+}
+// Load the hourly, server-collected feed (news.json) — same-origin, no CORS proxy.
+async function fetchPrebuilt(){
+  setStatus('Loading prebuilt feed…');
+  try{
+    const r=await fetch('news.json?_='+Date.now(),{cache:'no-store'});
+    if(!r.ok) throw new Error(r.status+' '+r.statusText);
+    const data=await r.json();
+    const days=parseInt(byId('timespan').value,10)||14; const cutoff=Date.now()-days*86400000;
+    news=(data.items||[]).filter(n=>{
+      if(!COUNTRIES[n.c]) return false;
+      const s=String(n.seendate||''); if(s.length<8) return true;
+      const dt=new Date(`${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}T${s.slice(8,10)||'00'}:${s.slice(10,12)||'00'}:${s.slice(12,14)||'00'}Z`);
+      return isNaN(dt)||dt.getTime()>=cutoff;
+    });
+    news.sort((a,b)=>String(b.seendate||'').localeCompare(String(a.seendate||'')));
+    const when=data.generated?new Date(data.generated).toLocaleString():null;
+    if(!when) setStatus('Prebuilt feed not generated yet — run the “Sync news feed” workflow (Actions → Run workflow), then refresh.');
+    else if(!news.length) setStatus(`Prebuilt feed has no Big 4 items in the last ${days} days (updated ${when}) — try a longer lookback.`);
+    else setStatus(`Loaded ${news.length} items from the prebuilt hourly feed (updated ${when})`);
+  }catch(e){
+    news=[]; setStatus('No prebuilt feed found (news.json) — it is generated hourly by the Sync news feed workflow, or pick a live source.');
+  }
+  renderAll();
 }
 async function fetchViaProxy(url){
   let lastErr;
@@ -478,7 +505,7 @@ function renderNews(){
   const wrap=byId('newsGrid'); wrap.innerHTML='';
   const list=news.filter(newsMatches).slice(0,60);
   if(!list.length){
-    wrap.innerHTML=`<div class="news-card"><div class="news-title">No live articles loaded yet.</div><p class="section-note">Pick a <strong>Source</strong> (GDELT API, Google News, or Cyber news feeds) and click “Refresh live news.” If a local <code>file://</code> page blocks network access, host this file over HTTP (e.g. <code>python3 -m http.server</code>) or use the source links in the Sources tab.</p></div>`; return;
+    wrap.innerHTML=`<div class="news-card"><div class="news-title">No live articles loaded yet.</div><p class="section-note">The default <strong>Hourly feed (prebuilt)</strong> loads automatically once the Sync news feed workflow has run. Otherwise pick a live <strong>Source</strong> (GDELT API, Google News, or Cyber news feeds) and click “Refresh live news.” If a local <code>file://</code> page blocks network access, host this file over HTTP (e.g. <code>python3 -m http.server</code>) or use the source links in the Sources tab.</p></div>`; return;
   }
   for(const n of list){
     const [sev,cls]=severityFor(n); const date=n.seendate?String(n.seendate).replace(/(\d{4})(\d{2})(\d{2}).*/, '$1-$2-$3'):'Recent';
@@ -502,6 +529,8 @@ byId('newsSource').addEventListener('change',refreshNews);
 renderAll();
 // Try a live actor refresh on load, but do not block offline use.
 refreshActors();
+// Auto-load the prebuilt hourly feed (default source) so the dashboard is populated on open.
+refreshNews();
 </script>
 </body>
 </html>
