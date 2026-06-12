@@ -33,7 +33,14 @@ try {
     if (!COUNTRIES.has(it.c)) throw new Error(`item ${i} invalid country "${it.c}"`);
     if (!/^https?:\/\//.test(it.url)) throw new Error(`item ${i} url not http(s): ${it.url}`);
   });
-  ok(`news.json valid (${data.items.length} items)`);
+  if ('feedsStatus' in data) {
+    if (!Array.isArray(data.feedsStatus)) throw new Error('"feedsStatus" is not an array');
+    data.feedsStatus.forEach((f, i) => {
+      if (!f.name) throw new Error(`feedsStatus ${i} missing "name"`);
+      if (typeof f.ok !== 'boolean') throw new Error(`feedsStatus ${i} "ok" not boolean`);
+    });
+  }
+  ok(`news.json valid (${data.items.length} items${data.feedsStatus ? `, ${data.feedsStatus.length} feed statuses` : ''})`);
 } catch (e) {
   fail('news.json schema: ' + e.message);
 }

@@ -80,6 +80,7 @@
   <section id="newsPanel" class="hidden">
     <h2>Recent Cyber & Information Warfare News</h2>
     <p class="section-note">Pick a <strong>Source</strong>, then click <strong>Refresh live news</strong>. <strong>Hourly feed (prebuilt)</strong> — the default — loads <span class="mono">news.json</span>, regenerated hourly by a GitHub Action that fetches all feeds server-side (no proxy, instant load). The live sources below fetch on demand from the browser. <strong>GDELT API</strong> queries the global news index directly. <strong>Google News</strong> runs the same per-country cyber query against Google News and aggregates thousands of outlets. <strong>Cyber news feeds</strong> reaches out to major cyber-security outlets (The Hacker News, BleepingComputer, Krebs, CyberScoop, The Register, WIRED, and more — see Sources tab) via their RSS feeds and keeps Big&nbsp;4-relevant items. Results are deduplicated and ranked by likely operational relevance.</p>
+    <div id="feedHealth" class="section-note" style="margin-top:-2px"></div>
     <div id="newsGrid" class="news-grid"></div>
   </section>
 
@@ -258,7 +259,26 @@ const FALLBACK_ACTORS=[
 let actors=[...FALLBACK_ACTORS.map(x=>({...x,source:'Curated fallback'}))];
 let news=[];
 let liveActorLoaded=false;
+let prebuiltMeta=null;
 const byId=id=>document.getElementById(id);
+function relTime(iso){
+  const t=Date.parse(iso); if(isNaN(t)) return '';
+  const s=Math.max(0,(Date.now()-t)/1000);
+  if(s<90) return 'just now';
+  const m=s/60; if(m<60) return Math.round(m)+' min ago';
+  const h=m/60; if(h<48) return Math.round(h)+' hr ago';
+  return Math.round(h/24)+' days ago';
+}
+function renderFeedHealth(){
+  const el=byId('feedHealth'); if(!el) return;
+  const show=byId('newsSource').value==='prebuilt'&&prebuiltMeta;
+  if(!show){ el.innerHTML=''; return; }
+  const st=prebuiltMeta.status||[]; const failed=st.filter(f=>!f.ok); const okN=st.length-failed.length;
+  let html=prebuiltMeta.generated?`Prebuilt feed updated ${escapeHtml(relTime(prebuiltMeta.generated))}`:'Prebuilt feed not generated yet';
+  if(st.length) html+=` · ${okN}/${st.length} feeds ok`;
+  if(failed.length) html+=` · <span style="color:var(--warn)" title="${escapeHtml(failed.map(f=>f.name+(f.error?' ('+f.error+')':'')).join('\n'))}">⚠ ${failed.length} failed: ${escapeHtml(failed.map(f=>f.name).join(', '))}</span>`;
+  el.innerHTML=html;
+}
 function setStatus(s){byId('status').textContent=s;}
 function cleanText(s){return (s||'').replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim();}
 function norm(s){return (s||'').toLowerCase().replace(/[^a-z0-9]+/g,'');}
@@ -379,6 +399,7 @@ async function fetchPrebuilt(){
     const r=await fetch('news.json?_='+Date.now(),{cache:'no-store'});
     if(!r.ok) throw new Error(r.status+' '+r.statusText);
     const data=await r.json();
+    prebuiltMeta={generated:data.generated||null,feeds:data.feeds||0,status:Array.isArray(data.feedsStatus)?data.feedsStatus:[]};
     const days=parseInt(byId('timespan').value,10)||14; const cutoff=Date.now()-days*86400000;
     news=(data.items||[]).filter(n=>{
       if(!COUNTRIES[n.c]) return false;
@@ -392,7 +413,7 @@ async function fetchPrebuilt(){
     else if(!news.length) setStatus(`Prebuilt feed has no Big 4 items in the last ${days} days (updated ${when}) — try a longer lookback.`);
     else setStatus(`Loaded ${news.length} items from the prebuilt hourly feed (updated ${when})`);
   }catch(e){
-    news=[]; setStatus('No prebuilt feed found (news.json) — it is generated hourly by the Sync news feed workflow, or pick a live source.');
+    news=[]; prebuiltMeta=null; setStatus('No prebuilt feed found (news.json) — it is generated hourly by the Sync news feed workflow, or pick a live source.');
   }
   renderAll();
 }
@@ -507,7 +528,7 @@ function renderNews(){
     wrap.appendChild(div);
   }
 }
-function renderAll(){renderCards(); renderSnapshot(); renderActors(); renderNews(); byId('updatedStamp').textContent='Last rendered: '+new Date().toLocaleString();}
+function renderAll(){renderCards(); renderSnapshot(); renderActors(); renderNews(); renderFeedHealth(); const pm=byId('newsSource').value==='prebuilt'&&prebuiltMeta&&prebuiltMeta.generated; byId('updatedStamp').textContent=pm?('Feed updated '+relTime(prebuiltMeta.generated)):('Last rendered: '+new Date().toLocaleString());}
 function activate(tab){
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));
   byId('overviewPanel').classList.toggle('hidden',tab!=='overview');
