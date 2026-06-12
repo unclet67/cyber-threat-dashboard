@@ -50,7 +50,7 @@
     { "name": "SANS Internet Storm Center", "url": "https://isc.sans.edu/rssfeed_full.xml" },
     { "name": "CISA Advisories", "url": "https://www.cisa.gov/cybersecurity-advisories/all.xml" },
     { "name": "Microsoft Security Blog", "url": "https://www.microsoft.com/en-us/security/blog/feed/" },
-    { "name": "Cisco Talos", "url": "https://blog.talosintelligence.com/feeds/posts/default?alt=rss" },
+    { "name": "Cisco Talos", "url": "https://blog.talosintelligence.com/rss/" },
     { "name": "Palo Alto Unit 42", "url": "https://unit42.paloaltonetworks.com/feed/" },
     { "name": "Unit 42 — Threat Research", "url": "https://unit42.paloaltonetworks.com/category/threat-research/feed/" },
     { "name": "CrowdStrike Blog", "url": "https://www.crowdstrike.com/blog/feed/" },
@@ -58,8 +58,8 @@
     { "name": "ESET WeLiveSecurity", "url": "https://feeds.feedburner.com/eset/blog" },
     { "name": "Kaspersky Securelist", "url": "https://securelist.com/feed/" },
     { "name": "Check Point Research", "url": "https://research.checkpoint.com/feed/" },
-    { "name": "Fortinet Threat Research", "url": "https://www.fortinet.com/blog/threat-research/rss.xml" },
-    { "name": "Trend Micro Research", "url": "http://feeds.trendmicro.com/Anti-MalwareBlog/" },
+    { "name": "Fortinet Threat Research", "url": "https://feeds.fortinet.com/fortinet/blog/threat-research" },
+    { "name": "Trend Micro Research", "url": "https://feeds.trendmicro.com/TrendMicroResearch" },
     { "name": "Proofpoint Threat Insight", "url": "https://www.proofpoint.com/us/threat-insight-blog.xml" }
   ]
 }
