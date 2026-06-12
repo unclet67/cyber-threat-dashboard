@@ -53,6 +53,7 @@
     <select id="countryFilter" title="Country filter">
       <option value="ALL">All countries</option><option value="CN">China</option><option value="RU">Russia</option><option value="IR">Iran</option><option value="KP">North Korea</option>
     </select>
+    <select id="newsSource" title="News source"><option value="gdelt" selected>Source: GDELT API</option><option value="feeds">Source: Cyber news feeds</option></select>
     <select id="timespan" title="News lookback"><option value="7">7 days</option><option value="14" selected>14 days</option><option value="30">30 days</option><option value="90">90 days</option></select>
     <input id="search" placeholder="Search actors/news/aliases, e.g., Salt Typhoon, GRU, wiper, disinformation" />
     <span class="status" id="status">Ready</span>
@@ -78,7 +79,7 @@
 
   <section id="newsPanel" class="hidden">
     <h2>Recent Cyber & Information Warfare News</h2>
-    <p class="section-note">Click <strong>Refresh live news</strong> to pull current public reporting via the GDELT Doc API. Results are deduplicated and ranked by likely operational relevance.</p>
+    <p class="section-note">Pick a <strong>Source</strong>, then click <strong>Refresh live news</strong>. <strong>GDELT API</strong> queries the global news index directly. <strong>Cyber news feeds</strong> reaches out to major cyber-security outlets (Krebs, BleepingComputer, The Hacker News, The Record, Dark Reading, SecurityWeek, SANS ISC, CISA) via their RSS feeds and keeps Big&nbsp;4-relevant items. Results are deduplicated and ranked by likely operational relevance.</p>
     <div id="newsGrid" class="news-grid"></div>
   </section>
 
@@ -102,6 +103,8 @@
           <li><a href="https://malpedia.caad.fkie.fraunhofer.de/actors" target="_blank" rel="noreferrer">Malpedia Actors</a> — actor-to-malware family mappings.</li>
           <li><a href="https://www.cisa.gov/news-events/cybersecurity-advisories" target="_blank" rel="noreferrer">CISA Cybersecurity Advisories</a> — U.S. government advisories.</li>
         </ul>
+        <h3>Cyber news feeds (RSS)</h3>
+        <p class="section-note">The <strong>Cyber news feeds</strong> source option reads RSS/Atom directly from Krebs on Security, BleepingComputer, The Hacker News, The Record, Dark Reading, SecurityWeek, SANS ISC, and CISA, then keeps items mentioning China, Russia, Iran, or North Korea. Because most outlets do not send CORS headers, feed requests are routed through a public CORS proxy (allorigins / corsproxy.io). If feeds fail to load, the proxy may be rate-limited or down — switch back to the GDELT source. Edit the <span class="mono">CYBER_FEEDS</span> list in the page source to add or remove outlets.</p>
       </div>
       <div class="card">
         <h3>Analytic caveats</h3>
@@ -134,6 +137,29 @@ const COUNTRIES={
   IR:{name:'Iran',flag:'🇮🇷',short:'Iran',color:'IR',terms:['Iran','Iranian','Tehran','IRGC','MOIS','APT33','APT34','APT35','APT42','MuddyWater','OilRig','Charming Kitten','CyberAv3ngers'],focus:'Regional espionage, hack-and-leak, wipers, ransomware enablement, Israel/Gulf/US targeting.'},
   KP:{name:'North Korea',flag:'🇰🇵',short:'DPRK',color:'KP',terms:['North Korea','DPRK','Lazarus','Kimsuky','APT38','APT37','APT43','Andariel','Bluenoroff','Emerald Sleet','Diamond Sleet'],focus:'Crypto theft, defense/aerospace espionage, IT worker schemes, sanctions evasion, nuclear/missile support.'}
 };
+function escapeRegex(s){return String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+// Whole-word matchers used to tag free-text news with Big 4 country codes.
+const COUNTRY_RX=Object.fromEntries(Object.keys(COUNTRIES).map(code=>{
+  const terms=[COUNTRIES[code].name,...COUNTRIES[code].terms];
+  return [code,new RegExp('\\b('+terms.map(escapeRegex).join('|')+')\\b','i')];
+}));
+function classifyCountries(text){return Object.keys(COUNTRY_RX).filter(code=>COUNTRY_RX[code].test(text));}
+// Curated cyber-security news RSS/Atom feeds for the "Cyber news feeds" source option. Edit freely.
+const CYBER_FEEDS=[
+  {name:'Krebs on Security',url:'https://krebsonsecurity.com/feed/'},
+  {name:'BleepingComputer',url:'https://www.bleepingcomputer.com/feed/'},
+  {name:'The Hacker News',url:'https://feeds.feedburner.com/TheHackersNews'},
+  {name:'The Record',url:'https://therecord.media/feed/'},
+  {name:'Dark Reading',url:'https://www.darkreading.com/rss.xml'},
+  {name:'SecurityWeek',url:'https://www.securityweek.com/feed/'},
+  {name:'SANS Internet Storm Center',url:'https://isc.sans.edu/rssfeed_full.xml'},
+  {name:'CISA Advisories',url:'https://www.cisa.gov/cybersecurity-advisories/all.xml'}
+];
+// Public CORS proxies, tried in order, so the browser can read feeds that lack CORS headers.
+const CORS_PROXIES=[
+  u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+  u=>`https://corsproxy.io/?url=${encodeURIComponent(u)}`
+];
 const FALLBACK_ACTORS=[
   {c:'CN',n:'APT1',a:['Comment Crew','PLA Unit 61398','Byzantine Candor','TG-8223','G0006'],d:'PLA-linked espionage actor widely associated with Unit 61398.'},
   {c:'CN',n:'APT2',a:['Putter Panda','PLA Unit 61486','MSUpdater','TG-6952','G0024'],d:'Aerospace/satellite-focused PRC-linked cluster.'},
@@ -316,7 +342,7 @@ function queryFor(code){
   const country='('+COUNTRIES[code].terms.map(t=>t.includes(' ')?`"${t}"`:t).join(' OR ')+')';
   return `${cyber} ${country}`;
 }
-async function refreshNews(){
+async function refreshNewsGdelt(){
   setStatus('Loading live news…');
   const days=byId('timespan').value; const all=[];
   for(const code of Object.keys(COUNTRIES)){
@@ -333,6 +359,57 @@ async function refreshNews(){
   if(news.length) setStatus(`Loaded ${news.length} live news items`); else setStatus('No live news returned; check browser internet/CORS settings');
   renderAll();
 }
+// Dispatch to the selected news source.
+function refreshNews(){return byId('newsSource').value==='feeds'?fetchCyberFeeds():refreshNewsGdelt();}
+async function fetchViaProxy(url){
+  let lastErr;
+  for(const proxy of CORS_PROXIES){
+    try{ const r=await fetch(proxy(url),{cache:'no-store'}); if(!r.ok) throw new Error(r.status+' '+r.statusText); return await r.text(); }
+    catch(e){ lastErr=e; }
+  }
+  throw lastErr||new Error('All CORS proxies failed');
+}
+function parseFeed(xmlText){
+  const doc=new DOMParser().parseFromString(xmlText,'text/xml');
+  if(doc.querySelector('parsererror')) return [];
+  const nodes=[...doc.querySelectorAll('item'),...doc.querySelectorAll('entry')];
+  const out=[];
+  for(const node of nodes){
+    const txt=tag=>node.querySelector(tag)?.textContent?.trim()||'';
+    const title=txt('title');
+    const linkEl=node.querySelector('link');
+    const link=(linkEl&&linkEl.textContent.trim())||linkEl?.getAttribute('href')||'';
+    const desc=txt('description')||txt('summary')||txt('content');
+    const dateStr=txt('pubDate')||txt('updated')||txt('published')||txt('date');
+    if(title&&link) out.push({title,link,desc,dateStr});
+  }
+  return out;
+}
+async function fetchCyberFeeds(){
+  setStatus('Reaching out to cyber news sources…');
+  const days=parseInt(byId('timespan').value,10)||14; const cutoff=Date.now()-days*86400000;
+  const collected=[]; let okFeeds=0;
+  await Promise.all(CYBER_FEEDS.map(async f=>{
+    try{
+      const items=parseFeed(await fetchViaProxy(f.url)); okFeeds++;
+      for(const it of items){
+        const dt=it.dateStr?new Date(it.dateStr):null; const valid=dt&&!isNaN(dt);
+        if(valid&&dt.getTime()<cutoff) continue;
+        const codes=classifyCountries(`${it.title} ${it.desc}`); if(!codes.length) continue;
+        let domain=''; try{ domain=new URL(it.link).hostname.replace(/^www\./,''); }catch(e){}
+        const seendate=valid?dt.toISOString().replace(/[-:T.Z]/g,'').slice(0,14):'';
+        for(const c of codes) collected.push({title:it.title,url:it.link,domain,seendate,sourceCountry:f.name,c});
+      }
+    }catch(e){ console.warn('Feed failed',f.name,e); }
+  }));
+  const seen=new Set(); news=[];
+  for(const n of collected){ const key=n.c+'|'+norm(n.title); if(!seen.has(key)){seen.add(key); news.push(n);} }
+  news.sort((a,b)=>String(b.seendate||'').localeCompare(String(a.seendate||'')));
+  if(news.length) setStatus(`Loaded ${news.length} Big 4-relevant items from ${okFeeds}/${CYBER_FEEDS.length} cyber news feeds`);
+  else if(okFeeds) setStatus(`Reached ${okFeeds} feed(s) but found no Big 4-relevant items in the last ${days} days`);
+  else setStatus('Could not reach cyber news feeds — the CORS proxy may be unavailable. Try the GDELT source instead.');
+  renderAll();
+}
 function newsMatches(n){
   const cf=byId('countryFilter').value, q=byId('search').value.toLowerCase();
   if(cf!=='ALL'&&n.c!==cf)return false;
@@ -343,7 +420,7 @@ function renderNews(){
   const wrap=byId('newsGrid'); wrap.innerHTML='';
   const list=news.filter(newsMatches).slice(0,60);
   if(!list.length){
-    wrap.innerHTML=`<div class="news-card"><div class="news-title">No live articles loaded yet.</div><p class="section-note">Click “Refresh live news.” If your browser blocks API access from a local file, use the source links in the Sources tab or host this HTML file on an internal web server.</p></div>`; return;
+    wrap.innerHTML=`<div class="news-card"><div class="news-title">No live articles loaded yet.</div><p class="section-note">Pick a <strong>Source</strong> (GDELT API or Cyber news feeds) and click “Refresh live news.” If a local <code>file://</code> page blocks network access, host this file over HTTP (e.g. <code>python3 -m http.server</code>) or use the source links in the Sources tab.</p></div>`; return;
   }
   for(const n of list){
     const [sev,cls]=severityFor(n); const date=n.seendate?String(n.seendate).replace(/(\d{4})(\d{2})(\d{2}).*/, '$1-$2-$3'):'Recent';
@@ -363,6 +440,7 @@ function activate(tab){
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>activate(t.dataset.tab)));
 byId('refreshNews').addEventListener('click',refreshNews); byId('refreshActors').addEventListener('click',refreshActors);
 byId('countryFilter').addEventListener('change',renderAll); byId('timespan').addEventListener('change',refreshNews); byId('search').addEventListener('input',renderAll);
+byId('newsSource').addEventListener('change',refreshNews);
 renderAll();
 // Try a live actor refresh on load, but do not block offline use.
 refreshActors();

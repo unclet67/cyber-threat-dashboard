@@ -9,10 +9,16 @@ designed for COPC-style operational awareness and quick research triage, and it
 
 - **Country snapshot cards** for China, Russia, Iran, and North Korea, each
   showing live actor counts, news counts, and current focus areas.
-- **Update on demand:**
-  - **Refresh live news** — pulls current public reporting from the
+- **Update on demand**, with a selectable **news source**:
+  - **GDELT API** — pulls current public reporting from the
     [GDELT Doc API](https://api.gdeltproject.org/api/v2/doc/doc), deduplicated and
     ranked by likely operational relevance, with a selectable 7/14/30/90-day lookback.
+  - **Cyber news feeds (RSS)** — reaches out to major cyber-security outlets
+    (Krebs on Security, BleepingComputer, The Hacker News, The Record, Dark Reading,
+    SecurityWeek, SANS ISC, CISA) via their RSS feeds and keeps the items mentioning
+    China, Russia, Iran, or North Korea. Because most outlets don't send CORS headers,
+    these requests are routed through a public CORS proxy; edit the `CYBER_FEEDS` list
+    in `index.html` to add or remove outlets.
   - **Refresh APT catalog** — live-loads CN/RU/IR/KP country-tagged actors from
     [MISP Galaxy](https://github.com/MISP/misp-galaxy) Threat Actor and Microsoft
     Activity Group data, merged with the built-in curated list.
@@ -42,6 +48,18 @@ python3 -m http.server 8000
 
 Internet access is only required for the **live news** and **live actor catalog**
 refresh. The curated fallback data works fully offline.
+
+## Deployment (GitHub Pages)
+
+The repo includes a GitHub Actions workflow (`.github/workflows/deploy.yml`) that
+publishes the dashboard to GitHub Pages on every push to `main` (and on manual
+**Run workflow**). Hosting it over `https://` also fixes the `file://` network
+restrictions, so the live refresh works with no local server.
+
+**One-time setup:** in the repo, go to **Settings → Pages → Build and deployment
+→ Source** and select **GitHub Actions**. After the next push to `main`, the
+**Deploy to GitHub Pages** workflow runs and the site is published at
+`https://<owner>.github.io/cyber-threat-dashboard/`.
 
 ## Data sources
 
