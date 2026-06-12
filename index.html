@@ -133,7 +133,7 @@
   </div>
 </main>
 <script>
-const COUNTRIES={
+let COUNTRIES={  // inline fallback; canonical config in data/sources.json (loaded by loadSources)
   CN:{name:'China',flag:'🇨🇳',short:'PRC',color:'CN',terms:['China','PRC','Chinese','Beijing','PLA','MSS','Salt Typhoon','Volt Typhoon','Flax Typhoon','APT41','APT40','Mustang Panda','Storm-0558'],focus:'Telecom, critical infrastructure, strategic espionage, IP theft, Taiwan/US targeting, influence activity.'},
   RU:{name:'Russia',flag:'🇷🇺',short:'Russia',color:'RU',terms:['Russia','Russian','Moscow','GRU','SVR','FSB','Sandworm','APT28','APT29','Fancy Bear','Cozy Bear','Gamaredon','Turla','Star Blizzard'],focus:'Wartime cyber operations, disruptive attacks, NATO/defense espionage, hack-and-leak, election influence.'},
   IR:{name:'Iran',flag:'🇮🇷',short:'Iran',color:'IR',terms:['Iran','Iranian','Tehran','IRGC','MOIS','APT33','APT34','APT35','APT42','MuddyWater','OilRig','Charming Kitten','CyberAv3ngers'],focus:'Regional espionage, hack-and-leak, wipers, ransomware enablement, Israel/Gulf/US targeting.'},
@@ -141,39 +141,22 @@ const COUNTRIES={
 };
 function escapeRegex(s){return String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
 // Whole-word matchers used to tag free-text news with Big 4 country codes.
-const COUNTRY_RX=Object.fromEntries(Object.keys(COUNTRIES).map(code=>{
+function buildCountryRx(){return Object.fromEntries(Object.keys(COUNTRIES).map(code=>{
   const terms=[COUNTRIES[code].name,...COUNTRIES[code].terms];
   return [code,new RegExp('\\b('+terms.map(escapeRegex).join('|')+')\\b','i')];
-}));
+}));}
+let COUNTRY_RX=buildCountryRx();
 function classifyCountries(text){return Object.keys(COUNTRY_RX).filter(code=>COUNTRY_RX[code].test(text));}
-// Curated cyber-security news RSS/Atom feeds for the "Cyber news feeds" source option. Edit freely.
-const CYBER_FEEDS=[
-  {name:'The Hacker News',url:'https://thehackernews.com/feeds/posts/default'},
-  {name:'BleepingComputer',url:'https://www.bleepingcomputer.com/feed/'},
-  {name:'Krebs on Security',url:'https://krebsonsecurity.com/feed/'},
-  {name:'CyberScoop',url:'https://cyberscoop.com/feed/'},
-  {name:'SecurityWeek',url:'https://www.securityweek.com/feed/atom/'},
-  {name:'Dark Reading',url:'https://www.darkreading.com/rss.xml'},
-  {name:'The Record (Recorded Future)',url:'https://therecord.media/feed/'},
-  {name:'Help Net Security',url:'https://www.helpnetsecurity.com/feed/'},
-  {name:'The Register — Security',url:'https://www.theregister.com/security/headlines.atom'},
-  {name:'WIRED — Security',url:'https://www.wired.com/feed/category/security/latest/rss'},
-  {name:'SANS Internet Storm Center',url:'https://isc.sans.edu/rssfeed_full.xml'},
-  {name:'CISA Advisories',url:'https://www.cisa.gov/cybersecurity-advisories/all.xml'},
-  // Vendor threat-research blogs.
-  {name:'Microsoft Security Blog',url:'https://www.microsoft.com/en-us/security/blog/feed/'},
-  {name:'Cisco Talos',url:'https://blog.talosintelligence.com/feeds/posts/default?alt=rss'},
-  {name:'Palo Alto Unit 42',url:'https://unit42.paloaltonetworks.com/feed/'},
-  {name:'Unit 42 — Threat Research',url:'https://unit42.paloaltonetworks.com/category/threat-research/feed/'},
-  {name:'CrowdStrike Blog',url:'https://www.crowdstrike.com/blog/feed/'},
-  {name:'SentinelOne Blog',url:'https://www.sentinelone.com/blog/feed/'},
-  {name:'ESET WeLiveSecurity',url:'https://feeds.feedburner.com/eset/blog'},
-  {name:'Kaspersky Securelist',url:'https://securelist.com/feed/'},
-  {name:'Check Point Research',url:'https://research.checkpoint.com/feed/'},
-  {name:'Fortinet Threat Research',url:'https://www.fortinet.com/blog/threat-research/rss.xml'},
-  {name:'Trend Micro Research',url:'http://feeds.trendmicro.com/Anti-MalwareBlog/'},
-  {name:'Proofpoint Threat Insight',url:'https://www.proofpoint.com/us/threat-insight-blog.xml'}
-];
+// Feeds load from data/sources.json (single source of truth, shared with the collector).
+let CYBER_FEEDS=[];
+async function loadSources(){
+  try{
+    const r=await fetch('data/sources.json?_='+Date.now(),{cache:'no-store'});
+    if(!r.ok) throw new Error(r.status);
+    const d=await r.json();
+    if(d&&d.countries&&Array.isArray(d.feeds)){ COUNTRIES=d.countries; CYBER_FEEDS=d.feeds; COUNTRY_RX=buildCountryRx(); }
+  }catch(e){ /* offline: keep the inline fallback COUNTRIES; live feeds unavailable */ }
+}
 // Public CORS proxies, tried in order, so the browser can read feeds that lack CORS headers.
 const CORS_PROXIES=[
   u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
@@ -526,10 +509,14 @@ byId('refreshNews').addEventListener('click',refreshNews); byId('refreshActors')
 byId('countryFilter').addEventListener('change',renderAll); byId('timespan').addEventListener('change',refreshNews); byId('search').addEventListener('input',renderAll);
 byId('newsSource').addEventListener('change',refreshNews);
 renderAll();
-// Try a live actor refresh on load, but do not block offline use.
-refreshActors();
-// Auto-load the prebuilt hourly feed (default source) so the dashboard is populated on open.
-refreshNews();
+// Load canonical feeds/country config from data/sources.json, then populate.
+loadSources().then(()=>{
+  renderAll();
+  // Try a live actor refresh on load, but do not block offline use.
+  refreshActors();
+  // Auto-load the prebuilt hourly feed (default source) so the dashboard is populated on open.
+  refreshNews();
+});
 </script>
 </body>
 </html>

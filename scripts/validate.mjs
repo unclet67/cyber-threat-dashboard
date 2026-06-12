@@ -38,6 +38,24 @@ try {
   fail('news.json schema: ' + e.message);
 }
 
+// 3. data/sources.json schema (single source of truth for countries + feeds).
+try {
+  const s = JSON.parse(readFileSync('data/sources.json', 'utf8'));
+  if (!s.countries || typeof s.countries !== 'object') throw new Error('missing "countries"');
+  for (const [code, c] of Object.entries(s.countries)) {
+    for (const k of ['name', 'focus']) if (!c[k]) throw new Error(`country ${code} missing "${k}"`);
+    if (!Array.isArray(c.terms) || !c.terms.length) throw new Error(`country ${code} has no terms`);
+  }
+  if (!Array.isArray(s.feeds) || !s.feeds.length) throw new Error('"feeds" empty or not an array');
+  s.feeds.forEach((f, i) => {
+    if (!f.name || !f.url) throw new Error(`feed ${i} missing name/url`);
+    if (!/^https?:\/\//.test(f.url)) throw new Error(`feed ${i} url not http(s): ${f.url}`);
+  });
+  ok(`data/sources.json valid (${Object.keys(s.countries).length} countries, ${s.feeds.length} feeds)`);
+} catch (e) {
+  fail('data/sources.json schema: ' + e.message);
+}
+
 if (failures) {
   console.error(`\n${failures} check(s) failed`);
   process.exit(1);

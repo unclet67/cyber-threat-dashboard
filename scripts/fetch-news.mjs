@@ -3,45 +3,14 @@
 // Runs in GitHub Actions (Node 20+), where there is no CORS/proxy constraint:
 // it fetches the cyber-security RSS/Atom feeds directly, keeps items mentioning
 // China, Russia, Iran, or North Korea, and writes news.json for the dashboard to
-// read same-origin. The feed list and country terms mirror index.html — keep in sync.
+// read same-origin. Countries and feeds come from data/sources.json (single source
+// of truth shared with the browser UI).
 
-import { writeFile } from 'node:fs/promises';
+import { readFile, writeFile } from 'node:fs/promises';
 
-const COUNTRIES = {
-  CN: { name: 'China', terms: ['China','PRC','Chinese','Beijing','PLA','MSS','Salt Typhoon','Volt Typhoon','Flax Typhoon','APT41','APT40','Mustang Panda','Storm-0558'] },
-  RU: { name: 'Russia', terms: ['Russia','Russian','Moscow','GRU','SVR','FSB','Sandworm','APT28','APT29','Fancy Bear','Cozy Bear','Gamaredon','Turla','Star Blizzard'] },
-  IR: { name: 'Iran', terms: ['Iran','Iranian','Tehran','IRGC','MOIS','APT33','APT34','APT35','APT42','MuddyWater','OilRig','Charming Kitten','CyberAv3ngers'] },
-  KP: { name: 'North Korea', terms: ['North Korea','DPRK','Lazarus','Kimsuky','APT38','APT37','APT43','Andariel','Bluenoroff','Emerald Sleet','Diamond Sleet'] },
-};
-
-const FEEDS = [
-  // Cyber-security press
-  ['The Hacker News', 'https://thehackernews.com/feeds/posts/default'],
-  ['BleepingComputer', 'https://www.bleepingcomputer.com/feed/'],
-  ['Krebs on Security', 'https://krebsonsecurity.com/feed/'],
-  ['CyberScoop', 'https://cyberscoop.com/feed/'],
-  ['SecurityWeek', 'https://www.securityweek.com/feed/atom/'],
-  ['Dark Reading', 'https://www.darkreading.com/rss.xml'],
-  ['The Record (Recorded Future)', 'https://therecord.media/feed/'],
-  ['Help Net Security', 'https://www.helpnetsecurity.com/feed/'],
-  ['The Register — Security', 'https://www.theregister.com/security/headlines.atom'],
-  ['WIRED — Security', 'https://www.wired.com/feed/category/security/latest/rss'],
-  ['SANS Internet Storm Center', 'https://isc.sans.edu/rssfeed_full.xml'],
-  ['CISA Advisories', 'https://www.cisa.gov/cybersecurity-advisories/all.xml'],
-  // Vendor threat-research blogs
-  ['Microsoft Security Blog', 'https://www.microsoft.com/en-us/security/blog/feed/'],
-  ['Cisco Talos', 'https://blog.talosintelligence.com/feeds/posts/default?alt=rss'],
-  ['Palo Alto Unit 42', 'https://unit42.paloaltonetworks.com/feed/'],
-  ['Unit 42 — Threat Research', 'https://unit42.paloaltonetworks.com/category/threat-research/feed/'],
-  ['CrowdStrike Blog', 'https://www.crowdstrike.com/blog/feed/'],
-  ['SentinelOne Blog', 'https://www.sentinelone.com/blog/feed/'],
-  ['ESET WeLiveSecurity', 'https://feeds.feedburner.com/eset/blog'],
-  ['Kaspersky Securelist', 'https://securelist.com/feed/'],
-  ['Check Point Research', 'https://research.checkpoint.com/feed/'],
-  ['Fortinet Threat Research', 'https://www.fortinet.com/blog/threat-research/rss.xml'],
-  ['Trend Micro Research', 'http://feeds.trendmicro.com/Anti-MalwareBlog/'],
-  ['Proofpoint Threat Insight', 'https://www.proofpoint.com/us/threat-insight-blog.xml'],
-];
+const SOURCES = JSON.parse(await readFile(new URL('../data/sources.json', import.meta.url), 'utf8'));
+const COUNTRIES = SOURCES.countries;
+const FEEDS = SOURCES.feeds.map(f => [f.name, f.url]);
 
 const LOOKBACK_DAYS = 30;   // keep items published within this window
 const MAX_ITEMS = 500;      // cap output size
