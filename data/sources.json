@@ -1,4 +1,5 @@
 {
+  "weakTerms": ["PLA", "MSS", "GRU", "SVR", "FSB"],
   "countries": {
     "CN": {
       "name": "China",
