@@ -399,7 +399,8 @@ function renderActors(){
   for(const a of list){
     const tr=document.createElement('tr');
     const refs=(a.refs||[]).slice(0,2).map((r,i)=>`<a href="${r}" target="_blank" rel="noreferrer">ref ${i+1}</a>`).join(' ');
-    tr.innerHTML=`<td><span class="pill ${a.c}">${COUNTRIES[a.c].flag} ${COUNTRIES[a.c].name}</span></td><td><div class="actor-name">${escapeHtml(a.n)}</div></td><td class="aliases">${(a.a||[]).slice(0,18).map(escapeHtml).join(', ')||'<span class="muted">—</span>'}</td><td>${escapeHtml((a.d||'').slice(0,360))}${a.d&&a.d.length>360?'…':''}</td><td>${escapeHtml(a.source||'')}${refs?'<br>'+refs:''}</td>`;
+    const cveN=cvesForActor(a).length; const cveChip=cveN?` <span class="tag high" title="Known exploited CVEs">${cveN} CVE${cveN>1?'s':''}</span>`:'';
+    tr.innerHTML=`<td><span class="pill ${a.c}">${COUNTRIES[a.c].flag} ${COUNTRIES[a.c].name}</span></td><td><div class="actor-name">${escapeHtml(a.n)}${cveChip}</div></td><td class="aliases">${(a.a||[]).slice(0,18).map(escapeHtml).join(', ')||'<span class="muted">—</span>'}</td><td>${escapeHtml((a.d||'').slice(0,360))}${a.d&&a.d.length>360?'…':''}</td><td>${escapeHtml(a.source||'')}${refs?'<br>'+refs:''}</td>`;
     tr.className='clickable'; tr.title='Open name crosswalk'; tr.addEventListener('click',()=>openCrosswalk(a));
     tbody.appendChild(tr);
   }
@@ -634,6 +635,21 @@ let CROSSWALK={providers:[
   {name:'Palo Alto Unit 42',lexicon:'Constellations: *Taurus, *Ursa.',suffixes:['Taurus','Ursa']},
   {name:'Recorded Future',lexicon:'TAG-## and color clusters.',prefixes:['TAG-']}
 ]};
+// Known exploited CVEs per actor (curated from public CISA/vendor advisories).
+let ACTOR_CVES={actors:[]};
+async function loadActorCves(){
+  try{ const r=await fetch('data/actor-cves.json?_='+Date.now(),{cache:'no-store'}); if(r.ok){ const d=await r.json(); if(d&&Array.isArray(d.actors)) ACTOR_CVES=d; } }catch(e){}
+  renderActors(); renderCrosswalk();
+}
+function cvesForActor(actor){
+  const names=[actor.n,...(actor.a||[])].map(norm); const out=[]; const seen=new Set();
+  for(const e of (ACTOR_CVES.actors||[])){
+    if((e.names||[]).some(n=>names.includes(norm(n)))){
+      for(const v of (e.cves||[])){ if(!seen.has(v.id)){ seen.add(v.id); out.push(v); } }
+    }
+  }
+  return out;
+}
 async function loadCrosswalk(){
   try{ const r=await fetch('data/crosswalk.json?_='+Date.now(),{cache:'no-store'}); if(r.ok){ const d=await r.json(); if(d&&Array.isArray(d.providers)&&d.providers.length) CROSSWALK=d; } }catch(e){}
   renderCrosswalkLegend(); renderCrosswalk();
@@ -658,9 +674,15 @@ function crosswalkGroups(actor){
 function openCrosswalk(actor){
   const c=COUNTRIES[actor.c]||{flag:'',name:actor.c}; const groups=crosswalkGroups(actor);
   const rows=groups.map(g=>`<div class="p">${escapeHtml(g.provider)}</div><div>${g.names.map(escapeHtml).join(', ')}${g.lexicon?`<div class="cw-lex">${escapeHtml(g.lexicon)}</div>`:''}</div>`).join('');
+  const cves=cvesForActor(actor);
+  const cveHtml=cves.length?`<h3 style="margin:16px 0 6px">Known exploited CVEs</h3><div class="cw-prov">`+cves.map(v=>{
+      const k=(kev||[]).find(x=>x.cve===v.id); const badge=k?` <span class="tag high">🔒 KEV${k.ransomware?' · ransomware':''}</span>`:'';
+      return `<div class="p mono"><a href="https://nvd.nist.gov/vuln/detail/${encodeURIComponent(v.id)}" target="_blank" rel="noreferrer">${escapeHtml(v.id)}</a></div><div>${escapeHtml(v.product||'')}${v.note?' — '+escapeHtml(v.note):''}${badge}</div>`;
+    }).join('')+`</div><p class="cw-lex">Curated from public CISA / vendor advisories; not exhaustive. 🔒 KEV = listed in CISA Known Exploited Vulnerabilities.</p>`:'';
   byId('cwBody').innerHTML=`<div class="cw-head"><span class="flag">${c.flag}</span><span class="cw-name" id="cwTitle">${escapeHtml(actor.n)}</span><span class="pill ${actor.c}">${escapeHtml(c.name)}</span></div>`
     +(actor.d?`<p class="section-note">${escapeHtml(actor.d)}</p>`:'')
     +`<div class="cw-prov">${rows}</div>`
+    +cveHtml
     +`<div class="cw-actions"><button id="cwNews">📰 News mentioning ${escapeHtml(actor.n)}</button>${(actor.refs&&actor.refs[0])?`<a class="tab" href="${actor.refs[0]}" target="_blank" rel="noreferrer">Source ↗</a>`:''}<a class="tab" href="https://attack.mitre.org/groups/" target="_blank" rel="noreferrer">MITRE ATT&amp;CK ↗</a></div>`;
   byId('cwNews').addEventListener('click',()=>{ byId('search').value=actor.n; byId('countryFilter').value='ALL'; closeCrosswalk(); activate('news'); renderAll(); });
   byId('crosswalkModal').classList.remove('hidden');
@@ -763,6 +785,7 @@ loadSources().then(()=>{
 // Load the CISA KEV catalog (independent of country config).
 loadKev();
 loadCrosswalk();
+loadActorCves();
 // Crosswalk modal close: button, backdrop click, Escape.
 byId('cwClose').addEventListener('click',closeCrosswalk);
 byId('crosswalkModal').addEventListener('click',e=>{ if(e.target===byId('crosswalkModal')) closeCrosswalk(); });
