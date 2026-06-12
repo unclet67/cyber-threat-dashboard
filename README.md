@@ -17,8 +17,9 @@ designed for COPC-style operational awareness and quick research triage, and it
     RSS search endpoint, aggregating thousands of outlets with a `when:` recency
     window tied to the lookback selector.
   - **Cyber news feeds (RSS)** — reaches out to major cyber-security outlets
-    (Krebs on Security, BleepingComputer, The Hacker News, The Record, Dark Reading,
-    SecurityWeek, SANS ISC, CISA) via their RSS feeds and keeps the items mentioning
+    (The Hacker News, BleepingComputer, Krebs on Security, CyberScoop, SecurityWeek,
+    Dark Reading, The Record, Help Net Security, The Register, WIRED, SANS ISC, CISA)
+    via their RSS feeds and keeps the items mentioning
     China, Russia, Iran, or North Korea. Because most outlets don't send CORS headers,
     these requests are routed through a public CORS proxy; edit the `CYBER_FEEDS` list
     in `index.html` to add or remove outlets.
