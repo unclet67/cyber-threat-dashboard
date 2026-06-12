@@ -29,9 +29,6 @@ const FEEDS = [
   ['SANS Internet Storm Center', 'https://isc.sans.edu/rssfeed_full.xml'],
   ['CISA Advisories', 'https://www.cisa.gov/cybersecurity-advisories/all.xml'],
   // Vendor threat-research blogs
-  // NOTE: the Google Cloud blog currently serves HTML (not RSS) at this path, so it yields
-  // 0 items until a working Mandiant/Google Cloud feed URL is supplied. Kept for parity with the UI.
-  ['Mandiant / Google Cloud Threat Intelligence', 'https://cloud.google.com/blog/topics/threat-intelligence/rss.xml'],
   ['Microsoft Security Blog', 'https://www.microsoft.com/en-us/security/blog/feed/'],
   ['Cisco Talos', 'https://blog.talosintelligence.com/feeds/posts/default?alt=rss'],
   ['Palo Alto Unit 42', 'https://unit42.paloaltonetworks.com/feed/'],

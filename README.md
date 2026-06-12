@@ -19,7 +19,7 @@ designed for COPC-style operational awareness and quick research triage, and it
   - **Cyber news feeds (RSS)** — reaches out to ~24 sources: cyber-security press
     (The Hacker News, BleepingComputer, Krebs on Security, CyberScoop, SecurityWeek,
     Dark Reading, The Record, Help Net Security, The Register, WIRED), vendor
-    threat-research blogs (Mandiant/Google Cloud, Microsoft, Cisco Talos, Palo Alto
+    threat-research blogs (Microsoft, Cisco Talos, Palo Alto
     Unit 42, CrowdStrike, SentinelOne, ESET, Kaspersky Securelist, Check Point,
     Fortinet, Trend Micro, Proofpoint), and SANS ISC + CISA — keeping items
     mentioning China, Russia, Iran, or North Korea. Because most outlets don't send CORS headers,
