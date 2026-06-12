@@ -46,6 +46,7 @@
       <span class="tab active" data-tab="overview">Overview</span>
       <span class="tab" data-tab="news">Recent News</span>
       <span class="tab" data-tab="actors">APT / Actor Catalog</span>
+      <span class="tab" data-tab="kev">KEV (Exploited)</span>
       <span class="tab" data-tab="sources">Sources & Caveats</span>
     </div>
     <button class="primary" id="refreshNews">Refresh live news</button>
@@ -88,6 +89,13 @@
     <h2>APT / Threat Actor Catalog</h2>
     <p class="section-note">The catalog attempts to live-load all CN/RU/IR/KP country-tagged actors from MISP Galaxy Threat Actor and Microsoft Activity Group data. If live sources fail, it displays the built-in curated fallback list.</p>
     <div class="table-wrap"><table id="actorTable"><thead><tr><th>Country</th><th>Actor / Group</th><th>Aliases / Vendor Names</th><th>Notes</th><th>Source</th></tr></thead><tbody></tbody></table></div>
+  </section>
+
+  <section id="kevPanel" class="hidden">
+    <h2>Known Exploited Vulnerabilities (CISA KEV)</h2>
+    <p class="section-note">The most recently added entries from the <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noreferrer">CISA KEV catalog</a> — vulnerabilities with reliable evidence of active in-the-wild exploitation. KEV is <strong>not nation-state attributed</strong>, so it is not filtered by country; use the search box to filter by CVE, vendor, or product. The 🔒 flag marks known ransomware-campaign use.</p>
+    <div id="kevHealth" class="section-note" style="margin-top:-2px"></div>
+    <div class="table-wrap"><table id="kevTable"><thead><tr><th>CVE</th><th>Vendor / Product</th><th>Vulnerability</th><th>Added</th><th>Due</th><th>Ransomware</th></tr></thead><tbody></tbody></table></div>
   </section>
 
   <section id="sourcesPanel" class="hidden">
@@ -528,12 +536,39 @@ function renderNews(){
     wrap.appendChild(div);
   }
 }
-function renderAll(){renderCards(); renderSnapshot(); renderActors(); renderNews(); renderFeedHealth(); const pm=byId('newsSource').value==='prebuilt'&&prebuiltMeta&&prebuiltMeta.generated; byId('updatedStamp').textContent=pm?('Feed updated '+relTime(prebuiltMeta.generated)):('Last rendered: '+new Date().toLocaleString());}
+// CISA KEV (Known Exploited Vulnerabilities) — general, not country-attributed.
+let kev=[]; let kevMeta=null;
+async function loadKev(){
+  try{
+    const r=await fetch('kev.json?_='+Date.now(),{cache:'no-store'});
+    if(!r.ok) throw new Error(r.status);
+    const d=await r.json();
+    kev=Array.isArray(d.items)?d.items:[];
+    kevMeta={generated:d.generated||null,total:d.total||0,catalogVersion:d.catalogVersion||null};
+  }catch(e){ kev=[]; kevMeta=null; }
+  renderKev();
+}
+function renderKev(){
+  const table=byId('kevTable'); if(!table) return;
+  const tbody=table.querySelector('tbody'); tbody.innerHTML='';
+  const q=byId('search').value.toLowerCase();
+  const list=kev.filter(v=>{ if(!q) return true; return [v.cve,v.vendor,v.product,v.name,v.description].join(' ').toLowerCase().includes(q); });
+  const hl=byId('kevHealth');
+  if(hl) hl.textContent=kevMeta&&kevMeta.generated?`Showing ${list.length} of ${kev.length} recent KEV entries · catalog updated ${relTime(kevMeta.generated)}`:'KEV catalog not generated yet — run the Sync news feed workflow.';
+  for(const v of list){
+    const tr=document.createElement('tr');
+    const rw=v.ransomware?'<span class="tag high">🔒 Known</span>':'<span class="tag">—</span>';
+    tr.innerHTML=`<td class="mono"><a href="https://nvd.nist.gov/vuln/detail/${encodeURIComponent(v.cve||'')}" target="_blank" rel="noreferrer">${escapeHtml(v.cve||'')}</a></td><td>${escapeHtml(v.vendor||'')}${v.product?' / '+escapeHtml(v.product):''}</td><td>${escapeHtml(v.name||'')}</td><td class="mono">${escapeHtml(v.added||'')}</td><td class="mono">${escapeHtml(v.due||'')}</td><td>${rw}</td>`;
+    tbody.appendChild(tr);
+  }
+}
+function renderAll(){renderCards(); renderSnapshot(); renderActors(); renderNews(); renderFeedHealth(); renderKev(); const pm=byId('newsSource').value==='prebuilt'&&prebuiltMeta&&prebuiltMeta.generated; byId('updatedStamp').textContent=pm?('Feed updated '+relTime(prebuiltMeta.generated)):('Last rendered: '+new Date().toLocaleString());}
 function activate(tab){
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));
   byId('overviewPanel').classList.toggle('hidden',tab!=='overview');
   byId('newsPanel').classList.toggle('hidden',tab!=='news');
   byId('actorsPanel').classList.toggle('hidden',tab!=='actors');
+  byId('kevPanel').classList.toggle('hidden',tab!=='kev');
   byId('sourcesPanel').classList.toggle('hidden',tab!=='sources');
 }
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>activate(t.dataset.tab)));
@@ -549,6 +584,8 @@ loadSources().then(()=>{
   // Auto-load the prebuilt hourly feed (default source) so the dashboard is populated on open.
   refreshNews();
 });
+// Load the CISA KEV catalog (independent of country config).
+loadKev();
 </script>
 </body>
 </html>

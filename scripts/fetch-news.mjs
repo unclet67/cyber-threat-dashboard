@@ -158,3 +158,37 @@ await writeFile('news.json', JSON.stringify(out) + '\n');
 
 console.log(report.sort().join('\n'));
 console.log(`\nWrote news.json — ${items.length} items from ${FEEDS.length} feeds at ${out.generated}`);
+
+// CISA Known Exploited Vulnerabilities — a separate, general (not country-attributed) catalog.
+// Isolated so a KEV fetch failure never affects news collection or the exit status.
+try {
+  const kevUrl = SOURCES.kevUrl || 'https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json';
+  const recent = SOURCES.kevRecent || 150;
+  const kev = JSON.parse(await fetchText(kevUrl, 30000));
+  const vulns = (kev.vulnerabilities || [])
+    .slice()
+    .sort((a, b) => String(b.dateAdded || '').localeCompare(String(a.dateAdded || '')))
+    .slice(0, recent)
+    .map(v => ({
+      cve: v.cveID,
+      vendor: v.vendorProject,
+      product: v.product,
+      name: v.vulnerabilityName,
+      added: v.dateAdded,
+      due: v.dueDate,
+      ransomware: v.knownRansomwareCampaignUse === 'Known',
+      description: (v.shortDescription || '').replace(/\s+/g, ' ').trim().slice(0, 400),
+    }));
+  const kevOut = {
+    generated: new Date().toISOString(),
+    source: 'CISA Known Exploited Vulnerabilities',
+    catalogVersion: kev.catalogVersion || null,
+    total: (kev.vulnerabilities || []).length,
+    count: vulns.length,
+    items: vulns,
+  };
+  await writeFile('kev.json', JSON.stringify(kevOut) + '\n');
+  console.log(`Wrote kev.json — ${vulns.length} of ${kevOut.total} KEV entries (catalog ${kevOut.catalogVersion})`);
+} catch (e) {
+  console.warn(`KEV fetch failed (kev.json left unchanged): ${e.message}`);
+}

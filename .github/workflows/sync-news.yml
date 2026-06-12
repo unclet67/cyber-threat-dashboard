@@ -28,19 +28,19 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Collect news into news.json
+      - name: Collect news.json and kev.json
         run: node scripts/fetch-news.mjs
 
-      - name: Commit news.json if it changed
+      - name: Commit data if it changed
         run: |
-          if [[ -n "$(git status --porcelain news.json)" ]]; then
+          git add news.json kev.json
+          if git diff --cached --quiet; then
+            echo "No data changes — nothing to commit."
+          else
             git config user.name  "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add news.json
-            git commit -m "chore: refresh news feed [skip ci]"
+            git commit -m "chore: refresh news + KEV feed [skip ci]"
             git push
-          else
-            echo "news.json unchanged — nothing to commit."
           fi
 
       # Publish the refreshed site (including news.json) to Pages.

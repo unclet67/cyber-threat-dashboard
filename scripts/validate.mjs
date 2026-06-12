@@ -63,6 +63,20 @@ try {
   fail('data/sources.json schema: ' + e.message);
 }
 
+// 4. kev.json schema (CISA KEV catalog slice).
+try {
+  const kev = JSON.parse(readFileSync('kev.json', 'utf8'));
+  if (!('generated' in kev)) throw new Error('missing "generated"');
+  if (!Array.isArray(kev.items)) throw new Error('"items" is not an array');
+  kev.items.forEach((v, i) => {
+    if (!v.cve) throw new Error(`item ${i} missing "cve"`);
+    if (typeof v.ransomware !== 'boolean') throw new Error(`item ${i} "ransomware" not boolean`);
+  });
+  ok(`kev.json valid (${kev.items.length} entries)`);
+} catch (e) {
+  fail('kev.json schema: ' + e.message);
+}
+
 if (failures) {
   console.error(`\n${failures} check(s) failed`);
   process.exit(1);
