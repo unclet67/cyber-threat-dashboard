@@ -13,6 +13,9 @@ designed for COPC-style operational awareness and quick research triage, and it
   - **GDELT API** — pulls current public reporting from the
     [GDELT Doc API](https://api.gdeltproject.org/api/v2/doc/doc), deduplicated and
     ranked by likely operational relevance, with a selectable 7/14/30/90-day lookback.
+  - **Google News** — runs the same per-country cyber query against the Google News
+    RSS search endpoint, aggregating thousands of outlets with a `when:` recency
+    window tied to the lookback selector.
   - **Cyber news feeds (RSS)** — reaches out to major cyber-security outlets
     (Krebs on Security, BleepingComputer, The Hacker News, The Record, Dark Reading,
     SecurityWeek, SANS ISC, CISA) via their RSS feeds and keeps the items mentioning
