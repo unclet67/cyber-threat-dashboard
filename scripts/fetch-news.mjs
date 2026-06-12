@@ -99,6 +99,7 @@ const norm = s => s.toLowerCase().replace(/[^a-z0-9]+/g, '');
 const cutoff = Date.now() - LOOKBACK_DAYS * 86400000;
 const collected = [];
 const report = [];
+const feedsStatus = [];
 
 await runPool(FEEDS, CONCURRENCY, async ([name, url]) => {
   try {
@@ -117,8 +118,10 @@ await runPool(FEEDS, CONCURRENCY, async ([name, url]) => {
         kept++;
       }
     }
+    feedsStatus.push({ name, ok: true, items: items.length, kept });
     report.push(`ok    ${name} — ${items.length} items, ${kept} kept`);
   } catch (e) {
+    feedsStatus.push({ name, ok: false, error: e.message });
     report.push(`FAIL  ${name} — ${e.message}`);
   }
 });
@@ -146,7 +149,9 @@ const out = {
   generated: new Date().toISOString(),
   lookbackDays: LOOKBACK_DAYS,
   feeds: FEEDS.length,
+  okFeeds: feedsStatus.filter(f => f.ok).length,
   count: items.length,
+  feedsStatus: feedsStatus.sort((a, b) => a.name.localeCompare(b.name)),
   items,
 };
 await writeFile('news.json', JSON.stringify(out) + '\n');
