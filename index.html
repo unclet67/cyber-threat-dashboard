@@ -79,7 +79,7 @@
 
   <section id="newsPanel" class="hidden">
     <h2>Recent Cyber & Information Warfare News</h2>
-    <p class="section-note">Pick a <strong>Source</strong>, then click <strong>Refresh live news</strong>. <strong>GDELT API</strong> queries the global news index directly. <strong>Google News</strong> runs the same per-country cyber query against Google News and aggregates thousands of outlets. <strong>Cyber news feeds</strong> reaches out to major cyber-security outlets (Krebs, BleepingComputer, The Hacker News, The Record, Dark Reading, SecurityWeek, SANS ISC, CISA) via their RSS feeds and keeps Big&nbsp;4-relevant items. Results are deduplicated and ranked by likely operational relevance.</p>
+    <p class="section-note">Pick a <strong>Source</strong>, then click <strong>Refresh live news</strong>. <strong>GDELT API</strong> queries the global news index directly. <strong>Google News</strong> runs the same per-country cyber query against Google News and aggregates thousands of outlets. <strong>Cyber news feeds</strong> reaches out to major cyber-security outlets (The Hacker News, BleepingComputer, Krebs, CyberScoop, The Register, WIRED, and more — see Sources tab) via their RSS feeds and keeps Big&nbsp;4-relevant items. Results are deduplicated and ranked by likely operational relevance.</p>
     <div id="newsGrid" class="news-grid"></div>
   </section>
 
@@ -104,7 +104,7 @@
           <li><a href="https://www.cisa.gov/news-events/cybersecurity-advisories" target="_blank" rel="noreferrer">CISA Cybersecurity Advisories</a> — U.S. government advisories.</li>
         </ul>
         <h3>Google News &amp; cyber news feeds (RSS)</h3>
-        <p class="section-note"><strong>Google News</strong> runs the same per-country cyber query (see Overview) against the Google News RSS search endpoint, aggregating thousands of outlets with a <span class="mono">when:</span> recency window tied to the lookback selector. The <strong>Cyber news feeds</strong> source option reads RSS/Atom directly from Krebs on Security, BleepingComputer, The Hacker News, The Record, Dark Reading, SecurityWeek, SANS ISC, and CISA, then keeps items mentioning China, Russia, Iran, or North Korea. Because most outlets do not send CORS headers, feed requests are routed through a public CORS proxy (allorigins / corsproxy.io). If feeds fail to load, the proxy may be rate-limited or down — switch back to the GDELT source. Edit the <span class="mono">CYBER_FEEDS</span> list in the page source to add or remove outlets.</p>
+        <p class="section-note"><strong>Google News</strong> runs the same per-country cyber query (see Overview) against the Google News RSS search endpoint, aggregating thousands of outlets with a <span class="mono">when:</span> recency window tied to the lookback selector. The <strong>Cyber news feeds</strong> source option reads RSS/Atom directly from The Hacker News, BleepingComputer, Krebs on Security, CyberScoop, SecurityWeek, Dark Reading, The Record (Recorded Future), Help Net Security, The Register, WIRED, SANS ISC, and CISA, then keeps items mentioning China, Russia, Iran, or North Korea. Because most outlets do not send CORS headers, feed requests are routed through a public CORS proxy (allorigins / corsproxy.io). If feeds fail to load, the proxy may be rate-limited or down — switch back to the GDELT source. Edit the <span class="mono">CYBER_FEEDS</span> list in the page source to add or remove outlets.</p>
       </div>
       <div class="card">
         <h3>Analytic caveats</h3>
@@ -146,12 +146,16 @@ const COUNTRY_RX=Object.fromEntries(Object.keys(COUNTRIES).map(code=>{
 function classifyCountries(text){return Object.keys(COUNTRY_RX).filter(code=>COUNTRY_RX[code].test(text));}
 // Curated cyber-security news RSS/Atom feeds for the "Cyber news feeds" source option. Edit freely.
 const CYBER_FEEDS=[
-  {name:'Krebs on Security',url:'https://krebsonsecurity.com/feed/'},
+  {name:'The Hacker News',url:'https://thehackernews.com/feeds/posts/default'},
   {name:'BleepingComputer',url:'https://www.bleepingcomputer.com/feed/'},
-  {name:'The Hacker News',url:'https://feeds.feedburner.com/TheHackersNews'},
-  {name:'The Record',url:'https://therecord.media/feed/'},
+  {name:'Krebs on Security',url:'https://krebsonsecurity.com/feed/'},
+  {name:'CyberScoop',url:'https://cyberscoop.com/feed/'},
+  {name:'SecurityWeek',url:'https://www.securityweek.com/feed/atom/'},
   {name:'Dark Reading',url:'https://www.darkreading.com/rss.xml'},
-  {name:'SecurityWeek',url:'https://www.securityweek.com/feed/'},
+  {name:'The Record (Recorded Future)',url:'https://therecord.media/feed/'},
+  {name:'Help Net Security',url:'https://www.helpnetsecurity.com/feed/'},
+  {name:'The Register — Security',url:'https://www.theregister.com/security/headlines.atom'},
+  {name:'WIRED — Security',url:'https://www.wired.com/feed/category/security/latest/rss'},
   {name:'SANS Internet Storm Center',url:'https://isc.sans.edu/rssfeed_full.xml'},
   {name:'CISA Advisories',url:'https://www.cisa.gov/cybersecurity-advisories/all.xml'}
 ];
@@ -382,8 +386,11 @@ function parseFeed(xmlText){
   for(const node of nodes){
     const txt=tag=>node.querySelector(tag)?.textContent?.trim()||'';
     const title=txt('title');
-    const linkEl=node.querySelector('link');
-    const link=(linkEl&&linkEl.textContent.trim())||linkEl?.getAttribute('href')||'';
+    // RSS puts the URL in <link> text; Atom uses <link rel="alternate" href="…"> among several link rels.
+    const links=[...node.querySelectorAll('link')];
+    const link=links.find(l=>l.textContent.trim())?.textContent.trim()
+      || links.find(l=>l.getAttribute('rel')==='alternate')?.getAttribute('href')
+      || links.find(l=>l.getAttribute('href'))?.getAttribute('href')||'';
     const desc=txt('description')||txt('summary')||txt('content');
     const dateStr=txt('pubDate')||txt('updated')||txt('published')||txt('date');
     if(title&&link) out.push({title,link,desc,dateStr});
