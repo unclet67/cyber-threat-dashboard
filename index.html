@@ -771,16 +771,17 @@ const DM_INFRA=[['command-and-control','C2 infrastructure'],['command and contro
 const DM_VICTIM=[['government','Government'],['defense','Defense'],['military','Military'],['telecom','Telecommunications'],['energy','Energy'],['grid','Power grid'],['healthcare','Healthcare'],['hospital','Healthcare'],['finance','Finance'],['bank','Banking / finance'],['university','Education'],['education','Education'],['critical infrastructure','Critical infrastructure'],['manufacturing','Manufacturing'],['aerospace','Aerospace'],['water','Water utility'],['election','Elections'],['journalist','Journalists / media'],['media','Media'],['cryptocurrency','Cryptocurrency'],['crypto','Cryptocurrency'],['developer','Software developers'],['ics','ICS / OT']];
 const DM_GEO=['Ukraine','Ukrainian','Israel','Israeli','Taiwan','United States','NATO','Europe','European','Gulf','South Korea','Japan','Latin America','Czech','Netherlands','Dutch','United Kingdom','Saudi','India'];
 function dmScan(text,dict){const t=text.toLowerCase();const out=[];for(const [kw,label] of dict){if(t.includes(kw)&&!out.includes(label))out.push(label);}return out;}
-function diamondForArticle(it){
-  const title=it.title||''; const hitActors=actorsInText(title);
+function diamondForArticle(it, extra){
+  const text=`${it.title||''} ${it.summary||''} ${extra||''}`.trim();
+  const hitActors=actorsInText(text);
   const country=COUNTRIES[it.c]?COUNTRIES[it.c].name:null;
   const adversary=[...new Set([...hitActors.map(a=>a.n), ...(country?[country+' (attributed)']:[])])];
-  const titleCves=[...new Set((title.match(/CVE-\d{4}-\d{4,}/gi)||[]).map(s=>s.toUpperCase()))];
+  const cves=[...new Set((text.match(/CVE-\d{4}-\d{4,}/gi)||[]).map(s=>s.toUpperCase()))];
   let actorCves=[]; for(const a of hitActors) actorCves.push(...cvesForActor(a).map(v=>v.id));
-  actorCves=[...new Set(actorCves)].filter(id=>!titleCves.includes(id));
-  const capability=[...titleCves.map(c=>'CVE '+c), ...dmScan(title,DM_TTP)];
-  const infrastructure=dmScan(title,DM_INFRA);
-  const victim=[...dmScan(title,DM_VICTIM), ...DM_GEO.filter(g=>new RegExp('\\b'+escapeRegex(g)+'\\b','i').test(title))];
+  actorCves=[...new Set(actorCves)].filter(id=>!cves.includes(id));
+  const capability=[...cves.map(c=>'CVE '+c), ...dmScan(text,DM_TTP)];
+  const infrastructure=dmScan(text,DM_INFRA);
+  const victim=[...dmScan(text,DM_VICTIM), ...DM_GEO.filter(g=>new RegExp('\\b'+escapeRegex(g)+'\\b','i').test(text))];
   return {adversary,capability,infrastructure,victim,actorCves,firstActor:hitActors[0]||null};
 }
 function renderDiamondOptions(){
@@ -790,23 +791,39 @@ function renderDiamondOptions(){
   sel.innerHTML='<option value="">— Select a news story —</option>'+diamondList.map((n,i)=>{const d=n.seendate?String(n.seendate).replace(/(\d{4})(\d{2})(\d{2}).*/,'$1-$2-$3'):'';return `<option value="${i}">${escapeHtml((d?d+' — ':'')+(n.title||'').slice(0,90))}</option>`;}).join('');
   if(prev!==''&&diamondList[+prev]) sel.value=prev;
 }
+let dmFullText=new Map();
+async function fetchFullArticle(it){
+  const btn=byId('dmFetch'); if(btn){ btn.disabled=true; btn.textContent='Fetching…'; }
+  try{
+    const html=await fetchViaProxy(it.url);
+    const doc=new DOMParser().parseFromString(html,'text/html');
+    doc.querySelectorAll('script,style,nav,header,footer,aside,form').forEach(e=>e.remove());
+    let txt=[...doc.querySelectorAll('article p, main p, p')].map(p=>p.textContent).join(' ').replace(/\s+/g,' ').trim();
+    if(!txt&&doc.body) txt=doc.body.textContent.replace(/\s+/g,' ').trim();
+    dmFullText.set(it.url, txt.slice(0,8000));
+    setStatus(txt?'Full article analyzed':'Fetched the page but found no readable body text');
+  }catch(e){ dmFullText.set(it.url,''); setStatus('Could not fetch full article (CORS proxy blocked or site unavailable)'); }
+  renderDiamond();
+}
 function renderDiamond(){
   const view=byId('diamondView'); if(!view) return;
   if(!diamondCurrent){ view.innerHTML='<p class="section-note">Select a news story above — or click <strong>◆ Diamond</strong> on any card in Recent News — to map it onto the Diamond Model.</p>'; return; }
-  const it=diamondCurrent; const D=diamondForArticle(it);
+  const it=diamondCurrent; const extra=dmFullText.get(it.url); const D=diamondForArticle(it,extra||'');
   const date=it.seendate?String(it.seendate).replace(/(\d{4})(\d{2})(\d{2}).*/,'$1-$2-$3'):'';
+  const depth=extra?'headline + summary + full article':(it.summary?'headline + article summary':'headline only');
   const vtx=(t,items,cls,hint)=>`<div class="dm-vertex ${cls}"><div class="dm-vtitle">${t}</div>${items.length?'<ul>'+items.map(x=>'<li>'+escapeHtml(x)+'</li>').join('')+'</ul>':'<p class="dm-empty">'+escapeHtml(hint)+'</p>'}</div>`;
   const capExtra=D.actorCves.length?`<p class="dm-empty">Actor's other known CVEs: ${escapeHtml(D.actorCves.join(', '))}</p>`:'';
-  view.innerHTML=`<div class="dm-meta"><a class="dm-t news-title" href="${it.url}" target="_blank" rel="noreferrer">${escapeHtml(it.title||'Untitled')}</a><div class="section-note">${escapeHtml(date)}${it.sourceCountry?' · '+escapeHtml(it.sourceCountry):''}${it.domain?' · '+escapeHtml(it.domain):''}</div></div>`
+  view.innerHTML=`<div class="dm-meta"><a class="dm-t news-title" href="${it.url}" target="_blank" rel="noreferrer">${escapeHtml(it.title||'Untitled')}</a><div class="section-note">${escapeHtml(date)}${it.sourceCountry?' · '+escapeHtml(it.sourceCountry):''}${it.domain?' · '+escapeHtml(it.domain):''}</div>${it.summary?`<p class="section-note" style="margin-top:6px">${escapeHtml(it.summary.slice(0,280))}${it.summary.length>280?'…':''}</p>`:''}</div>`
    +`<div class="diamond-grid">`
-   + vtx('Adversary',D.adversary,'adv','Unattributed in headline')
-   + `<div class="dm-vertex cap"><div class="dm-vtitle">Capability</div>${D.capability.length?'<ul>'+D.capability.map(x=>'<li>'+escapeHtml(x)+'</li>').join('')+'</ul>':'<p class="dm-empty">No TTP/CVE in headline</p>'}${capExtra}</div>`
+   + vtx('Adversary',D.adversary,'adv','Unattributed in text')
+   + `<div class="dm-vertex cap"><div class="dm-vtitle">Capability</div>${D.capability.length?'<ul>'+D.capability.map(x=>'<li>'+escapeHtml(x)+'</li>').join('')+'</ul>':'<p class="dm-empty">No TTP/CVE found</p>'}${capExtra}</div>`
    + `<div class="dm-mid"><div class="dia">◆</div>Diamond<br>Model</div>`
-   + vtx('Infrastructure',D.infrastructure,'inf','Not indicated in headline')
-   + vtx('Victim',D.victim,'vic','Target not indicated in headline')
+   + vtx('Infrastructure',D.infrastructure,'inf','Not indicated')
+   + vtx('Victim',D.victim,'vic','Target not indicated')
    + `</div>`
-   + `<p class="cw-lex">Auto-extracted from the headline as a starting point — open the article to confirm and complete each vertex.</p>`
-   + `<div class="cw-actions"><a class="tab" href="${it.url}" target="_blank" rel="noreferrer">Open article ↗</a>${D.firstActor?'<button id="dmActor">Actor crosswalk</button>':''}<button id="dmCopy">📋 Copy Diamond</button></div>`;
+   + `<p class="cw-lex">Analyzed from: <strong>${depth}</strong>. Auto-extracted as a starting point — confirm against the full article.</p>`
+   + `<div class="cw-actions"><a class="tab" href="${it.url}" target="_blank" rel="noreferrer">Open article ↗</a>${extra===undefined?'<button id="dmFetch">🔍 Fetch full article</button>':''}${D.firstActor?'<button id="dmActor">Actor crosswalk</button>':''}<button id="dmCopy">📋 Copy Diamond</button></div>`;
+  if(extra===undefined) byId('dmFetch').addEventListener('click',()=>fetchFullArticle(it));
   if(D.firstActor) byId('dmActor').addEventListener('click',()=>openCrosswalk(D.firstActor));
   byId('dmCopy').addEventListener('click',()=>{
     const md=`# Diamond Model — ${it.title}\n\n- **Adversary:** ${D.adversary.join(', ')||'—'}\n- **Capability:** ${D.capability.join(', ')||'—'}${D.actorCves.length?` (actor known CVEs: ${D.actorCves.join(', ')})`:''}\n- **Infrastructure:** ${D.infrastructure.join(', ')||'—'}\n- **Victim:** ${D.victim.join(', ')||'—'}\n\n_Source: ${it.sourceCountry||it.domain||''} ${date} — ${it.url}_\n`;
