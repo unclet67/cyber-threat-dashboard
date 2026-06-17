@@ -56,6 +56,19 @@
     @media(max-width:1100px){.grid{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.news-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:720px){.grid,.news-grid{grid-template-columns:1fr}.controls{position:static}.source-list{columns:1}.titlebar{display:block}.updated{display:inline-block;margin-top:12px}}
     @media print{body{background:#fff;color:#111}.card,.controls,.table-wrap,.news-card,.small-card{box-shadow:none;background:#fff;color:#111}.controls{display:none}a{color:#0645ad}.source-list{columns:1}}
     tr.clickable{cursor:pointer}tr.clickable:hover td{background:rgba(121,183,255,.08)}
+    .dm-meta{margin:4px 0 14px;font-size:13px}.dm-meta .dm-t{font-weight:800;font-size:16px}
+    .diamond-grid{display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-areas:". adv ." "cap mid inf" ". vic .";gap:12px;max-width:980px}
+    .dm-vertex{background:var(--chip);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+    .dm-vertex.adv{grid-area:adv;border-top:3px solid var(--cn)}.dm-vertex.cap{grid-area:cap;border-top:3px solid var(--warn)}
+    .dm-vertex.inf{grid-area:inf;border-top:3px solid var(--ir)}.dm-vertex.vic{grid-area:vic;border-top:3px solid var(--ru)}
+    .dm-vtitle{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);font-weight:700;margin-bottom:6px}
+    .dm-vertex ul{margin:0;padding-left:18px}.dm-vertex li{font-size:13px;margin:2px 0}
+    .dm-empty{font-size:12px;color:var(--muted);margin:0}
+    .dm-mid{grid-area:mid;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--muted);font-size:12px}
+    .dm-mid .dia{font-size:34px;color:var(--accent);line-height:1}
+    @media(max-width:720px){.diamond-grid{grid-template-columns:1fr;grid-template-areas:"adv" "cap" "inf" "vic" "mid"}}
+    .dm-btn{align-self:flex-start;font-size:11px;padding:2px 9px;border-radius:999px;background:transparent;border:1px solid var(--line);color:var(--muted);cursor:pointer}
+    .dm-btn:hover{border-color:var(--accent);color:var(--ink)}
     .actor-tags{display:flex;gap:6px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--line);padding-top:8px;margin-top:2px}
     .at-label{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
     .at-chip{font-size:11px;padding:2px 8px;border-radius:999px;background:var(--chip);border:1px solid var(--accent);color:#dce7ff;cursor:pointer}
@@ -93,6 +106,7 @@
       <span class="tab" data-tab="actors">APT / Actor Catalog</span>
       <span class="tab" data-tab="crosswalk">Name Crosswalk</span>
       <span class="tab" data-tab="kev">KEV (Exploited)</span>
+      <span class="tab" data-tab="diamond">Diamond Model</span>
       <span class="tab" data-tab="sources">Sources & Caveats</span>
     </div>
     <button class="primary" id="refreshNews">Refresh live news</button>
@@ -155,6 +169,15 @@
     <p class="section-note">The most recently added entries from the <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noreferrer">CISA KEV catalog</a> — vulnerabilities with reliable evidence of active in-the-wild exploitation. KEV is <strong>not nation-state attributed</strong>, so it is not filtered by country; use the search box to filter by CVE, vendor, or product. The 🔒 flag marks known ransomware-campaign use.</p>
     <div id="kevHealth" class="section-note" style="margin-top:-2px"></div>
     <div class="table-wrap"><table id="kevTable"><thead><tr><th>CVE</th><th>Vendor / Product</th><th>Vulnerability</th><th>Added</th><th>Due</th><th>Ransomware</th></tr></thead><tbody></tbody></table></div>
+  </section>
+
+  <section id="diamondPanel" class="hidden">
+    <h2>Diamond Model Mapper</h2>
+    <p class="section-note">Map a news story onto the <a href="https://www.activeresponse.org/the-diamond-model/" target="_blank" rel="noreferrer">Diamond Model of Intrusion Analysis</a> — Adversary, Capability, Infrastructure, Victim. Pick a story below (or click <strong>◆ Diamond</strong> on any card in Recent News). Vertices are auto-extracted from the headline as a starting point — confirm against the full article.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:6px">
+      <select id="diamondSelect" title="Choose a news story" style="min-width:320px;flex:1"></select>
+    </div>
+    <div id="diamondView"></div>
   </section>
 
   <section id="sourcesPanel" class="hidden">
@@ -629,6 +652,9 @@ function renderNews(){
       for(const a of acts){ const s=document.createElement('span'); s.className='at-chip'; s.textContent=a.n; s.title='Open name crosswalk'; s.addEventListener('click',ev=>{ ev.stopPropagation(); openCrosswalk(a); }); bar.appendChild(s); }
       div.appendChild(bar);
     }
+    const dm=document.createElement('button'); dm.className='dm-btn'; dm.textContent='◆ Diamond'; dm.title='Map this story to the Diamond Model';
+    dm.addEventListener('click',ev=>{ ev.stopPropagation(); mapToDiamond(n); });
+    div.appendChild(dm);
     wrap.appendChild(div);
   }
 }
@@ -738,7 +764,61 @@ function renderCrosswalk(){
     tbody.appendChild(tr);
   }
 }
-function renderAll(){renderCards(); renderSnapshot(); renderActors(); renderNews(); renderFeedHealth(); renderKev(); renderCrosswalk(); const pm=byId('newsSource').value==='prebuilt'&&prebuiltMeta&&prebuiltMeta.generated; byId('updatedStamp').textContent=pm?('Feed updated '+relTime(prebuiltMeta.generated)):('Last rendered: '+new Date().toLocaleString());}
+// ---- Diamond Model mapper: extract Adversary / Capability / Infrastructure / Victim from a headline ----
+let diamondList=[]; let diamondCurrent=null;
+const DM_TTP=[['ransomware','Ransomware'],['ransom','Ransomware'],['wiper','Wiper / destructive'],['spear-phishing','Spear-phishing'],['spear phishing','Spear-phishing'],['phishing','Phishing'],['botnet','Botnet'],['backdoor','Backdoor'],['infostealer','Infostealer'],['stealer','Infostealer'],['zero-day','Zero-day'],['0-day','Zero-day'],['supply chain','Supply-chain'],['ddos','DDoS'],['credential','Credential theft'],['espionage','Espionage'],['exploit','Exploitation'],['vulnerability','Vulnerability exploitation'],['malware','Malware'],['trojan','Trojan'],['loader','Loader'],['dropper','Dropper'],['disinformation','Disinformation / IO'],['influence operation','Influence operation'],['hack-and-leak','Hack-and-leak'],['scam','Scam / fraud'],['fraud','Scam / fraud'],['rootkit','Rootkit']];
+const DM_INFRA=[['command-and-control','C2 infrastructure'],['command and control','C2 infrastructure'],['bulletproof','Bulletproof hosting'],['botnet','Botnet / proxy network'],['proxy','Proxy / relay'],['vpn','VPN appliance'],['router','Router / edge device'],['edge device','Edge device'],['server','Server(s)'],['domain','Domain(s)'],['hosting','Hosting']];
+const DM_VICTIM=[['government','Government'],['defense','Defense'],['military','Military'],['telecom','Telecommunications'],['energy','Energy'],['grid','Power grid'],['healthcare','Healthcare'],['hospital','Healthcare'],['finance','Finance'],['bank','Banking / finance'],['university','Education'],['education','Education'],['critical infrastructure','Critical infrastructure'],['manufacturing','Manufacturing'],['aerospace','Aerospace'],['water','Water utility'],['election','Elections'],['journalist','Journalists / media'],['media','Media'],['cryptocurrency','Cryptocurrency'],['crypto','Cryptocurrency'],['developer','Software developers'],['ics','ICS / OT']];
+const DM_GEO=['Ukraine','Ukrainian','Israel','Israeli','Taiwan','United States','NATO','Europe','European','Gulf','South Korea','Japan','Latin America','Czech','Netherlands','Dutch','United Kingdom','Saudi','India'];
+function dmScan(text,dict){const t=text.toLowerCase();const out=[];for(const [kw,label] of dict){if(t.includes(kw)&&!out.includes(label))out.push(label);}return out;}
+function diamondForArticle(it){
+  const title=it.title||''; const hitActors=actorsInText(title);
+  const country=COUNTRIES[it.c]?COUNTRIES[it.c].name:null;
+  const adversary=[...new Set([...hitActors.map(a=>a.n), ...(country?[country+' (attributed)']:[])])];
+  const titleCves=[...new Set((title.match(/CVE-\d{4}-\d{4,}/gi)||[]).map(s=>s.toUpperCase()))];
+  let actorCves=[]; for(const a of hitActors) actorCves.push(...cvesForActor(a).map(v=>v.id));
+  actorCves=[...new Set(actorCves)].filter(id=>!titleCves.includes(id));
+  const capability=[...titleCves.map(c=>'CVE '+c), ...dmScan(title,DM_TTP)];
+  const infrastructure=dmScan(title,DM_INFRA);
+  const victim=[...dmScan(title,DM_VICTIM), ...DM_GEO.filter(g=>new RegExp('\\b'+escapeRegex(g)+'\\b','i').test(title))];
+  return {adversary,capability,infrastructure,victim,actorCves,firstActor:hitActors[0]||null};
+}
+function renderDiamondOptions(){
+  const sel=byId('diamondSelect'); if(!sel) return; const prev=sel.value;
+  diamondList=[]; const seen=new Set();
+  for(const n of news){ const k=n.url||n.title; if(seen.has(k))continue; seen.add(k); diamondList.push(n); }
+  sel.innerHTML='<option value="">— Select a news story —</option>'+diamondList.map((n,i)=>{const d=n.seendate?String(n.seendate).replace(/(\d{4})(\d{2})(\d{2}).*/,'$1-$2-$3'):'';return `<option value="${i}">${escapeHtml((d?d+' — ':'')+(n.title||'').slice(0,90))}</option>`;}).join('');
+  if(prev!==''&&diamondList[+prev]) sel.value=prev;
+}
+function renderDiamond(){
+  const view=byId('diamondView'); if(!view) return;
+  if(!diamondCurrent){ view.innerHTML='<p class="section-note">Select a news story above — or click <strong>◆ Diamond</strong> on any card in Recent News — to map it onto the Diamond Model.</p>'; return; }
+  const it=diamondCurrent; const D=diamondForArticle(it);
+  const date=it.seendate?String(it.seendate).replace(/(\d{4})(\d{2})(\d{2}).*/,'$1-$2-$3'):'';
+  const vtx=(t,items,cls,hint)=>`<div class="dm-vertex ${cls}"><div class="dm-vtitle">${t}</div>${items.length?'<ul>'+items.map(x=>'<li>'+escapeHtml(x)+'</li>').join('')+'</ul>':'<p class="dm-empty">'+escapeHtml(hint)+'</p>'}</div>`;
+  const capExtra=D.actorCves.length?`<p class="dm-empty">Actor's other known CVEs: ${escapeHtml(D.actorCves.join(', '))}</p>`:'';
+  view.innerHTML=`<div class="dm-meta"><a class="dm-t news-title" href="${it.url}" target="_blank" rel="noreferrer">${escapeHtml(it.title||'Untitled')}</a><div class="section-note">${escapeHtml(date)}${it.sourceCountry?' · '+escapeHtml(it.sourceCountry):''}${it.domain?' · '+escapeHtml(it.domain):''}</div></div>`
+   +`<div class="diamond-grid">`
+   + vtx('Adversary',D.adversary,'adv','Unattributed in headline')
+   + `<div class="dm-vertex cap"><div class="dm-vtitle">Capability</div>${D.capability.length?'<ul>'+D.capability.map(x=>'<li>'+escapeHtml(x)+'</li>').join('')+'</ul>':'<p class="dm-empty">No TTP/CVE in headline</p>'}${capExtra}</div>`
+   + `<div class="dm-mid"><div class="dia">◆</div>Diamond<br>Model</div>`
+   + vtx('Infrastructure',D.infrastructure,'inf','Not indicated in headline')
+   + vtx('Victim',D.victim,'vic','Target not indicated in headline')
+   + `</div>`
+   + `<p class="cw-lex">Auto-extracted from the headline as a starting point — open the article to confirm and complete each vertex.</p>`
+   + `<div class="cw-actions"><a class="tab" href="${it.url}" target="_blank" rel="noreferrer">Open article ↗</a>${D.firstActor?'<button id="dmActor">Actor crosswalk</button>':''}<button id="dmCopy">📋 Copy Diamond</button></div>`;
+  if(D.firstActor) byId('dmActor').addEventListener('click',()=>openCrosswalk(D.firstActor));
+  byId('dmCopy').addEventListener('click',()=>{
+    const md=`# Diamond Model — ${it.title}\n\n- **Adversary:** ${D.adversary.join(', ')||'—'}\n- **Capability:** ${D.capability.join(', ')||'—'}${D.actorCves.length?` (actor known CVEs: ${D.actorCves.join(', ')})`:''}\n- **Infrastructure:** ${D.infrastructure.join(', ')||'—'}\n- **Victim:** ${D.victim.join(', ')||'—'}\n\n_Source: ${it.sourceCountry||it.domain||''} ${date} — ${it.url}_\n`;
+    (navigator.clipboard?navigator.clipboard.writeText(md):Promise.reject()).then(()=>setStatus('Diamond copied as Markdown')).catch(()=>{const ta=document.createElement('textarea');ta.value=md;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');setStatus('Diamond copied');}catch(_){}ta.remove();});
+  });
+}
+function mapToDiamond(item){
+  activate('diamond'); renderDiamondOptions();
+  const k=item.url||item.title; const idx=diamondList.findIndex(n=>(n.url||n.title)===k);
+  byId('diamondSelect').value=idx>=0?String(idx):''; diamondCurrent=item; renderDiamond();
+}
+function renderAll(){renderCards(); renderSnapshot(); renderActors(); renderNews(); renderFeedHealth(); renderKev(); renderCrosswalk(); renderDiamondOptions(); const pm=byId('newsSource').value==='prebuilt'&&prebuiltMeta&&prebuiltMeta.generated; byId('updatedStamp').textContent=pm?('Feed updated '+relTime(prebuiltMeta.generated)):('Last rendered: '+new Date().toLocaleString());}
 function activate(tab){
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.tab===tab));
   byId('overviewPanel').classList.toggle('hidden',tab!=='overview');
@@ -746,6 +826,7 @@ function activate(tab){
   byId('actorsPanel').classList.toggle('hidden',tab!=='actors');
   byId('crosswalkPanel').classList.toggle('hidden',tab!=='crosswalk');
   byId('kevPanel').classList.toggle('hidden',tab!=='kev');
+  byId('diamondPanel').classList.toggle('hidden',tab!=='diamond');
   byId('sourcesPanel').classList.toggle('hidden',tab!=='sources');
 }
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>activate(t.dataset.tab)));
@@ -818,6 +899,8 @@ loadSources().then(()=>{
 // Load the CISA KEV catalog (independent of country config).
 loadKev();
 loadCrosswalk();
+byId('diamondSelect').addEventListener('change',e=>{ const v=e.target.value; diamondCurrent=v===''?null:diamondList[+v]; renderDiamond(); });
+renderDiamondOptions(); renderDiamond();
 loadActorCves();
 // Crosswalk modal close: button, backdrop click, Escape.
 byId('cwClose').addEventListener('click',closeCrosswalk);
