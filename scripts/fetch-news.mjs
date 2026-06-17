@@ -114,7 +114,7 @@ await runPool(FEEDS, CONCURRENCY, async ([name, url]) => {
       if (!codes.length) continue;
       const seendate = valid ? fmtSeen(dt) : '';
       for (const c of codes) {
-        collected.push({ title: it.title, url: it.link, domain: hostOf(it.link), seendate, sourceCountry: name, c });
+        collected.push({ title: it.title, url: it.link, domain: hostOf(it.link), seendate, sourceCountry: name, c, summary: (it.desc || '').slice(0, 500) });
         kept++;
       }
     }
