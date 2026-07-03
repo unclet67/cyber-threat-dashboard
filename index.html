@@ -197,7 +197,7 @@
         <h3>Hourly prebuilt feed</h3>
         <p class="section-note">The default <strong>Hourly feed (prebuilt)</strong> source reads <span class="mono">news.json</span>, regenerated every hour by the <span class="mono">Sync news feed</span> GitHub Action (<span class="mono">scripts/fetch-news.mjs</span>). It fetches all feeds server-side — no CORS proxy, no rate limits, instant load — and commits the result. The live sources below remain available as an on-demand fallback.</p>
         <h3>Google News &amp; cyber news feeds (RSS)</h3>
-        <p class="section-note"><strong>Google News</strong> runs the same per-country cyber query (see Overview) against the Google News RSS search endpoint, aggregating thousands of outlets with a <span class="mono">when:</span> recency window tied to the lookback selector. The <strong>Cyber news feeds</strong> source option reads RSS/Atom from cyber-security press (The Hacker News, BleepingComputer, Krebs on Security, CyberScoop, SecurityWeek, Dark Reading, The Record, Help Net Security, The Register, WIRED), vendor threat-research blogs (Microsoft, Cisco Talos, Palo Alto Unit 42, CrowdStrike, SentinelOne, ESET, Kaspersky Securelist, Check Point, Fortinet, Trend Micro, Proofpoint), and government/community sources (SANS ISC, CISA), then keeps items mentioning China, Russia, Iran, or North Korea. Feeds are fetched with limited concurrency through the proxy. Because most outlets do not send CORS headers, feed requests are routed through a public CORS proxy (allorigins / corsproxy.io). If feeds fail to load, the proxy may be rate-limited or down — switch back to the GDELT source. Edit the <span class="mono">CYBER_FEEDS</span> list in the page source to add or remove outlets.</p>
+        <p class="section-note"><strong>Google News</strong> runs the same per-country cyber query (see Overview) against the Google News RSS search endpoint, aggregating thousands of outlets with a <span class="mono">when:</span> recency window tied to the lookback selector. The <strong>Cyber news feeds</strong> source option reads RSS/Atom from cyber-security press (The Hacker News, BleepingComputer, Krebs on Security, CyberScoop, SecurityWeek, Dark Reading, The Record, Help Net Security, The Register, WIRED), vendor threat-research blogs (Microsoft, Cisco Talos, Palo Alto Unit 42, CrowdStrike, SentinelOne, ESET, Kaspersky Securelist, Check Point, Fortinet, Proofpoint), and government/community sources (SANS ISC, CISA), then keeps items mentioning China, Russia, Iran, or North Korea. Feeds are fetched with limited concurrency through the proxy. Because most outlets do not send CORS headers, feed requests are routed through a public CORS proxy (allorigins / corsproxy.io). If feeds fail to load, the proxy may be rate-limited or down — switch back to the GDELT source. Edit the feed list in <span class="mono">data/sources.json</span> (the single source of truth for the hourly collector and this page) to add or remove outlets.</p>
       </div>
       <div class="card">
         <h3>Analytic caveats</h3>
@@ -403,7 +403,7 @@ async function refreshActors(){
   ];
   const loaded=[];
   for(const [label,url] of urls){
-    try{ const r=await fetch(url,{cache:'no-store'}); if(!r.ok) throw new Error(r.status+' '+r.statusText); const j=await r.json(); (j.values||[]).forEach(v=>{ const a=addActorFromCluster(v,label); if(a) loaded.push(a); }); }
+    try{ const r=await fetchT(url,45000); if(!r.ok) throw new Error(r.status+' '+r.statusText); const j=await r.json(); (j.values||[]).forEach(v=>{ const a=addActorFromCluster(v,label); if(a) loaded.push(a); }); }
     catch(e){ console.warn('Actor source failed',label,e); }
   }
   if(loaded.length){
@@ -426,7 +426,7 @@ function renderActors(){
   const list=actors.filter(actorMatches);
   for(const a of list){
     const tr=document.createElement('tr');
-    const refs=(a.refs||[]).slice(0,2).map((r,i)=>`<a href="${r}" target="_blank" rel="noreferrer">ref ${i+1}</a>`).join(' ');
+    const refs=(a.refs||[]).map(safeUrl).filter(Boolean).slice(0,2).map((r,i)=>`<a href="${r}" target="_blank" rel="noreferrer">ref ${i+1}</a>`).join(' ');
     const cveN=cvesForActor(a).length; const cveChip=cveN?` <span class="tag high" title="Known exploited CVEs">${cveN} CVE${cveN>1?'s':''}</span>`:'';
     tr.innerHTML=`<td><span class="pill ${a.c}">${COUNTRIES[a.c].flag} ${COUNTRIES[a.c].name}</span></td><td><div class="actor-name">${escapeHtml(a.n)}${cveChip}</div></td><td class="aliases">${(a.a||[]).slice(0,18).map(escapeHtml).join(', ')||'<span class="muted">—</span>'}</td><td>${escapeHtml((a.d||'').slice(0,360))}${a.d&&a.d.length>360?'…':''}</td><td>${escapeHtml(a.source||'')}${refs?'<br>'+refs:''}</td>`;
     tr.className='clickable'; tr.title='Open name crosswalk'; tr.addEventListener('click',()=>openCrosswalk(a));
@@ -434,6 +434,8 @@ function renderActors(){
   }
 }
 function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+// External URLs (feed items, MISP refs) go into href attributes: allow only http(s) and escape quotes.
+function safeUrl(u){const s=String(u||'').trim();return /^https?:\/\//i.test(s)?escapeHtml(s):'';}
 function renderCards(){
   const wrap=byId('countryCards'); wrap.innerHTML='';
   for(const code of Object.keys(COUNTRIES)){
@@ -454,7 +456,7 @@ function renderSnapshot(){
   }
 }
 function severityFor(article){
-  const t=[article.title,article.seendate,article.domain,article.url].join(' ').toLowerCase();
+  const t=[article.title,article.summary,article.seendate,article.domain,article.url].join(' ').toLowerCase();
   const hi=['critical infrastructure','telecom','telecommunications','wiper','zero-day','zero day','cisa','fbi','nsa','sanction','indictment','apt','ransomware','election','influence operation','disinformation'];
   const med=['hack','malware','espionage','phishing','botnet','propaganda','social media','leak','cyber'];
   if(hi.some(x=>t.includes(x))) return ['High interest','high'];
@@ -473,7 +475,7 @@ async function refreshNewsGdelt(){
     const q=queryFor(code);
     const url=`https://api.gdeltproject.org/api/v2/doc/doc?query=${encodeURIComponent(q)}&mode=ArtList&format=json&maxrecords=25&sort=HybridRel&timespan=${days}d`;
     try{
-      const r=await fetch(url,{cache:'no-store'}); if(!r.ok) throw new Error(r.status+' '+r.statusText); const j=await r.json();
+      const r=await fetchT(url); if(!r.ok) throw new Error(r.status+' '+r.statusText); const j=await r.json();
       (j.articles||[]).forEach(x=>all.push({...x,c:code}));
     }catch(e){ console.warn('News source failed',code,e); }
   }
@@ -516,10 +518,15 @@ async function fetchPrebuilt(){
   }
   renderAll();
 }
+// Cross-origin fetch with a hard timeout so a hung proxy/API can't stall the UI forever.
+function fetchT(url,ms=20000){
+  const c=new AbortController(); const t=setTimeout(()=>c.abort(),ms);
+  return fetch(url,{cache:'no-store',signal:c.signal}).finally(()=>clearTimeout(t));
+}
 async function fetchViaProxy(url){
   let lastErr;
   for(const proxy of CORS_PROXIES){
-    try{ const r=await fetch(proxy(url),{cache:'no-store'}); if(!r.ok) throw new Error(r.status+' '+r.statusText); return await r.text(); }
+    try{ const r=await fetchT(proxy(url)); if(!r.ok) throw new Error(r.status+' '+r.statusText); return await r.text(); }
     catch(e){ lastErr=e; }
   }
   throw lastErr||new Error('All CORS proxies failed');
@@ -603,7 +610,7 @@ async function fetchGoogleNews(){
 function newsMatches(n){
   const cf=byId('countryFilter').value, q=byId('search').value.toLowerCase();
   if(cf!=='ALL'&&n.c!==cf)return false;
-  const blob=[n.title,n.domain,n.sourceCountry,COUNTRIES[n.c]?.name,n.url].join(' ').toLowerCase();
+  const blob=[n.title,n.summary,n.domain,n.sourceCountry,COUNTRIES[n.c]?.name,n.url].join(' ').toLowerCase();
   return !q||blob.includes(q);
 }
 // Detect APT/actor names mentioned in an article title (against the loaded catalog + aliases).
@@ -644,8 +651,8 @@ function renderNews(){
     const n=g.item; const [sev,cls]=severityFor(n); const date=n.seendate?String(n.seendate).replace(/(\d{4})(\d{2})(\d{2}).*/, '$1-$2-$3'):'Recent';
     const pills=g.countries.map(c=>`<span class="pill ${c}">${COUNTRIES[c].flag} ${COUNTRIES[c].name}</span>`).join('');
     const div=document.createElement('div'); div.className='news-card';
-    div.innerHTML=`<div class="news-meta">${pills}<span>${escapeHtml(date)}</span><span>${escapeHtml(n.domain||'')}</span></div><a class="news-title" href="${n.url}" target="_blank" rel="noreferrer">${escapeHtml(n.title||'Untitled')}</a><div class="tagbar"><span class="tag ${cls}">${sev}</span><span class="tag">${escapeHtml(n.sourceCountry||'source')}</span></div>`;
-    const acts=actorsInText(n.title);
+    div.innerHTML=`<div class="news-meta">${pills}<span>${escapeHtml(date)}</span><span>${escapeHtml(n.domain||'')}</span></div><a class="news-title" href="${safeUrl(n.url)||'#'}" target="_blank" rel="noreferrer">${escapeHtml(n.title||'Untitled')}</a><div class="tagbar"><span class="tag ${cls}">${sev}</span><span class="tag">${escapeHtml(n.sourceCountry||'source')}</span></div>`;
+    const acts=actorsInText([n.title,n.summary].filter(Boolean).join(' '));
     if(acts.length){
       const bar=document.createElement('div'); bar.className='actor-tags';
       const lbl=document.createElement('span'); lbl.className='at-label'; lbl.textContent='Actors:'; bar.appendChild(lbl);
@@ -742,7 +749,7 @@ function openCrosswalk(actor){
     +(actor.d?`<p class="section-note">${escapeHtml(actor.d)}</p>`:'')
     +`<div class="cw-prov">${rows}</div>`
     +cveHtml
-    +`<div class="cw-actions"><button id="cwNews">📰 News mentioning ${escapeHtml(actor.n)}</button>${(actor.refs&&actor.refs[0])?`<a class="tab" href="${actor.refs[0]}" target="_blank" rel="noreferrer">Source ↗</a>`:''}<a class="tab" href="https://attack.mitre.org/groups/" target="_blank" rel="noreferrer">MITRE ATT&amp;CK ↗</a></div>`;
+    +`<div class="cw-actions"><button id="cwNews">📰 News mentioning ${escapeHtml(actor.n)}</button>${safeUrl((actor.refs||[])[0])?`<a class="tab" href="${safeUrl(actor.refs[0])}" target="_blank" rel="noreferrer">Source ↗</a>`:''}<a class="tab" href="https://attack.mitre.org/groups/" target="_blank" rel="noreferrer">MITRE ATT&amp;CK ↗</a></div>`;
   byId('cwNews').addEventListener('click',()=>{ byId('search').value=actor.n; byId('countryFilter').value='ALL'; closeCrosswalk(); activate('news'); renderAll(); });
   byId('crosswalkModal').classList.remove('hidden');
 }
@@ -813,7 +820,8 @@ function renderDiamond(){
   const depth=extra?'headline + summary + full article':(it.summary?'headline + article summary':'headline only');
   const vtx=(t,items,cls,hint)=>`<div class="dm-vertex ${cls}"><div class="dm-vtitle">${t}</div>${items.length?'<ul>'+items.map(x=>'<li>'+escapeHtml(x)+'</li>').join('')+'</ul>':'<p class="dm-empty">'+escapeHtml(hint)+'</p>'}</div>`;
   const capExtra=D.actorCves.length?`<p class="dm-empty">Actor's other known CVEs: ${escapeHtml(D.actorCves.join(', '))}</p>`:'';
-  view.innerHTML=`<div class="dm-meta"><a class="dm-t news-title" href="${it.url}" target="_blank" rel="noreferrer">${escapeHtml(it.title||'Untitled')}</a><div class="section-note">${escapeHtml(date)}${it.sourceCountry?' · '+escapeHtml(it.sourceCountry):''}${it.domain?' · '+escapeHtml(it.domain):''}</div>${it.summary?`<p class="section-note" style="margin-top:6px">${escapeHtml(it.summary.slice(0,280))}${it.summary.length>280?'…':''}</p>`:''}</div>`
+  const artUrl=safeUrl(it.url)||'#';
+  view.innerHTML=`<div class="dm-meta"><a class="dm-t news-title" href="${artUrl}" target="_blank" rel="noreferrer">${escapeHtml(it.title||'Untitled')}</a><div class="section-note">${escapeHtml(date)}${it.sourceCountry?' · '+escapeHtml(it.sourceCountry):''}${it.domain?' · '+escapeHtml(it.domain):''}</div>${it.summary?`<p class="section-note" style="margin-top:6px">${escapeHtml(it.summary.slice(0,280))}${it.summary.length>280?'…':''}</p>`:''}</div>`
    +`<div class="diamond-grid">`
    + vtx('Adversary',D.adversary,'adv','Unattributed in text')
    + `<div class="dm-vertex cap"><div class="dm-vtitle">Capability</div>${D.capability.length?'<ul>'+D.capability.map(x=>'<li>'+escapeHtml(x)+'</li>').join('')+'</ul>':'<p class="dm-empty">No TTP/CVE found</p>'}${capExtra}</div>`
@@ -822,7 +830,7 @@ function renderDiamond(){
    + vtx('Victim',D.victim,'vic','Target not indicated')
    + `</div>`
    + `<p class="cw-lex">Analyzed from: <strong>${depth}</strong>. Auto-extracted as a starting point — confirm against the full article.</p>`
-   + `<div class="cw-actions"><a class="tab" href="${it.url}" target="_blank" rel="noreferrer">Open article ↗</a>${extra===undefined?'<button id="dmFetch">🔍 Fetch full article</button>':''}${D.firstActor?'<button id="dmActor">Actor crosswalk</button>':''}<button id="dmCopy">📋 Copy Diamond</button></div>`;
+   + `<div class="cw-actions"><a class="tab" href="${artUrl}" target="_blank" rel="noreferrer">Open article ↗</a>${extra===undefined?'<button id="dmFetch">🔍 Fetch full article</button>':''}${D.firstActor?'<button id="dmActor">Actor crosswalk</button>':''}<button id="dmCopy">📋 Copy Diamond</button></div>`;
   if(extra===undefined) byId('dmFetch').addEventListener('click',()=>fetchFullArticle(it));
   if(D.firstActor) byId('dmActor').addEventListener('click',()=>openCrosswalk(D.firstActor));
   byId('dmCopy').addEventListener('click',()=>{

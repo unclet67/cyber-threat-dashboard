@@ -16,15 +16,16 @@ designed for COPC-style operational awareness and quick research triage, and it
   - **Google News** — runs the same per-country cyber query against the Google News
     RSS search endpoint, aggregating thousands of outlets with a `when:` recency
     window tied to the lookback selector.
-  - **Cyber news feeds (RSS)** — reaches out to ~24 sources: cyber-security press
+  - **Cyber news feeds (RSS)** — reaches out to 23 sources: cyber-security press
     (The Hacker News, BleepingComputer, Krebs on Security, CyberScoop, SecurityWeek,
     Dark Reading, The Record, Help Net Security, The Register, WIRED), vendor
     threat-research blogs (Microsoft, Cisco Talos, Palo Alto
     Unit 42, CrowdStrike, SentinelOne, ESET, Kaspersky Securelist, Check Point,
-    Fortinet, Trend Micro, Proofpoint), and SANS ISC + CISA — keeping items
+    Fortinet, Proofpoint), and SANS ISC + CISA — keeping items
     mentioning China, Russia, Iran, or North Korea. Because most outlets don't send CORS headers,
-    these requests are routed through a public CORS proxy; edit the `CYBER_FEEDS` list
-    in `index.html` to add or remove outlets.
+    these requests are routed through a public CORS proxy; edit the feed list in
+    `data/sources.json` (the single source of truth for both the hourly collector
+    and the in-browser live fetch) to add or remove outlets.
   - **Refresh APT catalog** — live-loads CN/RU/IR/KP country-tagged actors from
     [MISP Galaxy](https://github.com/MISP/misp-galaxy) Threat Actor and Microsoft
     Activity Group data, merged with the built-in curated list.
