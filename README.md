@@ -31,7 +31,7 @@ designed for COPC-style operational awareness and quick research triage, and it
     Activity Group data, merged with the built-in curated list.
 - **APT / Actor catalog** with aliases, vendor naming, notes, and source links.
 - **KEV tab** — the most recently added [CISA Known Exploited Vulnerabilities](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
-  (CVE, vendor/product, due date, ransomware flag). Collected hourly into `kev.json`.
+  (CVE, vendor/product, due date, ransomware flag). Collected hourly into `data/kev.json`.
 - **Copy brief** — one click exports the current (filtered) news as a dated,
   country-grouped Markdown brief, ready to paste into a daily/weekly writeup.
 - **Filtering & search** by country and free text (actor names, aliases, news, CVEs).
@@ -79,17 +79,17 @@ rate-limited. To avoid that, a scheduled GitHub Action collects the news
 **server-side** instead:
 
 - **`scripts/fetch-news.mjs`** — a dependency-free Node script that fetches every
-  feed directly (no CORS/proxy), keeps Big-4-relevant items, and writes `news.json`.
+  feed directly (no CORS/proxy), keeps Big-4-relevant items, and writes `data/news.json`.
 - **`.github/workflows/sync-news.yml`** — runs the script **hourly** (and on manual
-  **Run workflow**), commits `news.json`, and redeploys Pages.
+  **Run workflow**), commits `data/news.json` (plus `data/kev.json` and a rolling `data/archive.json` of daily counts), and redeploys Pages.
 
-The dashboard's default source, **Hourly feed (prebuilt)**, reads `news.json`
+The dashboard's default source, **Hourly feed (prebuilt)**, reads `data/news.json`
 same-origin — instant, no proxy, no rate limits — and loads automatically on open.
 The live sources (GDELT, Google News, Cyber news feeds) remain available as an
 on-demand fallback.
 
 **To populate it the first time**, run the **Sync news feed** workflow once from
-the **Actions** tab (it otherwise runs hourly). Until then, `news.json` ships as an
+the **Actions** tab (it otherwise runs hourly). Until then, `data/news.json` ships as an
 empty placeholder and the dashboard shows a hint to run the workflow.
 
 ## Data sources

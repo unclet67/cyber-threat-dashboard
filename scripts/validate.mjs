@@ -10,20 +10,24 @@ let failures = 0;
 const fail = m => { console.error('✗ ' + m); failures++; };
 const ok = m => console.log('✓ ' + m);
 
-// 1. index.html inline <script> blocks must parse (compile-only; browser globals are never executed).
+// 1. App JS must parse (compile-only; browser globals are never executed):
+//    app.js plus any inline <script> blocks left in index.html (the pre-paint theme snippet).
 try {
+  new vm.Script(readFileSync('app.js', 'utf8'), { filename: 'app.js' });
   const html = readFileSync('index.html', 'utf8');
   const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/gi)].map(m => m[1]);
-  if (!scripts.length) throw new Error('no <script> block found');
   scripts.forEach((code, i) => new vm.Script(code, { filename: `index.html#script${i}` }));
-  ok(`index.html inline JS parses (${scripts.length} block(s))`);
+  for (const ref of ['src="app.js"', 'href="styles.css"']) {
+    if (!html.includes(ref)) throw new Error(`index.html missing ${ref}`);
+  }
+  ok(`app.js parses; index.html inline JS parses (${scripts.length} block(s)); asset refs present`);
 } catch (e) {
-  fail('index.html inline JS: ' + e.message);
+  fail('app JS: ' + e.message);
 }
 
 // 2. news.json schema.
 try {
-  const data = JSON.parse(readFileSync('news.json', 'utf8'));
+  const data = JSON.parse(readFileSync('data/news.json', 'utf8'));
   const COUNTRIES = new Set(['CN', 'RU', 'IR', 'KP']);
   if (typeof data !== 'object' || data === null) throw new Error('not an object');
   if (!('generated' in data)) throw new Error('missing "generated"');
@@ -65,7 +69,7 @@ try {
 
 // 4. kev.json schema (CISA KEV catalog slice).
 try {
-  const kev = JSON.parse(readFileSync('kev.json', 'utf8'));
+  const kev = JSON.parse(readFileSync('data/kev.json', 'utf8'));
   if (!('generated' in kev)) throw new Error('missing "generated"');
   if (!Array.isArray(kev.items)) throw new Error('"items" is not an array');
   kev.items.forEach((v, i) => {
@@ -107,6 +111,19 @@ try {
   ok(`data/actor-cves.json valid (${ac.actors.length} actors, ${cveCount} CVE mappings)`);
 } catch (e) {
   fail('data/actor-cves.json schema: ' + e.message);
+}
+
+// 7. data/archive.json schema (rolling daily counts for trend views).
+try {
+  const ar = JSON.parse(readFileSync('data/archive.json', 'utf8'));
+  if (!Array.isArray(ar.entries)) throw new Error('"entries" is not an array');
+  ar.entries.forEach((e, i) => {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(e.date || '')) throw new Error(`entry ${i} bad date "${e.date}"`);
+    if (typeof e.total !== 'number') throw new Error(`entry ${i} "total" not a number`);
+  });
+  ok(`data/archive.json valid (${ar.entries.length} day(s))`);
+} catch (e) {
+  fail('data/archive.json schema: ' + e.message);
 }
 
 if (failures) {
