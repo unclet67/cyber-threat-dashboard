@@ -18,8 +18,14 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Collector syntax
-        run: node --check scripts/fetch-news.mjs
+      - name: Syntax checks
+        run: |
+          node --check scripts/fetch-news.mjs
+          node --check scripts/lib.mjs
+          node --check app.js
 
-      - name: Validate inline JS and news.json
+      - name: Unit tests
+        run: node --test tests/lib.test.mjs
+
+      - name: Validate app JS and data schemas
         run: node scripts/validate.mjs

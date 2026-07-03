@@ -1,0 +1,729 @@
+/* Big 4 Cyber & IW Threat Dashboard — application logic.
+   Config: data/sources.json · Data: produced hourly by scripts/fetch-news.mjs */
+let COUNTRIES={  // inline fallback; canonical config in data/sources.json (loaded by loadSources)
+  CN:{name:'China',flag:'🇨🇳',short:'PRC',color:'CN',terms:['China','PRC','Chinese','Beijing','PLA','MSS','Salt Typhoon','Volt Typhoon','Flax Typhoon','APT41','APT40','Mustang Panda','Storm-0558'],focus:'Telecom, critical infrastructure, strategic espionage, IP theft, Taiwan/US targeting, influence activity.'},
+  RU:{name:'Russia',flag:'🇷🇺',short:'Russia',color:'RU',terms:['Russia','Russian','Moscow','GRU','SVR','FSB','Sandworm','APT28','APT29','Fancy Bear','Cozy Bear','Gamaredon','Turla','Star Blizzard'],focus:'Wartime cyber operations, disruptive attacks, NATO/defense espionage, hack-and-leak, election influence.'},
+  IR:{name:'Iran',flag:'🇮🇷',short:'Iran',color:'IR',terms:['Iran','Iranian','Tehran','IRGC','MOIS','APT33','APT34','APT35','APT42','MuddyWater','OilRig','Charming Kitten','CyberAv3ngers'],focus:'Regional espionage, hack-and-leak, wipers, ransomware enablement, Israel/Gulf/US targeting.'},
+  KP:{name:'North Korea',flag:'🇰🇵',short:'DPRK',color:'KP',terms:['North Korea','DPRK','Lazarus','Kimsuky','APT38','APT37','APT43','Andariel','Bluenoroff','Emerald Sleet','Diamond Sleet'],focus:'Crypto theft, defense/aerospace espionage, IT worker schemes, sanctions evasion, nuclear/missile support.'}
+};
+function escapeRegex(s){return String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+// Ambiguous short acronyms (e.g. MSS = managed security services) only count in titles; overridden from sources.json.
+let WEAK_TERMS=new Set(['PLA','MSS','GRU','SVR','FSB']);
+function rxFor(terms){return terms.length?new RegExp('\\b('+terms.map(escapeRegex).join('|')+')\\b','i'):null;}
+function buildCountryRx(){return Object.fromEntries(Object.keys(COUNTRIES).map(code=>{
+  const all=[COUNTRIES[code].name,...COUNTRIES[code].terms];
+  return [code,{strong:rxFor(all.filter(t=>!WEAK_TERMS.has(t))),weak:rxFor(all.filter(t=>WEAK_TERMS.has(t)))}];
+}));}
+let COUNTRY_RX=buildCountryRx();
+// Strong terms match anywhere; weak/ambiguous terms only in the title.
+function classifyCountries(title,desc){return Object.keys(COUNTRY_RX).filter(code=>{const{strong,weak}=COUNTRY_RX[code];return (strong&&strong.test(`${title} ${desc||''}`))||(weak&&weak.test(title));});}
+// Feeds load from data/sources.json (single source of truth, shared with the collector).
+let CYBER_FEEDS=[];
+async function loadSources(){
+  try{
+    const r=await fetch('data/sources.json?_='+Date.now(),{cache:'no-store'});
+    if(!r.ok) throw new Error(r.status);
+    const d=await r.json();
+    if(d&&d.countries&&Array.isArray(d.feeds)){ COUNTRIES=d.countries; CYBER_FEEDS=d.feeds; if(Array.isArray(d.weakTerms)) WEAK_TERMS=new Set(d.weakTerms); COUNTRY_RX=buildCountryRx(); }
+  }catch(e){ /* offline: keep the inline fallback COUNTRIES; live feeds unavailable */ }
+}
+// Public CORS proxies, tried in order, so the browser can read feeds that lack CORS headers.
+const CORS_PROXIES=[
+  u=>`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+  u=>`https://corsproxy.io/?url=${encodeURIComponent(u)}`
+];
+const FALLBACK_ACTORS=[
+  {c:'CN',n:'APT1',a:['Comment Crew','PLA Unit 61398','Byzantine Candor','TG-8223','G0006'],d:'PLA-linked espionage actor widely associated with Unit 61398.'},
+  {c:'CN',n:'APT2',a:['Putter Panda','PLA Unit 61486','MSUpdater','TG-6952','G0024'],d:'Aerospace/satellite-focused PRC-linked cluster.'},
+  {c:'CN',n:'APT3',a:['Buckeye','Gothic Panda','UPS Team','Brocade Typhoon','TG-0110'],d:'China-nexus cyber espionage group.'},
+  {c:'CN',n:'APT4',a:['Sykipot','Wisp Team'],d:'Historic China-linked intrusion set focused on DIB and aerospace.'},
+  {c:'CN',n:'APT5',a:['Manganese','Keyhole Panda','Mulberry Typhoon'],d:'Long-running telecom and technology espionage actor.'},
+  {c:'CN',n:'APT6',a:['1.php Group','Circle Typhoon overlap'],d:'China-nexus actor, often tracked through legacy APT naming.'},
+  {c:'CN',n:'APT7',a:['PittyTiger overlap','Group 7'],d:'Legacy China-linked actor in IP theft reporting.'},
+  {c:'CN',n:'APT8',a:['Group 8'],d:'China-linked group reported in industrial and media targeting.'},
+  {c:'CN',n:'APT10',a:['MenuPass','Stone Panda','Red Apollo','Cicada','Potassium'],d:'MSS-linked espionage actor; managed service provider compromises.'},
+  {c:'CN',n:'APT12',a:['Numbered Panda','Calc Team','BeeBus','DynCalc','Hexagon Typhoon'],d:'China-linked actor targeting journalists, government, and DIB.'},
+  {c:'CN',n:'APT14',a:['QAZTeam'],d:'China-linked data theft actor, maritime/military themes.'},
+  {c:'CN',n:'APT15',a:['Ke3chang','Vixen Panda','Mirage','NICKEL','Flea'],d:'China-nexus actor targeting government, finance, energy, military.'},
+  {c:'CN',n:'APT16',a:['SVCMONDR'],d:'China-linked actor in Japan/Taiwan themed campaigns.'},
+  {c:'CN',n:'APT17',a:['DeputyDog','Tailgator Team','Aurora Panda'],d:'China-linked intrusions against government and technology targets.'},
+  {c:'CN',n:'APT18',a:['Wekby','Dynamite Panda'],d:'China-linked actor targeting aerospace, health, telecom, high tech.'},
+  {c:'CN',n:'APT19',a:['Deep Panda','Codoso','Checkered Typhoon','TG-3551'],d:'China-linked legal, investment, and high-value sector espionage.'},
+  {c:'CN',n:'APT20',a:['Violin Panda','Wocao'],d:'China-linked actor with strategic web compromise history.'},
+  {c:'CN',n:'APT21',a:['Zhenbao'],d:'China-linked government-focused espionage cluster.'},
+  {c:'CN',n:'APT22',a:['Barista','Suckfly'],d:'China-nexus actor targeting political, military, and economic entities.'},
+  {c:'CN',n:'APT23',a:['Pirate Panda'],d:'China-linked actor targeting media and government.'},
+  {c:'CN',n:'APT24',a:['PittyTiger','Palmerworm','Canary Typhoon','BlackTech overlap'],d:'China-linked actor targeting government, healthcare, telecom, and Taiwan-related issues.'},
+  {c:'CN',n:'APT25',a:['Uncool','Ke3chang','Vixen Panda'],d:'China-linked data theft actor targeting DIB, media, finance, transportation.'},
+  {c:'CN',n:'APT26',a:['Hippo Team'],d:'China-linked aerospace, defense, and energy espionage actor.'},
+  {c:'CN',n:'APT27',a:['Emissary Panda','Lucky Mouse','Iron Tiger','Circle Typhoon','TG-3390'],d:'China-linked actor targeting government, defense, technology, and embassies.'},
+  {c:'CN',n:'APT30',a:['Naikon'],d:'Long-running China-linked ASEAN/government espionage actor.'},
+  {c:'CN',n:'APT31',a:['Zirconium','Judgment Panda','Violet Typhoon','TA412'],d:'China-nexus actor targeting government, aerospace, telecom, finance, and policy.'},
+  {c:'CN',n:'APT40',a:['Leviathan','TEMP.Periscope','Kryptonite Panda','Gingham Typhoon','BRONZE MOHAWK'],d:'MSS/Hainan-linked maritime, defense, and Belt-and-Road espionage actor.'},
+  {c:'CN',n:'APT41',a:['Barium','Winnti','Wicked Panda','Brass Typhoon','Double Dragon'],d:'PRC state-sponsored espionage plus financially motivated activity.'},
+  {c:'CN',n:'BackdoorDiplomacy',a:['Playful Taurus','CloudComputating'],d:'China-linked diplomatic and government targeting cluster.'},
+  {c:'CN',n:'BlackTech',a:['Palmerworm','Circuit Panda','Earth Hundun'],d:'Taiwan/Japan/US-focused China-linked espionage actor.'},
+  {c:'CN',n:'Flax Typhoon',a:['Ethyl APT'],d:'PRC-linked actor associated with botnet/proxy infrastructure reporting.'},
+  {c:'CN',n:'Gallium',a:['Soft Cell','PingPull','Alloy Taurus'],d:'China-linked telecom-focused espionage actor.'},
+  {c:'CN',n:'Hafnium',a:['Silk Typhoon'],d:'China-linked Exchange exploitation and espionage cluster.'},
+  {c:'CN',n:'Mustang Panda',a:['TA416','RedDelta','Bronze President','Stately Taurus'],d:'China-linked group targeting NGOs, governments, and regions of strategic interest.'},
+  {c:'CN',n:'Salt Typhoon',a:['GhostEmperor','FamousSparrow','Earth Estries','UNC2286'],d:'PRC-linked telecom/counterintelligence espionage reporting.'},
+  {c:'CN',n:'Storm-0558',a:['Antique Typhoon'],d:'China-linked cloud/email espionage actor.'},
+  {c:'CN',n:'Tropic Trooper',a:['Pirate Panda','KeyBoy'],d:'China-linked actor targeting Taiwan, Philippines, Hong Kong, and energy/government sectors.'},
+  {c:'CN',n:'Volt Typhoon',a:['VANGUARD PANDA','BRONZE SILHOUETTE','Insidious Taurus','VOLTZITE','UNC3236'],d:'PRC-linked critical infrastructure pre-positioning actor.'},
+
+  {c:'RU',n:'APT28',a:['Fancy Bear','Sofacy','Sednit','Pawn Storm','STRONTIUM','Forest Blizzard'],d:'GRU-linked espionage and influence/hack-and-leak actor.'},
+  {c:'RU',n:'APT29',a:['Cozy Bear','The Dukes','NOBELIUM','Midnight Blizzard','CozyDuke'],d:'SVR-linked strategic espionage actor.'},
+  {c:'RU',n:'Sandworm',a:['APT44','Voodoo Bear','Telebots','Seashell Blizzard','IRON VIKING','Unit 74455'],d:'GRU-linked destructive and disruptive operations actor.'},
+  {c:'RU',n:'Turla',a:['Snake','Venomous Bear','Secret Blizzard','KRYPTON'],d:'Russia-linked long-running espionage platform and actor.'},
+  {c:'RU',n:'Gamaredon',a:['Primitive Bear','Aqua Blizzard','Armageddon','Shuckworm','UAC-0010'],d:'FSB-linked Ukraine-focused espionage actor.'},
+  {c:'RU',n:'Energetic Bear',a:['Dragonfly','Crouching Yeti','Berserk Bear','DYMALLOY'],d:'Russia-linked energy and industrial-control targeting actor.'},
+  {c:'RU',n:'COLDRIVER',a:['Callisto Group','Star Blizzard','SEABORGIUM','TA446'],d:'Russia-linked credential phishing and influence-adjacent targeting.'},
+  {c:'RU',n:'Cadet Blizzard',a:['Ember Bear','DEV-0586','UAC-0056','Lorec53'],d:'Russia-linked destructive/disruptive actor observed in Ukraine-related activity.'},
+  {c:'RU',n:'BlueDelta',a:['APT28 infrastructure clusters','TAG-53'],d:'Russia-linked infrastructure/activity cluster in defense and policy targeting.'},
+  {c:'RU',n:'BlueBravo',a:['Cloaked Ursa','Nobelium overlap'],d:'Russia-linked espionage cluster often associated with SVR-style objectives.'},
+  {c:'RU',n:'BlueCharlie',a:['Calisto-related infrastructure'],d:'Russia-linked credential harvesting and infrastructure cluster.'},
+  {c:'RU',n:'Winter Vivern',a:['TA473','UAC-0114'],d:'Russia/Belarus-aligned espionage cluster targeting governments and NGOs.'},
+  {c:'RU',n:'XDSpy',a:['XDSpy Team'],d:'Eastern Europe/Russia-linked espionage actor.'},
+  {c:'RU',n:'UNC2589',a:['UAC-0056 overlap'],d:'Russia-linked Ukraine-focused phishing/espionage cluster.'},
+  {c:'RU',n:'NoName057(16)',a:['NoName05716'],d:'Russia-aligned hacktivist/DDoS persona; not a classic APT but relevant to IW/cyber effects.'},
+  {c:'RU',n:'Killnet',a:['KillNet'],d:'Russia-aligned hacktivist/DDoS ecosystem; relevant to cyber-enabled influence.'},
+
+  {c:'IR',n:'APT33',a:['Elfin','Refined Kitten','Magnallium','Peach Sandstorm','Holmium'],d:'Iran-linked aerospace, energy, and regional espionage/destructive-adjacent actor.'},
+  {c:'IR',n:'APT34',a:['OilRig','Helix Kitten','Hazel Sandstorm','Cobalt Gypsy','Crambus'],d:'Iran-linked regional espionage actor targeting government, energy, telecom.'},
+  {c:'IR',n:'APT35',a:['Charming Kitten','Phosphorus','Mint Sandstorm','TA453','Newscaster'],d:'Iran-linked phishing/espionage actor targeting policy, academia, dissidents.'},
+  {c:'IR',n:'APT39',a:['Chafer','Remix Kitten','Burgundy Sandstorm','ITG07'],d:'Iran-linked travel, telecom, government, and personal-data targeting actor.'},
+  {c:'IR',n:'APT42',a:['Charming Kitten overlap','Mint Sandstorm overlap'],d:'Iran-linked credential harvesting and surveillance-focused actor.'},
+  {c:'IR',n:'MuddyWater',a:['Static Kitten','Seedworm','Mango Sandstorm','TEMP.Zagros','Mercury'],d:'Iran MOIS-linked espionage actor active across Middle East and beyond.'},
+  {c:'IR',n:'Pioneer Kitten',a:['Fox Kitten','Parisite','UNC757','Rubidium'],d:'Iran-linked initial access/ransomware-enablement reporting.'},
+  {c:'IR',n:'Imperial Kitten',a:['Tortoiseshell','Crimson Sandstorm','TA456','Houseblend'],d:'Iran-linked actor targeting defense, IT, and regional interests.'},
+  {c:'IR',n:'CopyKittens',a:['Slayer Kitten'],d:'Iran-linked espionage actor historically targeting Israel and regional entities.'},
+  {c:'IR',n:'Ajax Security Team',a:['Operation Saffron Rose'],d:'Iran-linked group associated with early social engineering and malware campaigns.'},
+  {c:'IR',n:'Rocket Kitten',a:['Operation Woolen-Goldfish'],d:'Iran-linked spear-phishing actor targeting policy, defense, and dissidents.'},
+  {c:'IR',n:'Agrius',a:['Pink Sandstorm','Americium','BlackShadow','Deadwood'],d:'Iran-linked destructive/wiper and ransomware-masked operations.'},
+  {c:'IR',n:'Cobalt Mirage',a:['TunnelVision','UNC2448 overlap'],d:'Iran-linked intrusion/ransomware and espionage activity cluster.'},
+  {c:'IR',n:'UNC1860',a:['Mandiant UNC1860'],d:'Iran-linked initial access and persistence actor reported against Middle East sectors.'},
+  {c:'IR',n:'UNC1549',a:['Smoke Sandstorm','Tortoiseshell overlap'],d:'Iran-linked espionage actor targeting aerospace, defense, and technology.'},
+  {c:'IR',n:'Void Manticore',a:['Storm-0842'],d:'Iran-linked destructive activity cluster reported with Israel-focused operations.'},
+  {c:'IR',n:'Moses Staff',a:['Marigold Sandstorm'],d:'Iran-linked hack-and-leak/destructive persona.'},
+  {c:'IR',n:'CyberAv3ngers',a:['Cyber Avengers'],d:'IRGC-affiliated hacktivist persona targeting OT/ICS and Israeli-linked entities.'},
+  {c:'IR',n:'Shamoon Group',a:['Cutting Sword of Justice'],d:'Iran-linked destructive Shamoon/Disttrack wiper operations.'},
+
+  {c:'KP',n:'Lazarus Group',a:['Hidden Cobra','Diamond Sleet','ZINC','Labyrinth Chollima','Guardians of Peace'],d:'DPRK umbrella actor spanning espionage, destructive operations, and theft.'},
+  {c:'KP',n:'APT38',a:['Bluenoroff','Stardust Chollima','Sapphire Sleet','BeagleBoyz'],d:'DPRK financially motivated/crypto and bank-heist operations.'},
+  {c:'KP',n:'APT37',a:['ScarCruft','Reaper','InkySquid','Ricochet Chollima','Group123'],d:'DPRK espionage group targeting South Korea, Japan, and regional interests.'},
+  {c:'KP',n:'Kimsuky',a:['APT43','Emerald Sleet','Thallium','Velvet Chollima','Black Banshee'],d:'DPRK strategic intelligence collection actor.'},
+  {c:'KP',n:'Andariel',a:['Onyx Sleet','Silent Chollima','Stonefly'],d:'DPRK actor targeting defense, industry, and financial objectives.'},
+  {c:'KP',n:'Citrine Sleet',a:['AppleJeus','Labyrinth Chollima overlap'],d:'DPRK actor associated with crypto targeting and related activity.'},
+  {c:'KP',n:'Moonstone Sleet',a:['Storm-1789'],d:'DPRK cluster using custom ransomware, fake companies, and software supply-chain lures.'},
+  {c:'KP',n:'Jade Sleet',a:['TraderTraitor','UNC4899'],d:'DPRK crypto and blockchain targeting cluster.'},
+  {c:'KP',n:'Ruby Sleet',a:['Cerium','Velvet Chollima overlap'],d:'DPRK actor focused on aerospace/defense and strategic intelligence.'},
+  {c:'KP',n:'Coral Sleet',a:['Storm-1877'],d:'DPRK actor tracked in Microsoft activity-group naming.'},
+  {c:'KP',n:'Opal Sleet',a:['Konni','TA406 overlap'],d:'DPRK-linked espionage cluster in some vendor reporting.'},
+  {c:'KP',n:'TEMP.Hermit',a:['Lazarus overlap'],d:'Historic DPRK activity label used by FireEye/Mandiant reporting.'}
+];
+let actors=[...FALLBACK_ACTORS.map(x=>({...x,source:'Curated fallback'}))];
+let news=[];
+let liveActorLoaded=false;
+let prebuiltMeta=null;
+const byId=id=>document.getElementById(id);
+function relTime(iso){
+  const t=Date.parse(iso); if(isNaN(t)) return '';
+  const s=Math.max(0,(Date.now()-t)/1000);
+  if(s<90) return 'just now';
+  const m=s/60; if(m<60) return Math.round(m)+' min ago';
+  const h=m/60; if(h<48) return Math.round(h)+' hr ago';
+  return Math.round(h/24)+' days ago';
+}
+function renderFeedHealth(){
+  const el=byId('feedHealth'); if(!el) return;
+  const show=byId('newsSource').value==='prebuilt'&&prebuiltMeta;
+  if(!show){ el.innerHTML=''; return; }
+  const st=prebuiltMeta.status||[]; const failed=st.filter(f=>!f.ok); const okN=st.length-failed.length;
+  let html=prebuiltMeta.generated?`Prebuilt feed updated ${escapeHtml(relTime(prebuiltMeta.generated))}`:'Prebuilt feed not generated yet';
+  if(st.length) html+=` · ${okN}/${st.length} feeds ok`;
+  if(failed.length) html+=` · <span style="color:var(--warn)" title="${escapeHtml(failed.map(f=>f.name+(f.error?' ('+f.error+')':'')).join('\n'))}">⚠ ${failed.length} failed: ${escapeHtml(failed.map(f=>f.name).join(', '))}</span>`;
+  el.innerHTML=html;
+}
+function setStatus(s){byId('status').textContent=s;}
+function cleanText(s){return (s||'').replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim();}
+function norm(s){return (s||'').toLowerCase().replace(/[^a-z0-9]+/g,'');}
+function inferCountry(meta={}){
+  const candidates=[];
+  const add=v=>{ if(!v)return; Array.isArray(v)?v.forEach(add):candidates.push(String(v)); };
+  add(meta.country); add(meta['cfr-suspected-state-sponsor']); add(meta['microsoft-origin-threat']); add(meta.sector);
+  const t=candidates.join(' ').toLowerCase();
+  if(/\bcn\b|china|chinese|prc/.test(t)) return 'CN';
+  if(/\bru\b|russia|russian/.test(t)) return 'RU';
+  if(/\bir\b|iran|iranian/.test(t)) return 'IR';
+  if(/\bkp\b|north korea|dprk|korea \(democratic/.test(t)) return 'KP';
+  return null;
+}
+function addActorFromCluster(cluster, source){
+  const meta=cluster.meta||{}; const c=inferCountry(meta); if(!c) return null;
+  const synonyms=[...(meta.synonyms||[]), ...(meta['associated-groups']||[])].filter(Boolean);
+  return {c,n:cluster.value||cluster.name||'Unknown',a:[...new Set(synonyms)],d:cleanText(cluster.description||''),source,refs:meta.refs||[]};
+}
+async function refreshActors(){
+  setStatus('Loading actor catalogs…');
+  const urls=[
+    ['MISP Threat Actor','https://raw.githubusercontent.com/MISP/misp-galaxy/main/clusters/threat-actor.json'],
+    ['Microsoft Activity Group','https://raw.githubusercontent.com/MISP/misp-galaxy/main/clusters/microsoft-activity-group.json']
+  ];
+  const loaded=[];
+  for(const [label,url] of urls){
+    try{ const r=await fetchT(url,45000); if(!r.ok) throw new Error(r.status+' '+r.statusText); const j=await r.json(); (j.values||[]).forEach(v=>{ const a=addActorFromCluster(v,label); if(a) loaded.push(a); }); }
+    catch(e){ console.warn('Actor source failed',label,e); }
+  }
+  if(loaded.length){
+    const merged=[...FALLBACK_ACTORS.map(x=>({...x,source:'Curated fallback'})),...loaded];
+    const seen=new Map();
+    for(const a of merged){ const key=a.c+'|'+norm(a.n); if(!seen.has(key)){seen.set(key,a)} else { const cur=seen.get(key); cur.a=[...new Set([...(cur.a||[]),...(a.a||[])])]; cur.d=cur.d||a.d; cur.source=cur.source.includes(a.source)?cur.source:cur.source+' + '+a.source; cur.refs=[...new Set([...(cur.refs||[]),...(a.refs||[])])]; }}
+    actors=[...seen.values()].sort((x,y)=>x.c.localeCompare(y.c)||x.n.localeCompare(y.n)); actorIndex=null;
+    liveActorLoaded=true; setStatus(`Loaded ${actors.length} actors (${loaded.length} live records merged)`);
+  } else { liveActorLoaded=false; setStatus('Live actor sources unavailable; using curated fallback list'); }
+  renderAll();
+}
+function actorMatches(a){
+  const cf=byId('countryFilter').value, q=byId('search').value.toLowerCase();
+  if(cf!=='ALL'&&a.c!==cf)return false;
+  const blob=[a.n,(a.a||[]).join(' '),a.d,a.source,COUNTRIES[a.c]?.name].join(' ').toLowerCase();
+  return !q||blob.includes(q);
+}
+function renderActors(){
+  const tbody=byId('actorTable').querySelector('tbody'); tbody.innerHTML='';
+  const list=actors.filter(actorMatches);
+  for(const a of list){
+    const tr=document.createElement('tr');
+    const refs=(a.refs||[]).map(safeUrl).filter(Boolean).slice(0,2).map((r,i)=>`<a href="${r}" target="_blank" rel="noreferrer">ref ${i+1}</a>`).join(' ');
+    const cveN=cvesForActor(a).length; const cveChip=cveN?` <span class="tag high" title="Known exploited CVEs">${cveN} CVE${cveN>1?'s':''}</span>`:'';
+    tr.innerHTML=`<td><span class="pill ${a.c}">${COUNTRIES[a.c].flag} ${COUNTRIES[a.c].name}</span></td><td><div class="actor-name">${escapeHtml(a.n)}${cveChip}</div></td><td class="aliases">${(a.a||[]).slice(0,18).map(escapeHtml).join(', ')||'<span class="muted">—</span>'}</td><td>${escapeHtml((a.d||'').slice(0,360))}${a.d&&a.d.length>360?'…':''}</td><td>${escapeHtml(a.source||'')}${refs?'<br>'+refs:''}</td>`;
+    tr.className='clickable'; tr.title='Open name crosswalk'; tr.addEventListener('click',()=>openCrosswalk(a));
+    tbody.appendChild(tr);
+  }
+}
+function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+// External URLs (feed items, MISP refs) go into href attributes: allow only http(s) and escape quotes.
+function safeUrl(u){const s=String(u||'').trim();return /^https?:\/\//i.test(s)?escapeHtml(s):'';}
+function renderCards(){
+  const wrap=byId('countryCards'); wrap.innerHTML='';
+  for(const code of Object.keys(COUNTRIES)){
+    const c=COUNTRIES[code]; const ac=actors.filter(a=>a.c===code).length; const nc=news.filter(n=>n.c===code).length;
+    const div=document.createElement('div'); div.className='card country-card'; div.dataset.country=code;
+    div.innerHTML=`<div class="country-head"><span class="flag">${c.flag}</span><span class="country-name">${c.name}</span><span class="pill ${code}">${c.short}</span></div><div class="stat-row"><div class="stat"><b>${ac}</b><span>actors</span></div><div class="stat"><b>${nc}</b><span>news</span></div><div class="stat"><b>${liveActorLoaded?'Live':'Fallback'}</b><span>APT data</span></div></div><div class="focus">${c.focus}</div>`;
+    wrap.appendChild(div);
+  }
+}
+function renderSnapshot(){
+  const wrap=byId('snapshotList'); wrap.innerHTML='';
+  for(const code of Object.keys(COUNTRIES)){
+    const c=COUNTRIES[code];
+    const topActors=actors.filter(a=>a.c===code).slice(0,7).map(a=>a.n).join(', ');
+    const div=document.createElement('div'); div.className='small-card';
+    div.innerHTML=`<h3>${c.flag} ${c.name}</h3><p><strong>Focus:</strong> ${c.focus}</p><p><strong>Examples in catalog:</strong> ${escapeHtml(topActors)}${actors.filter(a=>a.c===code).length>7?', …':''}</p>`;
+    wrap.appendChild(div);
+  }
+}
+function severityFor(article){
+  const t=[article.title,article.summary,article.seendate,article.domain,article.url].join(' ').toLowerCase();
+  const hi=['critical infrastructure','telecom','telecommunications','wiper','zero-day','zero day','cisa','fbi','nsa','sanction','indictment','apt','ransomware','election','influence operation','disinformation'];
+  const med=['hack','malware','espionage','phishing','botnet','propaganda','social media','leak','cyber'];
+  if(hi.some(x=>t.includes(x))) return ['High interest','high'];
+  if(med.some(x=>t.includes(x))) return ['Monitor','medium'];
+  return ['Context','info'];
+}
+function queryFor(code){
+  const cyber='(cyber OR hack OR hacker OR malware OR ransomware OR espionage OR "zero day" OR vulnerability OR "critical infrastructure" OR telecom OR wiper OR "information warfare" OR disinformation OR propaganda OR "influence operation" OR botnet OR "hack and leak")';
+  const country='('+COUNTRIES[code].terms.map(t=>t.includes(' ')?`"${t}"`:t).join(' OR ')+')';
+  return `${cyber} ${country}`;
+}
+async function refreshNewsGdelt(){
+  setStatus('Loading live news…');
+  const days=byId('timespan').value; const all=[];
+  for(const code of Object.keys(COUNTRIES)){
+    const q=queryFor(code);
+    const url=`https://api.gdeltproject.org/api/v2/doc/doc?query=${encodeURIComponent(q)}&mode=ArtList&format=json&maxrecords=25&sort=HybridRel&timespan=${days}d`;
+    try{
+      const r=await fetchT(url); if(!r.ok) throw new Error(r.status+' '+r.statusText); const j=await r.json();
+      (j.articles||[]).forEach(x=>all.push({...x,c:code}));
+    }catch(e){ console.warn('News source failed',code,e); }
+  }
+  const seen=new Set(); news=[];
+  for(const n of all){ const key=norm(n.title||'')||n.url; if(!seen.has(key)){seen.add(key); news.push(n);} }
+  news.sort((a,b)=>String(b.seendate||'').localeCompare(String(a.seendate||'')));
+  if(news.length) setStatus(`Loaded ${news.length} live news items`); else setStatus('No live news returned; check browser internet/CORS settings');
+  renderAll();
+}
+// Dispatch to the selected news source.
+function refreshNews(){
+  const src=byId('newsSource').value;
+  if(src==='prebuilt') return fetchPrebuilt();
+  if(src==='feeds') return fetchCyberFeeds();
+  if(src==='gnews') return fetchGoogleNews();
+  return refreshNewsGdelt();
+}
+// Load the hourly, server-collected feed (news.json) — same-origin, no CORS proxy.
+async function fetchPrebuilt(){
+  setStatus('Loading prebuilt feed…');
+  try{
+    const r=await fetch('data/news.json?_='+Date.now(),{cache:'no-store'});
+    if(!r.ok) throw new Error(r.status+' '+r.statusText);
+    const data=await r.json();
+    prebuiltMeta={generated:data.generated||null,feeds:data.feeds||0,status:Array.isArray(data.feedsStatus)?data.feedsStatus:[]};
+    const days=parseInt(byId('timespan').value,10)||14; const cutoff=Date.now()-days*86400000;
+    news=(data.items||[]).filter(n=>{
+      if(!COUNTRIES[n.c]) return false;
+      const s=String(n.seendate||''); if(s.length<8) return true;
+      const dt=new Date(`${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}T${s.slice(8,10)||'00'}:${s.slice(10,12)||'00'}:${s.slice(12,14)||'00'}Z`);
+      return isNaN(dt)||dt.getTime()>=cutoff;
+    });
+    news.sort((a,b)=>String(b.seendate||'').localeCompare(String(a.seendate||'')));
+    const when=data.generated?new Date(data.generated).toLocaleString():null;
+    if(!when) setStatus('Prebuilt feed not generated yet — run the “Sync news feed” workflow (Actions → Run workflow), then refresh.');
+    else if(!news.length) setStatus(`Prebuilt feed has no Big 4 items in the last ${days} days (updated ${when}) — try a longer lookback.`);
+    else setStatus(`Loaded ${news.length} items from the prebuilt hourly feed (updated ${when})`);
+  }catch(e){
+    news=[]; prebuiltMeta=null; setStatus('No prebuilt feed found (news.json) — it is generated hourly by the Sync news feed workflow, or pick a live source.');
+  }
+  renderAll();
+}
+// Cross-origin fetch with a hard timeout so a hung proxy/API can't stall the UI forever.
+function fetchT(url,ms=20000){
+  const c=new AbortController(); const t=setTimeout(()=>c.abort(),ms);
+  return fetch(url,{cache:'no-store',signal:c.signal}).finally(()=>clearTimeout(t));
+}
+async function fetchViaProxy(url){
+  let lastErr;
+  for(const proxy of CORS_PROXIES){
+    try{ const r=await fetchT(proxy(url)); if(!r.ok) throw new Error(r.status+' '+r.statusText); return await r.text(); }
+    catch(e){ lastErr=e; }
+  }
+  throw lastErr||new Error('All CORS proxies failed');
+}
+// Run an async worker over items with limited concurrency (kind to the public CORS proxy).
+async function runPool(items,limit,worker){
+  const queue=items.slice();
+  const next=async()=>{ while(queue.length) await worker(queue.shift()); };
+  await Promise.all(Array.from({length:Math.min(limit,items.length)||1},next));
+}
+function parseFeed(xmlText){
+  const doc=new DOMParser().parseFromString(xmlText,'text/xml');
+  if(doc.querySelector('parsererror')) return [];
+  const nodes=[...doc.querySelectorAll('item'),...doc.querySelectorAll('entry')];
+  const out=[];
+  for(const node of nodes){
+    const txt=tag=>node.querySelector(tag)?.textContent?.trim()||'';
+    const title=txt('title');
+    // RSS puts the URL in <link> text; Atom uses <link rel="alternate" href="…"> among several link rels.
+    const links=[...node.querySelectorAll('link')];
+    const link=links.find(l=>l.textContent.trim())?.textContent.trim()
+      || links.find(l=>l.getAttribute('rel')==='alternate')?.getAttribute('href')
+      || links.find(l=>l.getAttribute('href'))?.getAttribute('href')||'';
+    const desc=txt('description')||txt('summary')||txt('content');
+    const dateStr=txt('pubDate')||txt('updated')||txt('published')||txt('date');
+    if(title&&link) out.push({title,link,desc,dateStr});
+  }
+  return out;
+}
+async function fetchCyberFeeds(){
+  setStatus('Reaching out to cyber news sources…');
+  const days=parseInt(byId('timespan').value,10)||14; const cutoff=Date.now()-days*86400000;
+  const collected=[]; let okFeeds=0;
+  await runPool(CYBER_FEEDS,5,async f=>{
+    try{
+      const items=parseFeed(await fetchViaProxy(f.url)); okFeeds++;
+      for(const it of items){
+        const dt=it.dateStr?new Date(it.dateStr):null; const valid=dt&&!isNaN(dt);
+        if(valid&&dt.getTime()<cutoff) continue;
+        const codes=classifyCountries(it.title,it.desc); if(!codes.length) continue;
+        let domain=''; try{ domain=new URL(it.link).hostname.replace(/^www\./,''); }catch(e){}
+        const seendate=valid?dt.toISOString().replace(/[-:T.Z]/g,'').slice(0,14):'';
+        for(const c of codes) collected.push({title:it.title,url:it.link,domain,seendate,sourceCountry:f.name,c});
+      }
+    }catch(e){ console.warn('Feed failed',f.name,e); }
+  });
+  const seen=new Set(); news=[];
+  for(const n of collected){ const key=n.c+'|'+norm(n.title); if(!seen.has(key)){seen.add(key); news.push(n);} }
+  news.sort((a,b)=>String(b.seendate||'').localeCompare(String(a.seendate||'')));
+  if(news.length) setStatus(`Loaded ${news.length} Big 4-relevant items from ${okFeeds}/${CYBER_FEEDS.length} cyber news feeds`);
+  else if(okFeeds) setStatus(`Reached ${okFeeds} feed(s) but found no Big 4-relevant items in the last ${days} days`);
+  else setStatus('Could not reach cyber news feeds — the CORS proxy may be unavailable. Try the GDELT source instead.');
+  renderAll();
+}
+async function fetchGoogleNews(){
+  setStatus('Searching Google News…');
+  const days=parseInt(byId('timespan').value,10)||14;
+  const collected=[]; let okQ=0;
+  await Promise.all(Object.keys(COUNTRIES).map(async code=>{
+    const q=`${queryFor(code)} when:${days}d`;
+    const url=`https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=en-US&gl=US&ceid=US:en`;
+    try{
+      const items=parseFeed(await fetchViaProxy(url)); okQ++;
+      for(const it of items){
+        let outlet='', title=it.title; const i=title.lastIndexOf(' - ');
+        if(i>0){ outlet=title.slice(i+3).trim(); title=title.slice(0,i).trim(); }
+        const dt=it.dateStr?new Date(it.dateStr):null; const valid=dt&&!isNaN(dt);
+        const seendate=valid?dt.toISOString().replace(/[-:T.Z]/g,'').slice(0,14):'';
+        collected.push({title,url:it.link,domain:outlet||'news.google.com',seendate,sourceCountry:'Google News',c:code});
+      }
+    }catch(e){ console.warn('Google News query failed',code,e); }
+  }));
+  const seen=new Set(); news=[];
+  for(const n of collected){ const key=n.c+'|'+norm(n.title); if(!seen.has(key)){seen.add(key); news.push(n);} }
+  news.sort((a,b)=>String(b.seendate||'').localeCompare(String(a.seendate||'')));
+  if(news.length) setStatus(`Loaded ${news.length} Google News items across ${okQ}/4 country searches`);
+  else if(okQ) setStatus('Google News returned no items — try a longer lookback or another source');
+  else setStatus('Could not reach Google News — the CORS proxy may be unavailable. Try another source.');
+  renderAll();
+}
+function newsMatches(n){
+  const cf=byId('countryFilter').value, q=byId('search').value.toLowerCase();
+  if(cf!=='ALL'&&n.c!==cf)return false;
+  const blob=[n.title,n.summary,n.domain,n.sourceCountry,COUNTRIES[n.c]?.name,n.url].join(' ').toLowerCase();
+  return !q||blob.includes(q);
+}
+// Detect APT/actor names mentioned in an article title (against the loaded catalog + aliases).
+let actorIndex=null;
+const ACTOR_STOP=new Set(['apt','axiom','platinum','silence','machete','confucius','windigo','thrip','sowbug','moafee','group5','mercury','patchwork','elderwood']);
+function buildActorIndex(){
+  const map=new Map(); const toks=[];
+  for(const a of actors){
+    for(const nm of [a.n,...(a.a||[])]){
+      const t=String(nm||'').trim(); if(t.length<4) continue;
+      const key=t.toLowerCase(); if(ACTOR_STOP.has(key)) continue;
+      if(!map.has(key)){ map.set(key,a); toks.push(t); }
+    }
+  }
+  actorIndex={map,rx:toks.length?new RegExp('\\b('+toks.map(escapeRegex).join('|')+')\\b','gi'):null};
+}
+function actorsInText(text){
+  if(!actorIndex) buildActorIndex();
+  const rx=actorIndex.rx; if(!rx||!text) return [];
+  rx.lastIndex=0; const seen=new Map(); let m;
+  while((m=rx.exec(text))){ const a=actorIndex.map.get(m[1].toLowerCase()); if(a&&!seen.has(a.n)) seen.set(a.n,a); }
+  return [...seen.values()];
+}
+function renderNews(){
+  const wrap=byId('newsGrid'); wrap.innerHTML='';
+  const matched=news.filter(newsMatches);
+  if(!matched.length){
+    wrap.innerHTML=`<div class="news-card"><div class="news-title">No live articles loaded yet.</div><p class="section-note">The default <strong>Hourly feed (prebuilt)</strong> loads automatically once the Sync news feed workflow has run. Otherwise pick a live <strong>Source</strong> (GDELT API, Google News, or Cyber news feeds) and click “Refresh live news.” If a local <code>file://</code> page blocks network access, host this file over HTTP (e.g. <code>python3 -m http.server</code>) or use the source links in the Sources tab.</p></div>`; return;
+  }
+  // Group by article URL so a story tagged to multiple countries shows one card with multiple flags.
+  const groups=[]; const byKey=new Map();
+  for(const n of matched){
+    const key=n.url||n.title; let g=byKey.get(key);
+    if(!g){ g={item:n,countries:[]}; groups.push(g); byKey.set(key,g); }
+    if(COUNTRIES[n.c]&&!g.countries.includes(n.c)) g.countries.push(n.c);
+  }
+  for(const g of groups.slice(0,60)){
+    const n=g.item; const [sev,cls]=severityFor(n); const date=n.seendate?String(n.seendate).replace(/(\d{4})(\d{2})(\d{2}).*/, '$1-$2-$3'):'Recent';
+    const pills=g.countries.map(c=>`<span class="pill ${c}">${COUNTRIES[c].flag} ${COUNTRIES[c].name}</span>`).join('');
+    const div=document.createElement('div'); div.className='news-card';
+    div.innerHTML=`<div class="news-meta">${pills}<span>${escapeHtml(date)}</span><span>${escapeHtml(n.domain||'')}</span></div><a class="news-title" href="${safeUrl(n.url)||'#'}" target="_blank" rel="noreferrer">${escapeHtml(n.title||'Untitled')}</a><div class="tagbar"><span class="tag ${cls}">${sev}</span><span class="tag">${escapeHtml(n.sourceCountry||'source')}</span></div>`;
+    const acts=actorsInText([n.title,n.summary].filter(Boolean).join(' '));
+    if(acts.length){
+      const bar=document.createElement('div'); bar.className='actor-tags';
+      const lbl=document.createElement('span'); lbl.className='at-label'; lbl.textContent='Actors:'; bar.appendChild(lbl);
+      for(const a of acts){ const s=document.createElement('span'); s.className='at-chip'; s.textContent=a.n; s.title='Open name crosswalk'; s.addEventListener('click',ev=>{ ev.stopPropagation(); openCrosswalk(a); }); bar.appendChild(s); }
+      div.appendChild(bar);
+    }
+    const dm=document.createElement('button'); dm.className='dm-btn'; dm.textContent='◆ Diamond'; dm.title='Map this story to the Diamond Model';
+    dm.addEventListener('click',ev=>{ ev.stopPropagation(); mapToDiamond(n); });
+    div.appendChild(dm);
+    wrap.appendChild(div);
+  }
+}
+// CISA KEV (Known Exploited Vulnerabilities) — general, not country-attributed.
+let kev=[]; let kevMeta=null;
+async function loadKev(){
+  try{
+    const r=await fetch('data/kev.json?_='+Date.now(),{cache:'no-store'});
+    if(!r.ok) throw new Error(r.status);
+    const d=await r.json();
+    kev=Array.isArray(d.items)?d.items:[];
+    kevMeta={generated:d.generated||null,total:d.total||0,catalogVersion:d.catalogVersion||null};
+  }catch(e){ kev=[]; kevMeta=null; }
+  renderKev();
+}
+function renderKev(){
+  const table=byId('kevTable'); if(!table) return;
+  const tbody=table.querySelector('tbody'); tbody.innerHTML='';
+  const q=byId('search').value.toLowerCase();
+  const list=kev.filter(v=>{ if(!q) return true; return [v.cve,v.vendor,v.product,v.name,v.description].join(' ').toLowerCase().includes(q); });
+  const hl=byId('kevHealth');
+  if(hl) hl.textContent=kevMeta&&kevMeta.generated?`Showing ${list.length} of ${kev.length} recent KEV entries · catalog updated ${relTime(kevMeta.generated)}`:'KEV catalog not generated yet — run the Sync news feed workflow.';
+  for(const v of list){
+    const tr=document.createElement('tr');
+    const rw=v.ransomware?'<span class="tag high">🔒 Known</span>':'<span class="tag">—</span>';
+    tr.innerHTML=`<td class="mono"><a href="https://nvd.nist.gov/vuln/detail/${encodeURIComponent(v.cve||'')}" target="_blank" rel="noreferrer">${escapeHtml(v.cve||'')}</a></td><td>${escapeHtml(v.vendor||'')}${v.product?' / '+escapeHtml(v.product):''}</td><td>${escapeHtml(v.name||'')}</td><td class="mono">${escapeHtml(v.added||'')}</td><td class="mono">${escapeHtml(v.due||'')}</td><td>${rw}</td><td class="kev-actors"></td>`;
+    const cell=tr.querySelector('.kev-actors');
+    const linked=actorsForCve(v.cve);
+    if(!linked.length) cell.textContent='—';
+    else for(const l of linked){
+      if(l.actor){ const s=document.createElement('span'); s.className='at-chip'; s.textContent=l.label; s.title='Open name crosswalk'; s.addEventListener('click',()=>openCrosswalk(l.actor)); cell.appendChild(s); cell.appendChild(document.createTextNode(' ')); }
+      else { const s=document.createElement('span'); s.className='tag'; s.textContent=l.label; cell.appendChild(s); cell.appendChild(document.createTextNode(' ')); }
+    }
+    tbody.appendChild(tr);
+  }
+}
+// ---- Threat Actor Name Crosswalk: derived live from the loaded catalog + provider conventions ----
+let CROSSWALK={providers:[
+  {name:'Microsoft',lexicon:'Weather + nation: Typhoon=China, Blizzard=Russia, Sandstorm=Iran, Sleet=North Korea; Storm-#### emerging.',suffixes:['Typhoon','Blizzard','Sandstorm','Sleet','Tempest'],prefixes:['Storm-','DEV-'],names:['Barium','Strontium','Phosphorus','Nobelium','Zinc','Thallium','Hafnium','Mercury']},
+  {name:'CrowdStrike',lexicon:'Animal = sponsor: Panda=China, Bear=Russia, Kitten=Iran, Chollima=North Korea, Spider=eCrime.',suffixes:['Panda','Bear','Kitten','Chollima','Spider','Jackal']},
+  {name:'Mandiant',lexicon:'APT##, FIN##, UNC####, TEMP.*',regex:['^APT[ -]?\\d+$','^FIN\\d+$','^UNC\\d+','^TEMP\\.']},
+  {name:'MITRE ATT&CK',lexicon:'G#### group IDs.',regex:['^G\\d{3,4}$']},
+  {name:'Secureworks',lexicon:'BRONZE/IRON/GOLD/COBALT + word; TG-####.',prefixes:['BRONZE ','IRON ','GOLD ','COBALT ','TG-']},
+  {name:'Palo Alto Unit 42',lexicon:'Constellations: *Taurus, *Ursa.',suffixes:['Taurus','Ursa']},
+  {name:'Recorded Future',lexicon:'TAG-## and color clusters.',prefixes:['TAG-']}
+]};
+// Known exploited CVEs per actor (curated from public CISA/vendor advisories).
+let ACTOR_CVES={actors:[]};
+async function loadActorCves(){
+  try{ const r=await fetch('data/actor-cves.json?_='+Date.now(),{cache:'no-store'}); if(r.ok){ const d=await r.json(); if(d&&Array.isArray(d.actors)) ACTOR_CVES=d; } }catch(e){}
+  renderActors(); renderCrosswalk();
+}
+// Reverse lookup: which curated actors are known to exploit a given CVE.
+function actorsForCve(cveId){
+  const out=[];
+  for(const e of (ACTOR_CVES.actors||[])){
+    if(!(e.cves||[]).some(v=>v.id===cveId)) continue;
+    const names=(e.names||[]).map(norm);
+    const cat=actors.find(a=>[a.n,...(a.a||[])].some(n=>names.includes(norm(n))));
+    out.push({label:(e.names||[])[0]||'?',actor:cat||null});
+  }
+  return out;
+}
+function cvesForActor(actor){
+  const names=[actor.n,...(actor.a||[])].map(norm); const out=[]; const seen=new Set();
+  for(const e of (ACTOR_CVES.actors||[])){
+    if((e.names||[]).some(n=>names.includes(norm(n)))){
+      for(const v of (e.cves||[])){ if(!seen.has(v.id)){ seen.add(v.id); out.push(v); } }
+    }
+  }
+  return out;
+}
+async function loadCrosswalk(){
+  try{ const r=await fetch('data/crosswalk.json?_='+Date.now(),{cache:'no-store'}); if(r.ok){ const d=await r.json(); if(d&&Array.isArray(d.providers)&&d.providers.length) CROSSWALK=d; } }catch(e){}
+  renderCrosswalkLegend(); renderCrosswalk();
+}
+function classifyProvider(tok){
+  const t=String(tok||'').trim(); const tl=t.toLowerCase();
+  for(const p of CROSSWALK.providers){
+    if(p.regex&&p.regex.some(r=>new RegExp(r,'i').test(t))) return p.name;
+    if(p.prefixes&&p.prefixes.some(pre=>tl.startsWith(pre.toLowerCase()))) return p.name;
+    if(p.suffixes&&p.suffixes.some(s=>tl===s.toLowerCase()||tl.endsWith(' '+s.toLowerCase()))) return p.name;
+    if(p.names&&p.names.some(n=>n.toLowerCase()===tl)) return p.name;
+  }
+  return 'Common / other';
+}
+function crosswalkGroups(actor){
+  const names=[actor.n,...(actor.a||[])].filter(Boolean);
+  const order=[...CROSSWALK.providers.map(p=>p.name),'Common / other'];
+  const map=new Map(order.map(o=>[o,[]])); const seen=new Set();
+  for(const nm of names){ const key=nm.toLowerCase(); if(seen.has(key))continue; seen.add(key); const prov=classifyProvider(nm); (map.get(prov)||map.get('Common / other')).push(nm); }
+  return order.filter(o=>map.get(o).length).map(o=>({provider:o,names:map.get(o),lexicon:(CROSSWALK.providers.find(p=>p.name===o)||{}).lexicon||''}));
+}
+function openCrosswalk(actor){
+  const c=COUNTRIES[actor.c]||{flag:'',name:actor.c}; const groups=crosswalkGroups(actor);
+  const rows=groups.map(g=>`<div class="p">${escapeHtml(g.provider)}</div><div>${g.names.map(escapeHtml).join(', ')}${g.lexicon?`<div class="cw-lex">${escapeHtml(g.lexicon)}</div>`:''}</div>`).join('');
+  const cves=cvesForActor(actor);
+  const cveHtml=cves.length?`<h3 style="margin:16px 0 6px">Known exploited CVEs</h3><div class="cw-prov">`+cves.map(v=>{
+      const k=(kev||[]).find(x=>x.cve===v.id); const badge=k?` <span class="tag high">🔒 KEV${k.ransomware?' · ransomware':''}</span>`:'';
+      return `<div class="p mono"><a href="https://nvd.nist.gov/vuln/detail/${encodeURIComponent(v.id)}" target="_blank" rel="noreferrer">${escapeHtml(v.id)}</a></div><div>${escapeHtml(v.product||'')}${v.note?' — '+escapeHtml(v.note):''}${badge}</div>`;
+    }).join('')+`</div><p class="cw-lex">Curated from public CISA / vendor advisories; not exhaustive. 🔒 KEV = listed in CISA Known Exploited Vulnerabilities.</p>`:'';
+  byId('cwBody').innerHTML=`<div class="cw-head"><span class="flag">${c.flag}</span><span class="cw-name" id="cwTitle">${escapeHtml(actor.n)}</span><span class="pill ${actor.c}">${escapeHtml(c.name)}</span></div>`
+    +(actor.d?`<p class="section-note">${escapeHtml(actor.d)}</p>`:'')
+    +`<div class="cw-prov">${rows}</div>`
+    +cveHtml
+    +`<div class="cw-actions"><button id="cwNews">📰 News mentioning ${escapeHtml(actor.n)}</button>${safeUrl((actor.refs||[])[0])?`<a class="tab" href="${safeUrl(actor.refs[0])}" target="_blank" rel="noreferrer">Source ↗</a>`:''}<a class="tab" href="https://attack.mitre.org/groups/" target="_blank" rel="noreferrer">MITRE ATT&amp;CK ↗</a></div>`;
+  byId('cwNews').addEventListener('click',()=>{ byId('search').value=actor.n; byId('countryFilter').value='ALL'; closeCrosswalk(); activate('news'); renderAll(); });
+  cwPrevFocus=document.activeElement;
+  byId('crosswalkModal').classList.remove('hidden');
+  byId('cwClose').focus();
+}
+let cwPrevFocus=null;
+function closeCrosswalk(){
+  byId('crosswalkModal').classList.add('hidden');
+  if(cwPrevFocus&&document.contains(cwPrevFocus)){ try{cwPrevFocus.focus();}catch(e){} }
+  cwPrevFocus=null;
+}
+function renderCrosswalkLegend(){
+  const el=byId('crosswalkLegend'); if(!el) return; el.innerHTML='';
+  for(const p of CROSSWALK.providers){ const d=document.createElement('div'); d.className='small-card'; d.innerHTML=`<h3>${escapeHtml(p.name)}</h3><p>${escapeHtml(p.lexicon||'')}</p>`; el.appendChild(d); }
+}
+function renderCrosswalk(){
+  const table=byId('crosswalkTable'); if(!table) return; const tbody=table.querySelector('tbody'); tbody.innerHTML='';
+  const q=byId('search').value.toLowerCase();
+  const list=actors.filter(a=>{ if(!q) return true; return [a.n,(a.a||[]).join(' '),a.d,COUNTRIES[a.c]?.name].join(' ').toLowerCase().includes(q); });
+  for(const a of list){
+    const provs=crosswalkGroups(a).filter(g=>g.provider!=='Common / other').map(g=>g.provider);
+    const c=COUNTRIES[a.c]||{flag:'',name:a.c};
+    const tr=document.createElement('tr'); tr.className='clickable'; tr.title='Open name crosswalk';
+    tr.innerHTML=`<td><div class="actor-name">${escapeHtml(a.n)}</div></td><td>${provs.map(escapeHtml).join(', ')||'<span class="muted">—</span>'}</td><td><span class="pill ${a.c}">${c.flag} ${escapeHtml(c.name)}</span></td><td class="aliases">${(a.a||[]).slice(0,14).map(escapeHtml).join(', ')||'—'}</td>`;
+    tr.addEventListener('click',()=>openCrosswalk(a));
+    tbody.appendChild(tr);
+  }
+}
+// ---- Diamond Model mapper: extract Adversary / Capability / Infrastructure / Victim from a headline ----
+let diamondList=[]; let diamondCurrent=null;
+const DM_TTP=[['ransomware','Ransomware'],['ransom','Ransomware'],['wiper','Wiper / destructive'],['spear-phishing','Spear-phishing'],['spear phishing','Spear-phishing'],['phishing','Phishing'],['botnet','Botnet'],['backdoor','Backdoor'],['infostealer','Infostealer'],['stealer','Infostealer'],['zero-day','Zero-day'],['0-day','Zero-day'],['supply chain','Supply-chain'],['ddos','DDoS'],['credential','Credential theft'],['espionage','Espionage'],['exploit','Exploitation'],['vulnerability','Vulnerability exploitation'],['malware','Malware'],['trojan','Trojan'],['loader','Loader'],['dropper','Dropper'],['disinformation','Disinformation / IO'],['influence operation','Influence operation'],['hack-and-leak','Hack-and-leak'],['scam','Scam / fraud'],['fraud','Scam / fraud'],['rootkit','Rootkit']];
+const DM_INFRA=[['command-and-control','C2 infrastructure'],['command and control','C2 infrastructure'],['bulletproof','Bulletproof hosting'],['botnet','Botnet / proxy network'],['proxy','Proxy / relay'],['vpn','VPN appliance'],['router','Router / edge device'],['edge device','Edge device'],['server','Server(s)'],['domain','Domain(s)'],['hosting','Hosting']];
+const DM_VICTIM=[['government','Government'],['defense','Defense'],['military','Military'],['telecom','Telecommunications'],['energy','Energy'],['grid','Power grid'],['healthcare','Healthcare'],['hospital','Healthcare'],['finance','Finance'],['bank','Banking / finance'],['university','Education'],['education','Education'],['critical infrastructure','Critical infrastructure'],['manufacturing','Manufacturing'],['aerospace','Aerospace'],['water','Water utility'],['election','Elections'],['journalist','Journalists / media'],['media','Media'],['cryptocurrency','Cryptocurrency'],['crypto','Cryptocurrency'],['developer','Software developers'],['ics','ICS / OT']];
+const DM_GEO=['Ukraine','Ukrainian','Israel','Israeli','Taiwan','United States','NATO','Europe','European','Gulf','South Korea','Japan','Latin America','Czech','Netherlands','Dutch','United Kingdom','Saudi','India'];
+function dmScan(text,dict){const t=text.toLowerCase();const out=[];for(const [kw,label] of dict){if(t.includes(kw)&&!out.includes(label))out.push(label);}return out;}
+function diamondForArticle(it, extra){
+  const text=`${it.title||''} ${it.summary||''} ${extra||''}`.trim();
+  const hitActors=actorsInText(text);
+  const country=COUNTRIES[it.c]?COUNTRIES[it.c].name:null;
+  const adversary=[...new Set([...hitActors.map(a=>a.n), ...(country?[country+' (attributed)']:[])])];
+  const cves=[...new Set((text.match(/CVE-\d{4}-\d{4,}/gi)||[]).map(s=>s.toUpperCase()))];
+  let actorCves=[]; for(const a of hitActors) actorCves.push(...cvesForActor(a).map(v=>v.id));
+  actorCves=[...new Set(actorCves)].filter(id=>!cves.includes(id));
+  const capability=[...cves.map(c=>'CVE '+c), ...dmScan(text,DM_TTP)];
+  const infrastructure=dmScan(text,DM_INFRA);
+  const victim=[...dmScan(text,DM_VICTIM), ...DM_GEO.filter(g=>new RegExp('\\b'+escapeRegex(g)+'\\b','i').test(text))];
+  return {adversary,capability,infrastructure,victim,actorCves,firstActor:hitActors[0]||null};
+}
+function renderDiamondOptions(){
+  const sel=byId('diamondSelect'); if(!sel) return; const prev=sel.value;
+  diamondList=[]; const seen=new Set();
+  for(const n of news){ const k=n.url||n.title; if(seen.has(k))continue; seen.add(k); diamondList.push(n); }
+  sel.innerHTML='<option value="">— Select a news story —</option>'+diamondList.map((n,i)=>{const d=n.seendate?String(n.seendate).replace(/(\d{4})(\d{2})(\d{2}).*/,'$1-$2-$3'):'';return `<option value="${i}">${escapeHtml((d?d+' — ':'')+(n.title||'').slice(0,90))}</option>`;}).join('');
+  if(prev!==''&&diamondList[+prev]) sel.value=prev;
+}
+let dmFullText=new Map();
+async function fetchFullArticle(it){
+  const btn=byId('dmFetch'); if(btn){ btn.disabled=true; btn.textContent='Fetching…'; }
+  try{
+    const html=await fetchViaProxy(it.url);
+    const doc=new DOMParser().parseFromString(html,'text/html');
+    doc.querySelectorAll('script,style,nav,header,footer,aside,form').forEach(e=>e.remove());
+    let txt=[...doc.querySelectorAll('article p, main p, p')].map(p=>p.textContent).join(' ').replace(/\s+/g,' ').trim();
+    if(!txt&&doc.body) txt=doc.body.textContent.replace(/\s+/g,' ').trim();
+    dmFullText.set(it.url, txt.slice(0,8000));
+    setStatus(txt?'Full article analyzed':'Fetched the page but found no readable body text');
+  }catch(e){ dmFullText.set(it.url,''); setStatus('Could not fetch full article (CORS proxy blocked or site unavailable)'); }
+  renderDiamond();
+}
+function renderDiamond(){
+  const view=byId('diamondView'); if(!view) return;
+  if(!diamondCurrent){ view.innerHTML='<p class="section-note">Select a news story above — or click <strong>◆ Diamond</strong> on any card in Recent News — to map it onto the Diamond Model.</p>'; return; }
+  const it=diamondCurrent; const extra=dmFullText.get(it.url); const D=diamondForArticle(it,extra||'');
+  const date=it.seendate?String(it.seendate).replace(/(\d{4})(\d{2})(\d{2}).*/,'$1-$2-$3'):'';
+  const depth=extra?'headline + summary + full article':(it.summary?'headline + article summary':'headline only');
+  const vtx=(t,items,cls,hint)=>`<div class="dm-vertex ${cls}"><div class="dm-vtitle">${t}</div>${items.length?'<ul>'+items.map(x=>'<li>'+escapeHtml(x)+'</li>').join('')+'</ul>':'<p class="dm-empty">'+escapeHtml(hint)+'</p>'}</div>`;
+  const capExtra=D.actorCves.length?`<p class="dm-empty">Actor's other known CVEs: ${escapeHtml(D.actorCves.join(', '))}</p>`:'';
+  const artUrl=safeUrl(it.url)||'#';
+  view.innerHTML=`<div class="dm-meta"><a class="dm-t news-title" href="${artUrl}" target="_blank" rel="noreferrer">${escapeHtml(it.title||'Untitled')}</a><div class="section-note">${escapeHtml(date)}${it.sourceCountry?' · '+escapeHtml(it.sourceCountry):''}${it.domain?' · '+escapeHtml(it.domain):''}</div>${it.summary?`<p class="section-note" style="margin-top:6px">${escapeHtml(it.summary.slice(0,280))}${it.summary.length>280?'…':''}</p>`:''}</div>`
+   +`<div class="diamond-grid">`
+   + vtx('Adversary',D.adversary,'adv','Unattributed in text')
+   + `<div class="dm-vertex cap"><div class="dm-vtitle">Capability</div>${D.capability.length?'<ul>'+D.capability.map(x=>'<li>'+escapeHtml(x)+'</li>').join('')+'</ul>':'<p class="dm-empty">No TTP/CVE found</p>'}${capExtra}</div>`
+   + `<div class="dm-mid"><div class="dia">◆</div>Diamond<br>Model</div>`
+   + vtx('Infrastructure',D.infrastructure,'inf','Not indicated')
+   + vtx('Victim',D.victim,'vic','Target not indicated')
+   + `</div>`
+   + `<p class="cw-lex">Analyzed from: <strong>${depth}</strong>. Auto-extracted as a starting point — confirm against the full article.</p>`
+   + `<div class="cw-actions"><a class="tab" href="${artUrl}" target="_blank" rel="noreferrer">Open article ↗</a>${extra===undefined?'<button id="dmFetch">🔍 Fetch full article</button>':''}${D.firstActor?'<button id="dmActor">Actor crosswalk</button>':''}<button id="dmCopy">📋 Copy Diamond</button></div>`;
+  if(extra===undefined) byId('dmFetch').addEventListener('click',()=>fetchFullArticle(it));
+  if(D.firstActor) byId('dmActor').addEventListener('click',()=>openCrosswalk(D.firstActor));
+  byId('dmCopy').addEventListener('click',()=>{
+    const md=`# Diamond Model — ${it.title}\n\n- **Adversary:** ${D.adversary.join(', ')||'—'}\n- **Capability:** ${D.capability.join(', ')||'—'}${D.actorCves.length?` (actor known CVEs: ${D.actorCves.join(', ')})`:''}\n- **Infrastructure:** ${D.infrastructure.join(', ')||'—'}\n- **Victim:** ${D.victim.join(', ')||'—'}\n\n_Source: ${it.sourceCountry||it.domain||''} ${date} — ${it.url}_\n`;
+    (navigator.clipboard?navigator.clipboard.writeText(md):Promise.reject()).then(()=>setStatus('Diamond copied as Markdown')).catch(()=>{const ta=document.createElement('textarea');ta.value=md;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');setStatus('Diamond copied');}catch(_){}ta.remove();});
+  });
+}
+function mapToDiamond(item){
+  activate('diamond'); renderDiamondOptions();
+  const k=item.url||item.title; const idx=diamondList.findIndex(n=>(n.url||n.title)===k);
+  byId('diamondSelect').value=idx>=0?String(idx):''; diamondCurrent=item; renderDiamond();
+}
+function renderAll(){renderCards(); renderSnapshot(); renderActors(); renderNews(); renderFeedHealth(); renderKev(); renderCrosswalk(); renderDiamondOptions(); const pm=byId('newsSource').value==='prebuilt'&&prebuiltMeta&&prebuiltMeta.generated; byId('updatedStamp').textContent=pm?('Feed updated '+relTime(prebuiltMeta.generated)):('Last rendered: '+new Date().toLocaleString());}
+function activate(tab){
+  document.querySelectorAll('#tabs .tab').forEach(t=>{const on=t.dataset.tab===tab;t.classList.toggle('active',on);t.setAttribute('aria-selected',on?'true':'false');});
+  byId('overviewPanel').classList.toggle('hidden',tab!=='overview');
+  byId('newsPanel').classList.toggle('hidden',tab!=='news');
+  byId('actorsPanel').classList.toggle('hidden',tab!=='actors');
+  byId('crosswalkPanel').classList.toggle('hidden',tab!=='crosswalk');
+  byId('kevPanel').classList.toggle('hidden',tab!=='kev');
+  byId('diamondPanel').classList.toggle('hidden',tab!=='diamond');
+  byId('sourcesPanel').classList.toggle('hidden',tab!=='sources');
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>activate(t.dataset.tab)));
+// Build a dated, country-grouped Markdown brief from the current (filtered) news.
+function buildBrief(){
+  const matched=news.filter(newsMatches);
+  const byKey=new Map();
+  for(const n of matched){ const k=n.url||n.title; if(!byKey.has(k)) byKey.set(k,{item:n,countries:new Set()}); if(COUNTRIES[n.c]) byKey.get(k).countries.add(n.c); }
+  const groups=[...byKey.values()];
+  const days=byId('timespan').value, cf=byId('countryFilter').value, q=byId('search').value.trim();
+  const today=new Date().toISOString().slice(0,10);
+  let md=`# Big 4 Cyber & IW Threat Brief — ${today}\n\n_Lookback: ${days} days`;
+  if(cf!=='ALL') md+=` · ${COUNTRIES[cf]?COUNTRIES[cf].name:cf}`;
+  if(q) md+=` · filter: "${q}"`;
+  md+=`_\n\n`;
+  let any=false;
+  for(const code of Object.keys(COUNTRIES)){
+    if(cf!=='ALL'&&cf!==code) continue;
+    const inC=groups.filter(g=>g.countries.has(code));
+    if(!inC.length) continue;
+    any=true;
+    inC.sort((a,b)=>String(b.item.seendate||'').localeCompare(String(a.item.seendate||'')));
+    md+=`## ${COUNTRIES[code].flag} ${COUNTRIES[code].name} (${inC.length})\n\n`;
+    for(const g of inC){
+      const n=g.item; const date=n.seendate?String(n.seendate).replace(/(\d{4})(\d{2})(\d{2}).*/,'$1-$2-$3'):'';
+      const also=[...g.countries].filter(c=>c!==code).map(c=>COUNTRIES[c]?COUNTRIES[c].short:c);
+      const title=(n.title||'Untitled').replace(/[\[\]]/g,'');
+      md+=`- [${title}](${n.url}) — ${n.sourceCountry||n.domain||'source'}${date?' ('+date+')':''}${also.length?' _[also: '+also.join(', ')+']_':''}\n`;
+    }
+    md+=`\n`;
+  }
+  if(!any) md+=`_No items match the current filters._\n`;
+  md+=`\n---\n_Generated from the Big 4 Cyber & IW Threat Dashboard. Attribution is probabilistic; treat as a naming/triage index, not a legal determination._\n`;
+  return md;
+}
+async function copyBrief(){
+  const md=buildBrief();
+  try{
+    await navigator.clipboard.writeText(md);
+    setStatus('Brief copied to clipboard as Markdown');
+  }catch(e){
+    const ta=document.createElement('textarea'); ta.value=md; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.focus(); ta.select();
+    let okCopy=false; try{ okCopy=document.execCommand('copy'); }catch(_){}
+    document.body.removeChild(ta);
+    setStatus(okCopy?'Brief copied to clipboard':'Copy blocked — brief logged to console'); if(!okCopy) console.log(md);
+  }
+}
+byId('refreshNews').addEventListener('click',refreshNews); byId('refreshActors').addEventListener('click',refreshActors);
+byId('copyBrief').addEventListener('click',copyBrief);
+// Light/dark theme toggle (initial theme is applied by the early <head> script).
+function syncThemeIcon(){ byId('themeToggle').textContent=document.documentElement.dataset.theme==='light'?'☀️':'🌙'; }
+syncThemeIcon();
+byId('themeToggle').addEventListener('click',()=>{
+  const next=document.documentElement.dataset.theme==='light'?'dark':'light';
+  document.documentElement.dataset.theme=next;
+  try{ localStorage.setItem('theme',next); }catch(e){}
+  syncThemeIcon();
+});
+byId('countryFilter').addEventListener('change',renderAll); byId('timespan').addEventListener('change',refreshNews);
+let searchDebounce=null;
+byId('search').addEventListener('input',()=>{ clearTimeout(searchDebounce); searchDebounce=setTimeout(renderAll,150); });
+byId('newsSource').addEventListener('change',refreshNews);
+renderAll();
+// Load canonical feeds/country config from data/sources.json, then populate.
+loadSources().then(()=>{
+  renderAll();
+  // Try a live actor refresh on load, but do not block offline use.
+  refreshActors();
+  // Auto-load the prebuilt hourly feed (default source) so the dashboard is populated on open.
+  refreshNews();
+});
+// Load the CISA KEV catalog (independent of country config).
+loadKev();
+loadCrosswalk();
+byId('diamondSelect').addEventListener('change',e=>{ const v=e.target.value; diamondCurrent=v===''?null:diamondList[+v]; renderDiamond(); });
+renderDiamondOptions(); renderDiamond();
+loadActorCves();
+// Crosswalk modal close: button, backdrop click, Escape.
+byId('cwClose').addEventListener('click',closeCrosswalk);
+byId('crosswalkModal').addEventListener('click',e=>{ if(e.target===byId('crosswalkModal')) closeCrosswalk(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeCrosswalk(); });
