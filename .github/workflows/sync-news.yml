@@ -43,7 +43,12 @@ jobs:
             git config user.name  "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "chore: refresh news + KEV feed [skip ci]"
-            git push
+            # Rebase-and-retry: another workflow (news/enrichment/deploy) may push
+            # concurrently; our file sets are disjoint, so rebasing is always safe.
+            for i in 1 2 3; do
+              git pull --rebase origin main && git push && break
+              echo "push attempt $i failed; retrying" && sleep 5
+            done
           fi
 
       # Publish the refreshed site (including news.json) to Pages.
