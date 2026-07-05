@@ -2,6 +2,284 @@
 <rss version="2.0"><channel>
   <title>Big 4 Cyber &amp; IW Threat Dashboard — curated news</title>
   <link>https://unclet67.github.io/cyber-threat-dashboard/</link>
-  <description>Populated by the hourly Sync news feed workflow.</description>
-
+  <description>China / Russia / Iran / North Korea cyber and information-warfare reporting, collected hourly from 27 vetted feeds.</description>
+  <item>
+    <title>North Korea-Linked npm Packages Mimic Rollup Polyfills to Steal Developer Secrets</title>
+    <link>https://thehackernews.com/2026/07/north-korea-linked-npm-packages-mimic.html</link>
+    <guid isPermaLink="true">https://thehackernews.com/2026/07/north-korea-linked-npm-packages-mimic.html</guid>
+    <pubDate>Fri, 03 Jul 2026 16:07:15 GMT</pubDate>
+    <category>KP</category>
+    <source url="https://thehackernews.com/2026/07/north-korea-linked-npm-packages-mimic.html">The Hacker News</source>
+    <description>Threat actors with ties to North Korea have been linked to a fresh set of malicious npm packages that masquerade as Rollup polyfill tooling to facilitate remote access and data theft. According to JFrog, the packages &quot;rollup-packages-polyfill-core&quot; and &quot;rollup-runtime-polyfill-core&quot; mimic the legitimate &quot;rollup-plugin-polyfill-node&quot; project, down to the description, repository metadata, and</description>
+  </item>
+  <item>
+    <title>Armored Likho Targets Government Agencies, Power Sector with BusySnake Stealer</title>
+    <link>https://thehackernews.com/2026/07/armored-likho-targets-government.html</link>
+    <guid isPermaLink="true">https://thehackernews.com/2026/07/armored-likho-targets-government.html</guid>
+    <pubDate>Fri, 03 Jul 2026 13:36:33 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://thehackernews.com/2026/07/armored-likho-targets-government.html">The Hacker News</source>
+    <description>A previously undocumented threat actor known as Armored Likho has been attributed to cyber attacks targeting government agencies and the electric power sector across Russia, Brazil, and Kazakhstan. &quot;Armored Likho blends financially motivated campaigns targeting private individuals with targeted cyber espionage aimed at organizations,&quot; Kaspersky said in a technical analysis published today. &quot;</description>
+  </item>
+  <item>
+    <title>Chinese LLMs Broaden the Gap Between Attackers &amp; Defenders</title>
+    <link>https://www.darkreading.com/cyber-risk/chinese-llms-broaden-gap-between-attackers-and-defenders</link>
+    <guid isPermaLink="true">https://www.darkreading.com/cyber-risk/chinese-llms-broaden-gap-between-attackers-and-defenders</guid>
+    <pubDate>Fri, 03 Jul 2026 13:01:00 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.darkreading.com/cyber-risk/chinese-llms-broaden-gap-between-attackers-and-defenders">Dark Reading</source>
+    <description>Two new models from Chinese firms compete with top US mainstream and frontier models. Should cyber-defenders be worried?</description>
+  </item>
+  <item>
+    <title>The Good, the Bad and the Ugly in Cybersecurity – Week 27</title>
+    <link>https://www.sentinelone.com/blog/the-good-the-bad-and-the-ugly-in-cybersecurity-week-27-7/</link>
+    <guid isPermaLink="true">https://www.sentinelone.com/blog/the-good-the-bad-and-the-ugly-in-cybersecurity-week-27-7/</guid>
+    <pubDate>Fri, 03 Jul 2026 13:00:49 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.sentinelone.com/blog/the-good-the-bad-and-the-ugly-in-cybersecurity-week-27-7/">SentinelOne Blog</source>
+    <description>FBI apprehends IRGC-linked cybercriminal, Russian hackers steal Signal backup keys, and unknown hackers breach the DHS information network.</description>
+  </item>
+  <item>
+    <title>The Good, the Bad and the Ugly in Cybersecurity – Week 27</title>
+    <link>https://www.sentinelone.com/blog/the-good-the-bad-and-the-ugly-in-cybersecurity-week-27-7/</link>
+    <guid isPermaLink="true">https://www.sentinelone.com/blog/the-good-the-bad-and-the-ugly-in-cybersecurity-week-27-7/</guid>
+    <pubDate>Fri, 03 Jul 2026 13:00:49 GMT</pubDate>
+    <category>IR</category>
+    <source url="https://www.sentinelone.com/blog/the-good-the-bad-and-the-ugly-in-cybersecurity-week-27-7/">SentinelOne Blog</source>
+    <description>FBI apprehends IRGC-linked cybercriminal, Russian hackers steal Signal backup keys, and unknown hackers breach the DHS information network.</description>
+  </item>
+  <item>
+    <title>Armored Likho digging a snake pit: inside the covert BusySnake Stealer campaign</title>
+    <link>https://securelist.com/tr/armored-likho-apt-with-busysnake-stealer/120292/</link>
+    <guid isPermaLink="true">https://securelist.com/tr/armored-likho-apt-with-busysnake-stealer/120292/</guid>
+    <pubDate>Fri, 03 Jul 2026 10:00:33 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://securelist.com/tr/armored-likho-apt-with-busysnake-stealer/120292/">Kaspersky Securelist</source>
+    <description>An inside look at the active Armored Likho APT campaign. The attackers are using spear-phishing, AI-generated loaders, and a new Python-based tool, BusySnake Stealer, to target organizations in Russia, Kazakhstan, and Brazil.</description>
+  </item>
+  <item>
+    <title>Startup sues Palo Alto Networks&apos; Koi Security, saying an AI-hallucinated report falsely linked it to Chinese espionage</title>
+    <link>https://www.theregister.com/legal/2026/07/02/startup-sues-palo-alto-networks-koi-security-saying-an-ai-hallucinated-report-falsely-linked-it-to-chinese-espionage/5266201</link>
+    <guid isPermaLink="true">https://www.theregister.com/legal/2026/07/02/startup-sues-palo-alto-networks-koi-security-saying-an-ai-hallucinated-report-falsely-linked-it-to-chinese-espionage/5266201</guid>
+    <pubDate>Thu, 02 Jul 2026 22:47:46 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.theregister.com/legal/2026/07/02/startup-sues-palo-alto-networks-koi-security-saying-an-ai-hallucinated-report-falsely-linked-it-to-chinese-espionage/5266201">The Register — Security</source>
+    <description>MeetingTV wants to see the evidence</description>
+  </item>
+  <item>
+    <title>China-Linked Group Targets Southeast Asia Critical Systems</title>
+    <link>https://www.darkreading.com/threat-intelligence/china-linked-group-targets-southeast-asia-critical-systems</link>
+    <guid isPermaLink="true">https://www.darkreading.com/threat-intelligence/china-linked-group-targets-southeast-asia-critical-systems</guid>
+    <pubDate>Wed, 01 Jul 2026 01:00:01 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.darkreading.com/threat-intelligence/china-linked-group-targets-southeast-asia-critical-systems">Dark Reading</source>
+    <description>The group compromised at least 10 regional organizations, including two state-owned entities, and deployed a new backdoor.</description>
+  </item>
+  <item>
+    <title>Four years into Ukraine invasion, Russia turns influence-ops back to US and Europe</title>
+    <link>https://www.theregister.com/security/2026/06/29/four-years-into-ukraine-invasion-russia-turns-influence-ops-back-to-us-and-europe/5264011</link>
+    <guid isPermaLink="true">https://www.theregister.com/security/2026/06/29/four-years-into-ukraine-invasion-russia-turns-influence-ops-back-to-us-and-europe/5264011</guid>
+    <pubDate>Mon, 29 Jun 2026 22:10:16 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.theregister.com/security/2026/06/29/four-years-into-ukraine-invasion-russia-turns-influence-ops-back-to-us-and-europe/5264011">The Register — Security</source>
+    <description>Not today, Putin</description>
+  </item>
+  <item>
+    <title>Iran, Russia, China Target Water Systems for Sabotage</title>
+    <link>https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage</link>
+    <guid isPermaLink="true">https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage</guid>
+    <pubDate>Mon, 29 Jun 2026 19:12:08 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage">Dark Reading</source>
+    <description>Nation-state attackers breach water systems through weak passwords, exposed PLCs, and poor segmentation — not sophisticated malware.</description>
+  </item>
+  <item>
+    <title>Iran, Russia, China Target Water Systems for Sabotage</title>
+    <link>https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage</link>
+    <guid isPermaLink="true">https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage</guid>
+    <pubDate>Mon, 29 Jun 2026 19:12:08 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage">Dark Reading</source>
+    <description>Nation-state attackers breach water systems through weak passwords, exposed PLCs, and poor segmentation — not sophisticated malware.</description>
+  </item>
+  <item>
+    <title>Iran, Russia, China Target Water Systems for Sabotage</title>
+    <link>https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage</link>
+    <guid isPermaLink="true">https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage</guid>
+    <pubDate>Mon, 29 Jun 2026 19:12:08 GMT</pubDate>
+    <category>IR</category>
+    <source url="https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage">Dark Reading</source>
+    <description>Nation-state attackers breach water systems through weak passwords, exposed PLCs, and poor segmentation — not sophisticated malware.</description>
+  </item>
+  <item>
+    <title>Mustang Panda Uses Zoho WorkDrive as Command Channel in Indian Government Attacks</title>
+    <link>https://thehackernews.com/2026/06/mustang-panda-uses-zoho-workdrive-as.html</link>
+    <guid isPermaLink="true">https://thehackernews.com/2026/06/mustang-panda-uses-zoho-workdrive-as.html</guid>
+    <pubDate>Mon, 29 Jun 2026 15:03:40 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://thehackernews.com/2026/06/mustang-panda-uses-zoho-workdrive-as.html">The Hacker News</source>
+    <description>The China-aligned espionage group Mustang Panda is running two campaigns against the Indian government and hydropower targets, deploying new malware and turning a legitimate cloud service into its command channel. Acronis Threat Research Unit found active compromises inside Indian government networks, including machines used by senior administrative staff, and worked with</description>
+  </item>
+  <item>
+    <title>Russian Intelligence Services Continue to Target Commercial Messaging Applications</title>
+    <link>https://www.cisa.gov/resources-tools/resources/russian-intelligence-services-continue-target-commercial-messaging-applications</link>
+    <guid isPermaLink="true">https://www.cisa.gov/resources-tools/resources/russian-intelligence-services-continue-target-commercial-messaging-applications</guid>
+    <pubDate>Fri, 26 Jun 2026 12:00:00 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.cisa.gov/resources-tools/resources/russian-intelligence-services-continue-target-commercial-messaging-applications">CISA Advisories</source>
+    <description>CISA and the Federal Bureau of Investigation (FBI) issued an updated Public Service Announcement (PSA) warning of Russian Intelligence Services (RIS) cyber threat actors targeting commercial messaging applications in ongoing phishing campaigns. This PSA is an update to the March 2026 Russian Intelligence Services Target Commercial Messaging Application Accounts and provides recent tactics, recommended mitigations, and samples of phishing messages.&amp;nbsp;</description>
+  </item>
+  <item>
+    <title>Chinese cybersecurity company claims it’s built a better-than-Mythos bug finder</title>
+    <link>https://www.theregister.com/security/2026/06/26/chinese-cybersecurity-company-claims-its-built-a-better-than-mythos-bug-finder/5262642</link>
+    <guid isPermaLink="true">https://www.theregister.com/security/2026/06/26/chinese-cybersecurity-company-claims-its-built-a-better-than-mythos-bug-finder/5262642</guid>
+    <pubDate>Fri, 26 Jun 2026 01:49:35 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.theregister.com/security/2026/06/26/chinese-cybersecurity-company-claims-its-built-a-better-than-mythos-bug-finder/5262642">The Register — Security</source>
+    <description>Qihoo 360, which the US has banned, says it’s needed as a deterrent to weaponized Anthropic models</description>
+  </item>
+  <item>
+    <title>Russian APT &apos;Gamaredon&apos; Upgrades Its Arsenal, Requiring New Defenses</title>
+    <link>https://www.darkreading.com/threat-intelligence/russia-apt-gamaredon-arsenal-defense</link>
+    <guid isPermaLink="true">https://www.darkreading.com/threat-intelligence/russia-apt-gamaredon-arsenal-defense</guid>
+    <pubDate>Thu, 25 Jun 2026 21:12:01 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.darkreading.com/threat-intelligence/russia-apt-gamaredon-arsenal-defense">Dark Reading</source>
+    <description>The FSB state-sponsored operation has gotten a lot better at loading its malware and hiding its servers.</description>
+  </item>
+  <item>
+    <title>H.VIEW HV-500S6 IP Camera</title>
+    <link>https://www.cisa.gov/news-events/ics-advisories/icsa-26-176-05</link>
+    <guid isPermaLink="true">https://www.cisa.gov/news-events/ics-advisories/icsa-26-176-05</guid>
+    <pubDate>Thu, 25 Jun 2026 12:00:00 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.cisa.gov/news-events/ics-advisories/icsa-26-176-05">CISA Advisories</source>
+    <description>View CSAF Summary Successful exploitation of these vulnerabilities could allow an attacker to execute arbitrary code and upload malicious files to the affected device. The following versions of H.VIEW HV-500S6 IP Camera are affected: H.VIEW HV-500S6 IP Camera IPCAM_V4.06.88.251229&amp;nbsp; CVSS Vendor Equipment Vulnerabilities v3 7.2 H.VIEW H.VIEW HV-500S6 IP Camera Improper Neutralization of Special Elements used in an OS Command (&apos;OS Command Injection&apos;), Unrestricted Upload of File with Dangerous</description>
+  </item>
+  <item>
+    <title>Gamaredon in 2025: Leveraging tunnels, workers, dead drops, and new alliances</title>
+    <link>https://www.welivesecurity.com/en/eset-research/gamaredon-2025-leveraging-tunnels-workers-dead-drops-new-alliances/</link>
+    <guid isPermaLink="true">https://www.welivesecurity.com/en/eset-research/gamaredon-2025-leveraging-tunnels-workers-dead-drops-new-alliances/</guid>
+    <pubDate>Thu, 25 Jun 2026 08:45:00 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.welivesecurity.com/en/eset-research/gamaredon-2025-leveraging-tunnels-workers-dead-drops-new-alliances/">ESET WeLiveSecurity</source>
+    <description>ESET Research analyzes Gamaredon’s new toolset and the group’s growing reliance on legitimate online services to hide its C&amp;C infrastructure and exfiltrate stolen data</description>
+  </item>
+  <item>
+    <title>Linux Process Name Masquerading, (Wed, Jun 24th)</title>
+    <link>https://isc.sans.edu/diary/rss/33102</link>
+    <guid isPermaLink="true">https://isc.sans.edu/diary/rss/33102</guid>
+    <pubDate>Wed, 24 Jun 2026 06:29:03 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://isc.sans.edu/diary/rss/33102">SANS Internet Storm Center</source>
+    <description>In a previous diary, I talked about stack strings&amp;&amp;#x23;x26;&amp;#x23;x5b; 1 &amp;&amp;#x23;x26;&amp;#x23;x5d; with a practical example of them. Since my SEC670 class, I&amp;&amp;#x23;x26;&amp;#x23;xe2;&amp;&amp;#x23;x26;&amp;#x23;x80;&amp;&amp;#x23;x26;&amp;#x23;x99;m even more interested&amp;&amp;#x23;x26;&amp;#x23;xc2;&amp;&amp;#x23;x26;&amp;#x23;xa0;in malware obfuscation techniques. I had&amp;&amp;#x23;x26;&amp;#x23;xc2;&amp;&amp;#x23;x26;&amp;#x23;xa0;a look at process names. When you list running processes on a computer, can you trust what you see&amp;&amp;#x23;x26;&amp;#x23;x3f; If you&amp;&amp;#x23;x26;&amp;</description>
+  </item>
+  <item>
+    <title>Sayonara, SocGholish: Operation Endgame Disrupts Major Cybercrime Operation</title>
+    <link>https://www.proofpoint.com/us/blog/threat-insight/sayonara-socgholish-operation-endgame-disrupts-major-cybercrime-operation</link>
+    <guid isPermaLink="true">https://www.proofpoint.com/us/blog/threat-insight/sayonara-socgholish-operation-endgame-disrupts-major-cybercrime-operation</guid>
+    <pubDate>Wed, 17 Jun 2026 17:59:58 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.proofpoint.com/us/blog/threat-insight/sayonara-socgholish-operation-endgame-disrupts-major-cybercrime-operation">Proofpoint Threat Insight</source>
+    <description>Key Findings&amp;nbsp; Global law enforcement and private sector partners worked to disrupt activity related to TA569, as part of Operation Endgame.&amp;nbsp; TA569 is one of the most prominent&amp;nbsp;cybercriminal&amp;nbsp;threat groups in Proofpoint threat data, which our researchers have tracked since 2018.&amp;nbsp;&amp;nbsp; TA569’s&amp;nbsp;SocGholish&amp;nbsp;inject activity has been linked to major ransomware families and criminal syndicates.&amp;nbsp; The&amp;nbsp;law enforcement&amp;nbsp;actions included disrupting their serve</description>
+  </item>
+  <item>
+    <title>Don&apos;t Fear the Repo: UNK_DeadDrop Phishing Campaign Targets Developers to Steal Cryptocurrency</title>
+    <link>https://www.proofpoint.com/us/blog/threat-insight/dont-fear-repo-unkdeaddrop-phishing-campaign-targets-developers-steal</link>
+    <guid isPermaLink="true">https://www.proofpoint.com/us/blog/threat-insight/dont-fear-repo-unkdeaddrop-phishing-campaign-targets-developers-steal</guid>
+    <pubDate>Mon, 08 Jun 2026 15:11:53 GMT</pubDate>
+    <category>KP</category>
+    <source url="https://www.proofpoint.com/us/blog/threat-insight/dont-fear-repo-unkdeaddrop-phishing-campaign-targets-developers-steal">Proofpoint Threat Insight</source>
+    <description>By Saher Naumaan, Carlos Rubio, and the Proofpoint Threat Research Team Key Findings Between April and May 2026, Proofpoint Threat Research observed a likely North Korean threat actor conducting phishing campaigns using developer role recruitment or code review themes to targets in close to 100 organizations in finance, cryptocurrency, education, technology, and several other sectors. Proofpoint clusters this activity under the name UNK_DeadDrop. The infection chain begins with emails containing</description>
+  </item>
+  <item>
+    <title>TA4922: The Suspected Chinese Crime Group is Going Global</title>
+    <link>https://www.proofpoint.com/us/blog/threat-insight/ta4922-suspected-chinese-crime-group-going-global</link>
+    <guid isPermaLink="true">https://www.proofpoint.com/us/blog/threat-insight/ta4922-suspected-chinese-crime-group-going-global</guid>
+    <pubDate>Wed, 03 Jun 2026 17:06:32 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.proofpoint.com/us/blog/threat-insight/ta4922-suspected-chinese-crime-group-going-global">Proofpoint Threat Insight</source>
+    <description>Key Findings:&amp;nbsp; TA4922 is a highly sophisticated threat actor&amp;nbsp;demonstrating&amp;nbsp;a rapid operational tempo and continually evolving malware arsenal.&amp;nbsp; The group has been&amp;nbsp;observed&amp;nbsp;using multiple malware families including Atlas RAT,&amp;nbsp;RomulusLoader,&amp;nbsp;SilentRunLoader, and&amp;nbsp;ValleyRAT&amp;nbsp;(Winos4.0), among others.&amp;nbsp; TA4922 relies on localized lures often themed around HR, payroll, tax, and invoicing to convince targets across multiple regions. In recent months,</description>
+  </item>
+  <item>
+    <title>Hackers Used Meta’s AI Support Bot to Seize Instagram Accounts</title>
+    <link>https://krebsonsecurity.com/2026/06/hackers-used-metas-ai-support-bot-to-seize-instagram-accounts/</link>
+    <guid isPermaLink="true">https://krebsonsecurity.com/2026/06/hackers-used-metas-ai-support-bot-to-seize-instagram-accounts/</guid>
+    <pubDate>Mon, 01 Jun 2026 17:32:50 GMT</pubDate>
+    <category>IR</category>
+    <source url="https://krebsonsecurity.com/2026/06/hackers-used-metas-ai-support-bot-to-seize-instagram-accounts/">Krebs on Security</source>
+    <description>The Instagram accounts for the Obama White House and the Chief Master Sergeant of the U.S. Space Force were briefly defaced with pro-Iranian images and messages over the weekend, after instructions began circulating on Telegram showing how to trick Meta&apos;s &quot;AI support assistant&quot; bot into resetting account passwords.</description>
+  </item>
+  <item>
+    <title>More CVEs, Same Playbook: 2026 Vulnerability Exploitation in the Wild</title>
+    <link>https://www.proofpoint.com/us/blog/threat-insight/more-cves-same-playbook-2026-vulnerability-exploitation-wild</link>
+    <guid isPermaLink="true">https://www.proofpoint.com/us/blog/threat-insight/more-cves-same-playbook-2026-vulnerability-exploitation-wild</guid>
+    <pubDate>Wed, 27 May 2026 15:00:00 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.proofpoint.com/us/blog/threat-insight/more-cves-same-playbook-2026-vulnerability-exploitation-wild">Proofpoint Threat Insight</source>
+    <description>Executive Summary The CVE Landscape Has Changed. The Threat Actors Haven&apos;t.&amp;nbsp; Proofpoint&apos;s dual telemetry streams — targeted&amp;nbsp;attack&amp;nbsp;visibility covering hundreds of millions of messages daily, and a global network sensor array that generated over 3 million alerts&amp;nbsp;and&amp;nbsp;identified&amp;nbsp;four undisclosed CVEs&amp;nbsp;in 2026 to date — present a consistent picture:&amp;nbsp;attackers are opportunistic. They grab newly published CVEs when public proof-of-concept code appears, chain them</description>
+  </item>
+  <item>
+    <title>More CVEs, Same Playbook: 2026 Vulnerability Exploitation in the Wild</title>
+    <link>https://www.proofpoint.com/us/blog/threat-insight/more-cves-same-playbook-2026-vulnerability-exploitation-wild</link>
+    <guid isPermaLink="true">https://www.proofpoint.com/us/blog/threat-insight/more-cves-same-playbook-2026-vulnerability-exploitation-wild</guid>
+    <pubDate>Wed, 27 May 2026 15:00:00 GMT</pubDate>
+    <category>KP</category>
+    <source url="https://www.proofpoint.com/us/blog/threat-insight/more-cves-same-playbook-2026-vulnerability-exploitation-wild">Proofpoint Threat Insight</source>
+    <description>Executive Summary The CVE Landscape Has Changed. The Threat Actors Haven&apos;t.&amp;nbsp; Proofpoint&apos;s dual telemetry streams — targeted&amp;nbsp;attack&amp;nbsp;visibility covering hundreds of millions of messages daily, and a global network sensor array that generated over 3 million alerts&amp;nbsp;and&amp;nbsp;identified&amp;nbsp;four undisclosed CVEs&amp;nbsp;in 2026 to date — present a consistent picture:&amp;nbsp;attackers are opportunistic. They grab newly published CVEs when public proof-of-concept code appears, chain them</description>
+  </item>
+  <item>
+    <title>Netherlands Seizes 800 Servers, Arrests 2 for Aiding Cyberattacks</title>
+    <link>https://krebsonsecurity.com/2026/05/netherlands-seizes-800-servers-arrests-2-for-aiding-cyberattacks/</link>
+    <guid isPermaLink="true">https://krebsonsecurity.com/2026/05/netherlands-seizes-800-servers-arrests-2-for-aiding-cyberattacks/</guid>
+    <pubDate>Mon, 25 May 2026 13:21:49 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://krebsonsecurity.com/2026/05/netherlands-seizes-800-servers-arrests-2-for-aiding-cyberattacks/">Krebs on Security</source>
+    <description>Authorities in the Netherlands have arrested the co-owners of two related Internet hosting companies for operating IT infrastructure used by Russia to carry out cyberattacks, influence operations and disinformation campaigns inside the European Union. The two men were the focus of a 2025 KrebsOnSecurity story about how their hosting companies had assumed control over the technical infrastructure of Stark Industries Solutions, an Internet service provider sanctioned last year by the EU as a frequ</description>
+  </item>
+  <item>
+    <title>Fast and Furious – Nimbus Manticore Operations During the Iranian Conflict</title>
+    <link>https://research.checkpoint.com/2026/fast-and-furious-nimbus-manticore-operations-during-the-iranian-conflict/</link>
+    <guid isPermaLink="true">https://research.checkpoint.com/2026/fast-and-furious-nimbus-manticore-operations-during-the-iranian-conflict/</guid>
+    <pubDate>Fri, 22 May 2026 15:09:29 GMT</pubDate>
+    <category>IR</category>
+    <source url="https://research.checkpoint.com/2026/fast-and-furious-nimbus-manticore-operations-during-the-iranian-conflict/">Check Point Research</source>
+    <description>Key Findings Introduction During the recent geopolitical tensions in the Middle East, we reported on multiple Iran-nexus threat actors advancing Iran’s strategic objectives through cyber operations. These activities included targeting internet-connected cameras, conducting destructive attacks against US and Israeli entities, and exfiltrating data from cloud environments to support broader kinetic and intelligence-gathering efforts. Nimbus Manticore (also tracked as UNC1549) is an IRGC-affiliated</description>
+  </item>
+  <item>
+    <title>This month in security with Tony Anscombe – April 2026 edition</title>
+    <link>https://www.welivesecurity.com/en/videos/month-security-tony-anscombe-april-2026/</link>
+    <guid isPermaLink="true">https://www.welivesecurity.com/en/videos/month-security-tony-anscombe-april-2026/</guid>
+    <pubDate>Thu, 30 Apr 2026 09:00:00 GMT</pubDate>
+    <category>IR</category>
+    <source url="https://www.welivesecurity.com/en/videos/month-security-tony-anscombe-april-2026/">ESET WeLiveSecurity</source>
+    <description>Warnings about helpdesk impersonation scams and Iran-linked hackers targeting critical sectors in the US, plus the most damaging scams of 2025 - here&apos;s some of what made the headlines this month</description>
+  </item>
+  <item>
+    <title>Defending against China-nexus covert networks of compromised devices</title>
+    <link>https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</link>
+    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
+    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
+    <description>Explaining the widespread shift in tactics, techniques and procedures (TTPs) towards networks of compromised infrastructure, and how to defend against it</description>
+  </item>
+  <item>
+    <title>International cyber agencies share fresh advice to defend against China-linked covert networks</title>
+    <link>https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</link>
+    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</guid>
+    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks">NCSC UK</source>
+    <description>New advisory highlights how to defend against attacker tactics believed to be used by China-linked actors to hide malicious cyber activity.</description>
+  </item>
+  <item>
+    <title>GopherWhisper: A burrow full of malware</title>
+    <link>https://www.welivesecurity.com/en/eset-research/gopherwhisper-burrow-full-malware/</link>
+    <guid isPermaLink="true">https://www.welivesecurity.com/en/eset-research/gopherwhisper-burrow-full-malware/</guid>
+    <pubDate>Thu, 23 Apr 2026 08:59:18 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.welivesecurity.com/en/eset-research/gopherwhisper-burrow-full-malware/">ESET WeLiveSecurity</source>
+    <description>ESET Research has discovered a new China-aligned APT group that we’ve named GopherWhisper, which targets Mongolian governmental institutions</description>
+  </item>
 </channel></rss>
