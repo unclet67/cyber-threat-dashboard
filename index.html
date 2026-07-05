@@ -31,6 +31,8 @@
       <button type="button" class="tab" role="tab" aria-selected="false" data-tab="crosswalk">Name Crosswalk</button>
       <button type="button" class="tab" role="tab" aria-selected="false" data-tab="kev">KEV (Exploited)</button>
       <button type="button" class="tab" role="tab" aria-selected="false" data-tab="diamond">Diamond Model</button>
+      <button type="button" class="tab" role="tab" aria-selected="false" data-tab="trends">Trends</button>
+      <button type="button" class="tab" role="tab" aria-selected="false" data-tab="workbench">Workbench</button>
       <button type="button" class="tab" role="tab" aria-selected="false" data-tab="sources">Sources & Caveats</button>
     </div>
     <button class="primary" id="refreshNews">Refresh live news</button>
@@ -90,9 +92,9 @@
 
   <section id="kevPanel" class="hidden">
     <h2>Known Exploited Vulnerabilities (CISA KEV)</h2>
-    <p class="section-note">The most recently added entries from the <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noreferrer">CISA KEV catalog</a> — vulnerabilities with reliable evidence of active in-the-wild exploitation. KEV is <strong>not nation-state attributed</strong>, so it is not filtered by country; use the search box to filter by CVE, vendor, or product. The 🔒 flag marks known ransomware-campaign use.</p>
+    <p class="section-note">The most recently added entries from the <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noreferrer">CISA KEV catalog</a> — vulnerabilities with reliable evidence of active in-the-wild exploitation. KEV is <strong>not nation-state attributed</strong>, so it is not filtered by country; use the search box to filter by CVE, vendor, or product. The 🔒 flag marks known ransomware-campaign use; <strong>EPSS</strong> is FIRST’s modeled probability of exploitation in the next 30 days (refreshed daily).</p>
     <div id="kevHealth" class="section-note" style="margin-top:-2px"></div>
-    <div class="table-wrap"><table id="kevTable"><thead><tr><th>CVE</th><th>Vendor / Product</th><th>Vulnerability</th><th>Added</th><th>Due</th><th>Ransomware</th><th>Linked actors</th></tr></thead><tbody></tbody></table></div>
+    <div class="table-wrap"><table id="kevTable"><thead><tr><th>CVE</th><th>Vendor / Product</th><th>Vulnerability</th><th>Added</th><th>Due</th><th title="FIRST EPSS — probability of exploitation in the next 30 days">EPSS</th><th>Ransomware</th><th>Linked actors</th></tr></thead><tbody></tbody></table></div>
   </section>
 
   <section id="diamondPanel" class="hidden">
@@ -102,6 +104,39 @@
       <select id="diamondSelect" title="Choose a news story" style="min-width:320px;flex:1"></select>
     </div>
     <div id="diamondView"></div>
+  </section>
+
+  <section id="trendsPanel" class="hidden">
+    <h2>Activity Trends</h2>
+    <p class="section-note">Stories per country per day, from the rolling archive the hourly sync maintains (<span class="mono">data/archive.json</span>). Hover for exact counts; the table below has the raw data.</p>
+    <div id="trendNote" class="section-note"></div>
+    <div class="card">
+      <div id="trendLegend" class="tagbar" style="margin-bottom:8px"></div>
+      <div id="trendChart" style="position:relative"></div>
+      <details style="margin-top:10px"><summary class="section-note" style="cursor:pointer;display:list-item">Data table</summary>
+        <div class="table-wrap" style="margin-top:8px"><table id="trendTable"><thead><tr><th>Date</th><th>China</th><th>Russia</th><th>Iran</th><th>North Korea</th><th>Total</th><th>Feeds OK</th></tr></thead><tbody></tbody></table></div>
+      </details>
+    </div>
+  </section>
+
+  <section id="workbenchPanel" class="hidden">
+    <h2>Analyst Workbench</h2>
+    <p class="section-note">Pins, notes, and watchlists live <strong>in this browser</strong> (localStorage) — nothing leaves your machine. Pin stories from Recent News with the 📌 button; pinned items lead the 📋 Copy brief export.</p>
+    <div class="two-col">
+      <div class="card">
+        <h3>📌 Pinned stories</h3>
+        <div id="pinList" class="side-list"><p class="section-note">Nothing pinned yet — use the 📌 button on any Recent News card.</p></div>
+      </div>
+      <div class="card">
+        <h3>🔭 Keyword watchlist</h3>
+        <p class="section-note">Stories matching these terms get a highlighted <span class="tag high">WATCH</span> badge in Recent News — your own sector, a malware family, a region.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><input id="watchInput" placeholder="e.g. VPN appliance, Taiwan, ICS" style="flex:1;min-width:180px"/><button id="watchAdd">Add term</button></div>
+        <div id="watchList" class="tagbar" style="margin-top:10px"></div>
+        <h3 style="margin-top:20px">📦 Machine-readable exports</h3>
+        <p class="section-note">Export the current (filtered) news — detected actors and CVEs included — as a <strong>STIX 2.1 bundle</strong> for MISP / OpenCTI, or subscribe to the curated stream as <a href="feed.xml">RSS</a> / consume <a href="data/news.json">data/news.json</a> directly.</p>
+        <button id="stixExport">⬇ STIX 2.1 bundle (filtered news)</button>
+      </div>
+    </div>
   </section>
 
   <section id="sourcesPanel" class="hidden">

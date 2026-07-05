@@ -118,3 +118,71 @@ test('app.js safeUrl blocks non-http(s) schemes and escapes quotes', () => {
   assert.equal(safeUrl('data:text/html,x'), '');
   assert.ok(!safeUrl('https://evil.example/" onmouseover="x').includes('"'), 'quotes escaped');
 });
+
+// ---------- enrichment: ATT&CK reduction ----------
+
+import { reduceAttack, parseEpssCsv, extractIocs, defang, xmlEscape, buildRss } from '../scripts/lib.mjs';
+
+const STIX_FIXTURE = {
+  objects: [
+    { type: 'intrusion-set', id: 'intrusion-set--g1', name: 'APT41', aliases: ['APT41', 'Wicked Panda'], external_references: [{ source_name: 'mitre-attack', external_id: 'G0096' }] },
+    { type: 'intrusion-set', id: 'intrusion-set--g2', name: 'OldGroup', revoked: true, external_references: [{ source_name: 'mitre-attack', external_id: 'G0001' }] },
+    { type: 'attack-pattern', id: 'attack-pattern--t1', name: 'Phishing', external_references: [{ source_name: 'mitre-attack', external_id: 'T1566' }] },
+    { type: 'attack-pattern', id: 'attack-pattern--t2', name: 'Spearphishing Attachment', x_mitre_is_subtechnique: true, external_references: [{ source_name: 'mitre-attack', external_id: 'T1566.001' }] },
+    { type: 'malware', id: 'malware--m1', name: 'ShadowPad', external_references: [{ source_name: 'mitre-attack', external_id: 'S0596' }] },
+    { type: 'relationship', id: 'relationship--r1', relationship_type: 'uses', source_ref: 'intrusion-set--g1', target_ref: 'attack-pattern--t1' },
+    { type: 'relationship', id: 'relationship--r2', relationship_type: 'uses', source_ref: 'intrusion-set--g1', target_ref: 'attack-pattern--t2' },
+    { type: 'relationship', id: 'relationship--r3', relationship_type: 'uses', source_ref: 'intrusion-set--g1', target_ref: 'malware--m1' },
+    { type: 'relationship', id: 'relationship--r4', relationship_type: 'uses', source_ref: 'intrusion-set--g2', target_ref: 'attack-pattern--t1' },
+  ],
+};
+
+test('reduceAttack maps groups to parent techniques + software, skipping revoked and subtechniques', () => {
+  const groups = reduceAttack(STIX_FIXTURE);
+  assert.equal(groups.length, 1, 'revoked group dropped');
+  const g = groups[0];
+  assert.equal(g.gid, 'G0096');
+  assert.deepEqual(g.aliases, ['Wicked Panda'], 'self-alias removed');
+  assert.deepEqual(g.techniques, [{ id: 'T1566', name: 'Phishing' }], 'subtechnique excluded');
+  assert.deepEqual(g.software, [{ id: 'S0596', name: 'ShadowPad', type: 'malware' }]);
+});
+
+test('parseEpssCsv keeps only wanted CVEs and skips headers/comments', () => {
+  const csv = '#model_version:v2025.03.14\ncve,epss,percentile\nCVE-2026-1111,0.94321,0.99912\nCVE-2020-0001,0.00042,0.05\n';
+  const out = parseEpssCsv(csv, ['CVE-2026-1111']);
+  assert.deepEqual(Object.keys(out), ['CVE-2026-1111']);
+  assert.ok(Math.abs(out['CVE-2026-1111'].epss - 0.94321) < 1e-9);
+});
+
+// ---------- IOC extraction ----------
+
+test('extractIocs finds hashes, IPs, CVEs, and defanged-only domains', () => {
+  const text = 'Dropper e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 beacons to '
+    + '203.0.113.7 and evil-c2[.]example via hxxps://bad[.]example/p — patched as CVE-2026-9999. '
+    + 'Read more at https://vendor.com/blog (a live link, not an IOC). Version 10.2.3.4000 is safe.';
+  const ioc = extractIocs(text);
+  assert.equal(ioc.sha256.length, 1);
+  assert.deepEqual(ioc.ips, ['203.0.113.7'], 'version-like octet >255 excluded');
+  assert.deepEqual(ioc.cves, ['CVE-2026-9999']);
+  assert.ok(ioc.defanged.some(d => d.includes('evil-c2[.]example')));
+  assert.ok(ioc.defanged.some(d => d.startsWith('hxxps://')));
+  assert.ok(!ioc.defanged.some(d => d.includes('vendor.com')), 'live links are not IOCs');
+});
+
+test('defang neutralizes schemes and dots without double-defanging', () => {
+  assert.equal(defang('https://evil.com/x'), 'hxxps://evil[.]com/x');
+  assert.equal(defang('1.2.3.4'), '1[.]2[.]3[.]4');
+  assert.equal(defang('already[.]defanged'), 'already[.]defanged');
+});
+
+// ---------- RSS emitter ----------
+
+test('buildRss escapes XML and formats dates', () => {
+  const xml = buildRss([{ title: 'A & B <test>', url: 'https://x.example/a?b=1&c=2', seendate: '20260703120000', c: 'CN', sourceCountry: 'Feed "Q"', summary: 'S' }],
+    { title: 'T', link: 'https://x.example/', description: 'D' });
+  assert.ok(xml.includes('A &amp; B &lt;test&gt;'));
+  assert.ok(xml.includes('b=1&amp;c=2'));
+  assert.ok(xml.includes('<pubDate>Fri, 03 Jul 2026 12:00:00 GMT</pubDate>'));
+  assert.ok(!xml.includes('Feed "Q"'), 'quotes escaped in attributes');
+  assert.equal(xmlEscape(`<&>'"`), '&lt;&amp;&gt;&apos;&quot;');
+});

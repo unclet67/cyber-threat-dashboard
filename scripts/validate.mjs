@@ -126,6 +126,33 @@ try {
   fail('data/archive.json schema: ' + e.message);
 }
 
+// 8. data/attack.json schema (reduced MITRE ATT&CK groups map).
+try {
+  const at = JSON.parse(readFileSync('data/attack.json', 'utf8'));
+  if (!Array.isArray(at.groups)) throw new Error('"groups" is not an array');
+  at.groups.forEach((g, i) => {
+    if (!/^G\d{3,4}$/.test(g.gid || '')) throw new Error(`group ${i} bad gid "${g.gid}"`);
+    if (!g.name) throw new Error(`group ${i} missing "name"`);
+    (g.techniques || []).forEach(t => { if (!/^T\d{4}$/.test(t.id || '')) throw new Error(`group ${g.gid} bad technique id "${t.id}"`); });
+  });
+  ok(`data/attack.json valid (${at.groups.length} groups)`);
+} catch (e) {
+  fail('data/attack.json schema: ' + e.message);
+}
+
+// 9. data/epss.json schema (EPSS scores for KEV CVEs).
+try {
+  const ep = JSON.parse(readFileSync('data/epss.json', 'utf8'));
+  if (typeof ep.scores !== 'object' || ep.scores === null) throw new Error('"scores" is not an object');
+  for (const [cve, s] of Object.entries(ep.scores)) {
+    if (!/^CVE-\d{4}-\d{4,}$/.test(cve)) throw new Error(`bad CVE key "${cve}"`);
+    if (typeof s.epss !== 'number' || s.epss < 0 || s.epss > 1) throw new Error(`${cve} epss out of range`);
+  }
+  ok(`data/epss.json valid (${Object.keys(ep.scores).length} scores)`);
+} catch (e) {
+  fail('data/epss.json schema: ' + e.message);
+}
+
 if (failures) {
   console.error(`\n${failures} check(s) failed`);
   process.exit(1);

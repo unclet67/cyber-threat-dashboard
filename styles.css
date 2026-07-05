@@ -79,3 +79,20 @@ tr.clickable{cursor:pointer}tr.clickable:hover td{background:rgba(121,183,255,.0
 .tabs button.tab.active{color:var(--ink);border-color:var(--accent)}
 .tabs button.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 [data-theme="light"] .tabs button.tab{background:var(--chip);border-color:var(--line)}
+.cw-ttp{display:flex;gap:6px;flex-wrap:wrap}
+.cw-ttp .tag{font-size:11.5px}
+/* Trends chart (series colors are validated chart-grade steps of the country hues) */
+:root{--chart-cn:#d84b4b;--chart-ru:#5577dd;--chart-ir:#279a72;--chart-kp:#bd832c}
+#trendChart svg{display:block;width:100%;height:auto}
+.trend-tip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:8px 10px;font-size:12px;z-index:5;min-width:130px}
+.trend-tip .d{color:var(--muted);margin-bottom:4px}
+.trend-tip .row{display:flex;justify-content:space-between;gap:12px}
+.trend-tip .sw{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px}
+.legend-chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.legend-chip .sw{display:inline-block;width:10px;height:10px;border-radius:3px}
+/* Workbench */
+.pin-btn{align-self:flex-start;font-size:11px;padding:2px 9px;border-radius:999px;background:transparent;border:1px solid var(--line);color:var(--muted);cursor:pointer}
+.pin-btn.pinned,.pin-btn:hover{border-color:var(--warn);color:var(--ink)}
+.news-card.watch-hit{border-color:var(--warn)}
+.pin-item textarea{width:100%;min-height:52px;margin-top:6px;background:var(--panel2,#0e1527);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font:inherit;font-size:12.5px}
+.watch-term{cursor:pointer}

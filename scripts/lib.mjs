@@ -74,3 +74,105 @@ export async function runPool(items, limit, worker) {
   const run = async () => { while (q.length) await worker(q.shift()); };
   await Promise.all(Array.from({ length: Math.min(limit, items.length) || 1 }, run));
 }
+
+// ---- MITRE ATT&CK enterprise STIX reduction ----
+// Input: the enterprise-attack STIX bundle. Output: compact groups -> techniques/software map.
+export function reduceAttack(stix) {
+  const objs = stix.objects || [];
+  const alive = o => !o.revoked && !o.x_mitre_deprecated;
+  const extId = o => ((o.external_references || []).find(r => r.source_name === 'mitre-attack') || {}).external_id || null;
+
+  const groups = new Map();     // stix id -> {gid,name,aliases,techniques:[],software:[]}
+  const techniques = new Map(); // stix id -> {id,name}
+  const software = new Map();   // stix id -> {id,name,type}
+  for (const o of objs) {
+    if (!alive(o)) continue;
+    if (o.type === 'intrusion-set') {
+      const gid = extId(o); if (!gid) continue;
+      groups.set(o.id, { gid, name: o.name, aliases: (o.aliases || []).filter(a => a !== o.name), techniques: [], software: [] });
+    } else if (o.type === 'attack-pattern') {
+      const id = extId(o); if (!id || o.x_mitre_is_subtechnique) continue; // parent techniques only, keeps output small
+      techniques.set(o.id, { id, name: o.name });
+    } else if (o.type === 'malware' || o.type === 'tool') {
+      const id = extId(o); if (!id) continue;
+      software.set(o.id, { id, name: o.name, type: o.type });
+    }
+  }
+  for (const o of objs) {
+    if (o.type !== 'relationship' || o.relationship_type !== 'uses' || (o.revoked || o.x_mitre_deprecated)) continue;
+    const g = groups.get(o.source_ref); if (!g) continue;
+    const t = techniques.get(o.target_ref);
+    if (t) { if (!g.techniques.some(x => x.id === t.id)) g.techniques.push(t); continue; }
+    const s = software.get(o.target_ref);
+    if (s && !g.software.some(x => x.id === s.id)) g.software.push(s);
+  }
+  const out = [...groups.values()].filter(g => g.techniques.length || g.software.length);
+  for (const g of out) { g.techniques.sort((a, b) => a.id.localeCompare(b.id)); g.software.sort((a, b) => a.name.localeCompare(b.name)); }
+  return out.sort((a, b) => a.gid.localeCompare(b.gid));
+}
+
+// ---- EPSS CSV -> scores for a wanted set of CVEs ----
+// CSV format: optional "#comment" lines, header "cve,epss,percentile", then rows.
+export function parseEpssCsv(csv, wanted) {
+  const want = wanted instanceof Set ? wanted : new Set(wanted);
+  const out = {};
+  for (const line of csv.split('\n')) {
+    if (!line || line.startsWith('#') || line.startsWith('cve,')) continue;
+    const [cve, epss, pct] = line.split(',');
+    if (want.has(cve)) out[cve] = { epss: +epss, percentile: +pct };
+  }
+  return out;
+}
+
+// ---- IOC extraction (defanged output for hunting) ----
+// Extracts hashes, IPv4s, CVEs always; domains/URLs only when the source defanged them
+// (hxxp / [.] style) — a defanged token is an intentional indicator, a live link is not.
+// NOTE: mirrored in app.js (classic script, cannot import) — keep the two in sync.
+export function extractIocs(text) {
+  const t = String(text || '');
+  const uniq = a => [...new Set(a)];
+  const sha256 = uniq(t.match(/\b[a-f0-9]{64}\b/gi) || []);
+  const sha1 = uniq((t.match(/\b[a-f0-9]{40}\b/gi) || []).filter(h => !sha256.some(s => s.includes(h))));
+  const md5 = uniq((t.match(/\b[a-f0-9]{32}\b/gi) || []).filter(h => !sha256.concat(sha1).some(s => s.includes(h))));
+  const ips = uniq((t.match(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g) || []).filter(ip => ip.split('.').every(o => +o <= 255)));
+  const cves = uniq((t.match(/CVE-\d{4}-\d{4,}/gi) || []).map(c => c.toUpperCase()));
+  const defanged = uniq([
+    ...(t.match(/\bhxxps?:\/\/[^\s"'<>]+/gi) || []),
+    ...(t.match(/\b(?:[a-z0-9-]+(?:\.|\[\.\]))+[a-z]{2,}\b/gi) || []).filter(d => d.includes('[.]')),
+  ]);
+  return { sha256, sha1, md5, ips, cves, defanged };
+}
+
+export function defang(ioc) {
+  let s = String(ioc).replace(/^http(s?):\/\//i, 'hxxp$1://');
+  if (!s.includes('[.]')) s = s.replace(/\./g, '[.]');
+  return s;
+}
+
+// ---- RSS 2.0 emitter for the curated Big 4 stream ----
+export const xmlEscape = s => String(s || '').replace(/[<>&'"]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' }[c]));
+export function buildRss(items, { title, link, description }) {
+  const toRfc822 = seen => {
+    const s = String(seen || '');
+    if (s.length < 8) return '';
+    const d = new Date(`${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}T${s.slice(8, 10) || '00'}:${s.slice(10, 12) || '00'}:${s.slice(12, 14) || '00'}Z`);
+    return isNaN(d) ? '' : d.toUTCString();
+  };
+  const entries = items.map(n => `  <item>
+    <title>${xmlEscape(n.title)}</title>
+    <link>${xmlEscape(n.url)}</link>
+    <guid isPermaLink="true">${xmlEscape(n.url)}</guid>
+    ${toRfc822(n.seendate) ? `<pubDate>${toRfc822(n.seendate)}</pubDate>` : ''}
+    <category>${xmlEscape(n.c)}</category>
+    <source url="${xmlEscape(n.url)}">${xmlEscape(n.sourceCountry || n.domain || '')}</source>
+    ${n.summary ? `<description>${xmlEscape(n.summary)}</description>` : ''}
+  </item>`).join('\n');
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel>
+  <title>${xmlEscape(title)}</title>
+  <link>${xmlEscape(link)}</link>
+  <description>${xmlEscape(description)}</description>
+${entries}
+</channel></rss>
+`;
+}

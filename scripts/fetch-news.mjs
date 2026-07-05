@@ -7,7 +7,7 @@
 // source of truth shared with the browser UI). Pure logic lives in lib.mjs (tested).
 
 import { readFile, writeFile } from 'node:fs/promises';
-import { buildClassifier, parseItems, sigWords, jaccard, norm, fmtSeen, hostOf, runPool } from './lib.mjs';
+import { buildClassifier, parseItems, sigWords, jaccard, norm, fmtSeen, hostOf, runPool, buildRss } from './lib.mjs';
 
 const SOURCES = JSON.parse(await readFile(new URL('../data/sources.json', import.meta.url), 'utf8'));
 const COUNTRIES = SOURCES.countries;
@@ -114,6 +114,20 @@ try {
   console.log(`Archived ${date}: ${JSON.stringify(counts)} (${archive.entries.length} days retained)`);
 } catch (e) {
   console.warn(`Archive update failed (non-fatal): ${e.message}`);
+}
+
+// Emit an RSS 2.0 feed of the curated Big 4 stream so researchers can subscribe
+// in their own readers (served from the Pages site as /feed.xml).
+try {
+  const rss = buildRss(items.slice(0, 100), {
+    title: 'Big 4 Cyber & IW Threat Dashboard — curated news',
+    link: 'https://unclet67.github.io/cyber-threat-dashboard/',
+    description: 'China / Russia / Iran / North Korea cyber and information-warfare reporting, collected hourly from 27 vetted feeds.',
+  });
+  await writeFile('feed.xml', rss);
+  console.log(`Wrote feed.xml — ${Math.min(items.length, 100)} entries`);
+} catch (e) {
+  console.warn(`RSS emit failed (non-fatal): ${e.message}`);
 }
 
 // CISA Known Exploited Vulnerabilities — a separate, general (not country-attributed) catalog.
