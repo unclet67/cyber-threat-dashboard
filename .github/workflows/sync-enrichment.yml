@@ -1,8 +1,8 @@
-name: Sync news feed
+name: Sync enrichment data
 
 on:
   schedule:
-    - cron: '17 * * * *'   # hourly, at :17
+    - cron: '43 5 * * *'   # daily — ATT&CK changes rarely, EPSS updates daily
   workflow_dispatch:
 
 permissions:
@@ -10,15 +10,14 @@ permissions:
   pages: write
   id-token: write
 
-# Share the Pages concurrency group with deploy.yml so deployments serialize.
+# Share the Pages concurrency group so deployments serialize with the other workflows.
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
-  sync:
-    # Only run on main — the github-pages environment rejects deployments from other
-    # branches, so a scheduled/dispatched run on a feature branch would fail fast.
+  enrich:
+    # Only run on main — the github-pages environment rejects deployments from other branches.
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
@@ -31,22 +30,22 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Collect news.json and kev.json
-        run: node scripts/fetch-news.mjs
+      - name: Collect attack.json and epss.json
+        run: node scripts/fetch-enrichment.mjs
 
       - name: Commit data if it changed
         run: |
-          git add data/news.json data/kev.json data/archive.json feed.xml
+          git add data/attack.json data/epss.json
           if git diff --cached --quiet; then
-            echo "No data changes — nothing to commit."
+            echo "No enrichment changes — nothing to commit."
           else
             git config user.name  "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git commit -m "chore: refresh news + KEV feed [skip ci]"
+            git commit -m "chore: refresh ATT&CK + EPSS enrichment [skip ci]"
             git push
           fi
 
-      # Publish the refreshed site (including news.json) to Pages.
+      # Publish the refreshed site (including the enrichment data) to Pages.
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

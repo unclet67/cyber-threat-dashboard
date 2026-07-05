@@ -32,8 +32,23 @@ designed for COPC-style operational awareness and quick research triage, and it
 - **APT / Actor catalog** with aliases, vendor naming, notes, and source links.
 - **KEV tab** — the most recently added [CISA Known Exploited Vulnerabilities](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
   (CVE, vendor/product, due date, ransomware flag). Collected hourly into `data/kev.json`.
+- **ATT&CK profiles** — each actor's known techniques and software from MITRE
+  ATT&CK (refreshed daily into `data/attack.json`), with one-click **ATT&CK
+  Navigator layer** export.
+- **EPSS scores** — FIRST's exploit-probability score on every KEV entry
+  (refreshed daily into `data/epss.json`).
+- **IOC extraction** — hashes, IPs, CVEs, and published defanged indicators from
+  any story (Diamond Model view), copied defanged for hunting.
+- **Trends** — stories per country per day, charted from the rolling archive.
+- **Analyst Workbench** — pin stories with notes, keep keyword watchlists
+  (highlighted in Recent News); all localStorage, nothing leaves the browser.
+- **Shareable deep links** — tab/filter/search state lives in the URL hash
+  (e.g. `#tab=news&q=Salt%20Typhoon&c=CN`).
+- **Machine-readable outputs** — `data/news.json` (curated stream), `feed.xml`
+  (RSS 2.0 for readers), and on-demand **STIX 2.1 bundle** export for MISP/OpenCTI.
 - **Copy brief** — one click exports the current (filtered) news as a dated,
-  country-grouped Markdown brief, ready to paste into a daily/weekly writeup.
+  country-grouped Markdown brief (pinned stories lead), ready to paste into a
+  daily/weekly writeup.
 - **Filtering & search** by country and free text (actor names, aliases, news, CVEs).
 - **Offline fallback** — a curated catalog of Big 4 actors ships in the page, so
   the dashboard remains useful with no network access.
@@ -92,8 +107,15 @@ on-demand fallback.
 the **Actions** tab (it otherwise runs hourly). Until then, `data/news.json` ships as an
 empty placeholder and the dashboard shows a hint to run the workflow.
 
+A second scheduled workflow, **Sync enrichment data**
+(`.github/workflows/sync-enrichment.yml`, daily), reduces the MITRE ATT&CK
+enterprise STIX bundle to `data/attack.json` (group → techniques/software) and
+fetches FIRST EPSS scores for the KEV slice into `data/epss.json`. Run it once
+from the Actions tab to populate the ATT&CK profiles and EPSS column.
+
 ## Data sources
 
+- MITRE ATT&CK enterprise STIX (group techniques/software) & FIRST EPSS
 - MISP Galaxy Threat Actor & Microsoft Activity Group clusters
 - Microsoft threat actor naming taxonomy (Typhoon / Blizzard / Sandstorm / Sleet)
 - GDELT Doc API (news discovery)
