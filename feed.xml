@@ -112,15 +112,6 @@
     <description>Nation-state attackers breach water systems through weak passwords, exposed PLCs, and poor segmentation — not sophisticated malware.</description>
   </item>
   <item>
-    <title>Mustang Panda Uses Zoho WorkDrive as Command Channel in Indian Government Attacks</title>
-    <link>https://thehackernews.com/2026/06/mustang-panda-uses-zoho-workdrive-as.html</link>
-    <guid isPermaLink="true">https://thehackernews.com/2026/06/mustang-panda-uses-zoho-workdrive-as.html</guid>
-    <pubDate>Mon, 29 Jun 2026 15:03:40 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://thehackernews.com/2026/06/mustang-panda-uses-zoho-workdrive-as.html">The Hacker News</source>
-    <description>The China-aligned espionage group Mustang Panda is running two campaigns against the Indian government and hydropower targets, deploying new malware and turning a legitimate cloud service into its command channel. Acronis Threat Research Unit found active compromises inside Indian government networks, including machines used by senior administrative staff, and worked with</description>
-  </item>
-  <item>
     <title>Russian Intelligence Services Continue to Target Commercial Messaging Applications</title>
     <link>https://www.cisa.gov/resources-tools/resources/russian-intelligence-services-continue-target-commercial-messaging-applications</link>
     <guid isPermaLink="true">https://www.cisa.gov/resources-tools/resources/russian-intelligence-services-continue-target-commercial-messaging-applications</guid>
@@ -256,15 +247,6 @@
     <description>Warnings about helpdesk impersonation scams and Iran-linked hackers targeting critical sectors in the US, plus the most damaging scams of 2025 - here&apos;s some of what made the headlines this month</description>
   </item>
   <item>
-    <title>Defending against China-nexus covert networks of compromised devices</title>
-    <link>https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</link>
-    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
-    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
-    <description>Explaining the widespread shift in tactics, techniques and procedures (TTPs) towards networks of compromised infrastructure, and how to defend against it</description>
-  </item>
-  <item>
     <title>International cyber agencies share fresh advice to defend against China-linked covert networks</title>
     <link>https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</link>
     <guid isPermaLink="true">https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</guid>
@@ -272,6 +254,15 @@
     <category>CN</category>
     <source url="https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks">NCSC UK</source>
     <description>New advisory highlights how to defend against attacker tactics believed to be used by China-linked actors to hide malicious cyber activity.</description>
+  </item>
+  <item>
+    <title>Executive Summary: Defending against China-nexus covert networks of compromised devices</title>
+    <link>https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</link>
+    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
+    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
+    <description>Organisations should map and baseline their edge device traffic, especially VPN and remote access connections, and adopt dynamic threat feed filtering that includes known covert network indicators.</description>
   </item>
   <item>
     <title>GopherWhisper: A burrow full of malware</title>
