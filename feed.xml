@@ -4,6 +4,24 @@
   <link>https://unclet67.github.io/cyber-threat-dashboard/</link>
   <description>China / Russia / Iran / North Korea cyber and information-warfare reporting, collected hourly from 27 vetted feeds.</description>
   <item>
+    <title>Cavern Manticore: Exposing Iran-Linked Modular C2 Framework</title>
+    <link>https://research.checkpoint.com/2026/cavern-manticore-exposing-iran-linked-modular-c2-framework/</link>
+    <guid isPermaLink="true">https://research.checkpoint.com/2026/cavern-manticore-exposing-iran-linked-modular-c2-framework/</guid>
+    <pubDate>Mon, 06 Jul 2026 12:25:02 GMT</pubDate>
+    <category>IR</category>
+    <source url="https://research.checkpoint.com/2026/cavern-manticore-exposing-iran-linked-modular-c2-framework/">Check Point Research</source>
+    <description>Key Points Introduction Since early 2026, Check Point Research (CPR) has tracked a new modular command-and-control framework used by Cavern Manticore, an Iran-nexus APT group primarily targeting Israeli organizations, with a focus on IT providers, and government sectors. Cavern Manticore is an Iran MOIS (Ministry of Intelligence and Security)-linked actor, with links to the OilRig […] The post Cavern Manticore: Exposing Iran-Linked Modular C2 Framework appeared first on Check Point Research .</description>
+  </item>
+  <item>
+    <title>Suspected China-Nexus Hackers Use Fake Indian Tax Filing Utility to Deploy DcRAT</title>
+    <link>https://thehackernews.com/2026/07/suspected-china-nexus-hackers-use-fake.html</link>
+    <guid isPermaLink="true">https://thehackernews.com/2026/07/suspected-china-nexus-hackers-use-fake.html</guid>
+    <pubDate>Mon, 06 Jul 2026 10:58:16 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://thehackernews.com/2026/07/suspected-china-nexus-hackers-use-fake.html">The Hacker News</source>
+    <description>A suspected China-nexus threat activity cluster has been observed targeting Indian taxpayers, tax professionals, and corporate finance teams to deliver a remote access trojan designed to steal sensitive data from compromised hosts. The multi-stage campaign, codenamed Operation DragonReturn by Seqrite Labs, involves sending spear-phishing emails impersonating the Income Tax Department of India.</description>
+  </item>
+  <item>
     <title>North Korea-Linked npm Packages Mimic Rollup Polyfills to Steal Developer Secrets</title>
     <link>https://thehackernews.com/2026/07/north-korea-linked-npm-packages-mimic.html</link>
     <guid isPermaLink="true">https://thehackernews.com/2026/07/north-korea-linked-npm-packages-mimic.html</guid>
@@ -155,15 +173,6 @@
     <category>RU</category>
     <source url="https://www.welivesecurity.com/en/eset-research/gamaredon-2025-leveraging-tunnels-workers-dead-drops-new-alliances/">ESET WeLiveSecurity</source>
     <description>ESET Research analyzes Gamaredon’s new toolset and the group’s growing reliance on legitimate online services to hide its C&amp;C infrastructure and exfiltrate stolen data</description>
-  </item>
-  <item>
-    <title>Linux Process Name Masquerading, (Wed, Jun 24th)</title>
-    <link>https://isc.sans.edu/diary/rss/33102</link>
-    <guid isPermaLink="true">https://isc.sans.edu/diary/rss/33102</guid>
-    <pubDate>Wed, 24 Jun 2026 06:29:03 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://isc.sans.edu/diary/rss/33102">SANS Internet Storm Center</source>
-    <description>In a previous diary, I talked about stack strings&amp;&amp;#x23;x26;&amp;#x23;x5b; 1 &amp;&amp;#x23;x26;&amp;#x23;x5d; with a practical example of them. Since my SEC670 class, I&amp;&amp;#x23;x26;&amp;#x23;xe2;&amp;&amp;#x23;x26;&amp;#x23;x80;&amp;&amp;#x23;x26;&amp;#x23;x99;m even more interested&amp;&amp;#x23;x26;&amp;#x23;xc2;&amp;&amp;#x23;x26;&amp;#x23;xa0;in malware obfuscation techniques. I had&amp;&amp;#x23;x26;&amp;#x23;xc2;&amp;&amp;#x23;x26;&amp;#x23;xa0;a look at process names. When you list running processes on a computer, can you trust what you see&amp;&amp;#x23;x26;&amp;#x23;x3f; If you&amp;&amp;#x23;x26;&amp;</description>
   </item>
   <item>
     <title>Sayonara, SocGholish: Operation Endgame Disrupts Major Cybercrime Operation</title>
