@@ -58,6 +58,15 @@
     <description>An inside look at the active Armored Likho APT campaign. The attackers are using spear-phishing, AI-generated loaders, and a new Python-based tool, BusySnake Stealer, to target organizations in Russia, Kazakhstan, and Brazil.</description>
   </item>
   <item>
+    <title>Startup sues Palo Alto Networks&apos; Koi Security, saying an AI-hallucinated report falsely linked it to Chinese espionage</title>
+    <link>https://www.theregister.com/legal/2026/07/02/startup-sues-palo-alto-networks-koi-security-saying-an-ai-hallucinated-report-falsely-linked-it-to-chinese-espionage/5266201</link>
+    <guid isPermaLink="true">https://www.theregister.com/legal/2026/07/02/startup-sues-palo-alto-networks-koi-security-saying-an-ai-hallucinated-report-falsely-linked-it-to-chinese-espionage/5266201</guid>
+    <pubDate>Thu, 02 Jul 2026 22:47:46 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.theregister.com/legal/2026/07/02/startup-sues-palo-alto-networks-koi-security-saying-an-ai-hallucinated-report-falsely-linked-it-to-chinese-espionage/5266201">The Register — Security</source>
+    <description>MeetingTV wants to see the evidence</description>
+  </item>
+  <item>
     <title>China-Linked Group Targets Southeast Asia Critical Systems</title>
     <link>https://www.darkreading.com/threat-intelligence/china-linked-group-targets-southeast-asia-critical-systems</link>
     <guid isPermaLink="true">https://www.darkreading.com/threat-intelligence/china-linked-group-targets-southeast-asia-critical-systems</guid>
@@ -65,6 +74,15 @@
     <category>CN</category>
     <source url="https://www.darkreading.com/threat-intelligence/china-linked-group-targets-southeast-asia-critical-systems">Dark Reading</source>
     <description>The group compromised at least 10 regional organizations, including two state-owned entities, and deployed a new backdoor.</description>
+  </item>
+  <item>
+    <title>Four years into Ukraine invasion, Russia turns influence-ops back to US and Europe</title>
+    <link>https://www.theregister.com/security/2026/06/29/four-years-into-ukraine-invasion-russia-turns-influence-ops-back-to-us-and-europe/5264011</link>
+    <guid isPermaLink="true">https://www.theregister.com/security/2026/06/29/four-years-into-ukraine-invasion-russia-turns-influence-ops-back-to-us-and-europe/5264011</guid>
+    <pubDate>Mon, 29 Jun 2026 22:10:16 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.theregister.com/security/2026/06/29/four-years-into-ukraine-invasion-russia-turns-influence-ops-back-to-us-and-europe/5264011">The Register — Security</source>
+    <description>Not today, Putin</description>
   </item>
   <item>
     <title>Iran, Russia, China Target Water Systems for Sabotage</title>
@@ -110,6 +128,15 @@
     <category>RU</category>
     <source url="https://www.cisa.gov/resources-tools/resources/russian-intelligence-services-continue-target-commercial-messaging-applications">CISA Advisories</source>
     <description>CISA and the Federal Bureau of Investigation (FBI) issued an updated Public Service Announcement (PSA) warning of Russian Intelligence Services (RIS) cyber threat actors targeting commercial messaging applications in ongoing phishing campaigns. This PSA is an update to the March 2026 Russian Intelligence Services Target Commercial Messaging Application Accounts and provides recent tactics, recommended mitigations, and samples of phishing messages.&amp;nbsp;</description>
+  </item>
+  <item>
+    <title>Chinese cybersecurity company claims it’s built a better-than-Mythos bug finder</title>
+    <link>https://www.theregister.com/security/2026/06/26/chinese-cybersecurity-company-claims-its-built-a-better-than-mythos-bug-finder/5262642</link>
+    <guid isPermaLink="true">https://www.theregister.com/security/2026/06/26/chinese-cybersecurity-company-claims-its-built-a-better-than-mythos-bug-finder/5262642</guid>
+    <pubDate>Fri, 26 Jun 2026 01:49:35 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.theregister.com/security/2026/06/26/chinese-cybersecurity-company-claims-its-built-a-better-than-mythos-bug-finder/5262642">The Register — Security</source>
+    <description>Qihoo 360, which the US has banned, says it’s needed as a deterrent to weaponized Anthropic models</description>
   </item>
   <item>
     <title>Russian APT &apos;Gamaredon&apos; Upgrades Its Arsenal, Requiring New Defenses</title>
