@@ -4,6 +4,15 @@
   <link>https://unclet67.github.io/cyber-threat-dashboard/</link>
   <description>China / Russia / Iran / North Korea cyber and information-warfare reporting, collected hourly from 27 vetted feeds.</description>
   <item>
+    <title>Ukrainian media outlets now among &apos;priority targets&apos; for Russian hackers</title>
+    <link>https://therecord.media/ukraine-media-organizations-priority-hacking-targets-russia</link>
+    <guid isPermaLink="true">https://therecord.media/ukraine-media-organizations-priority-hacking-targets-russia</guid>
+    <pubDate>Mon, 06 Jul 2026 13:20:00 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://therecord.media/ukraine-media-organizations-priority-hacking-targets-russia">The Record (Recorded Future)</source>
+    <description>A top Ukrainian security official described two previously unreported attacks on TV media organizations and said Russia has ramped up hacking activities against the industry.</description>
+  </item>
+  <item>
     <title>Cavern Manticore: Exposing Iran-Linked Modular C2 Framework</title>
     <link>https://research.checkpoint.com/2026/cavern-manticore-exposing-iran-linked-modular-c2-framework/</link>
     <guid isPermaLink="true">https://research.checkpoint.com/2026/cavern-manticore-exposing-iran-linked-modular-c2-framework/</guid>
@@ -256,6 +265,15 @@
     <description>Warnings about helpdesk impersonation scams and Iran-linked hackers targeting critical sectors in the US, plus the most damaging scams of 2025 - here&apos;s some of what made the headlines this month</description>
   </item>
   <item>
+    <title>Defending against China-nexus covert networks of compromised devices</title>
+    <link>https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</link>
+    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
+    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
+    <description>Explaining the widespread shift in tactics, techniques and procedures (TTPs) towards networks of compromised infrastructure, and how to defend against it</description>
+  </item>
+  <item>
     <title>International cyber agencies share fresh advice to defend against China-linked covert networks</title>
     <link>https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</link>
     <guid isPermaLink="true">https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</guid>
@@ -263,15 +281,6 @@
     <category>CN</category>
     <source url="https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks">NCSC UK</source>
     <description>New advisory highlights how to defend against attacker tactics believed to be used by China-linked actors to hide malicious cyber activity.</description>
-  </item>
-  <item>
-    <title>Executive Summary: Defending against China-nexus covert networks of compromised devices</title>
-    <link>https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</link>
-    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
-    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
-    <description>Organisations should map and baseline their edge device traffic, especially VPN and remote access connections, and adopt dynamic threat feed filtering that includes known covert network indicators.</description>
   </item>
   <item>
     <title>GopherWhisper: A burrow full of malware</title>
