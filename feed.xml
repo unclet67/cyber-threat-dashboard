@@ -4,13 +4,22 @@
   <link>https://unclet67.github.io/cyber-threat-dashboard/</link>
   <description>China / Russia / Iran / North Korea cyber and information-warfare reporting, collected hourly from 27 vetted feeds.</description>
   <item>
-    <title>&apos;BusySnake&apos; Infostealer Slithers into Critical Infrastructure Networks</title>
-    <link>https://www.darkreading.com/cyberattacks-data-breaches/busysnake-infostealer-critical-infrastructure-networks</link>
-    <guid isPermaLink="true">https://www.darkreading.com/cyberattacks-data-breaches/busysnake-infostealer-critical-infrastructure-networks</guid>
-    <pubDate>Mon, 06 Jul 2026 21:37:56 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://www.darkreading.com/cyberattacks-data-breaches/busysnake-infostealer-critical-infrastructure-networks">Dark Reading</source>
-    <description>A threat group researchers call &quot;Armored Likho&quot; has gained access to government agencies and electrical power entities in Russia, Brazil, and Kazakhstan.</description>
+    <title>CERT/CC Warns of Hidden Admin Backdoor in Tenda Router Firmware</title>
+    <link>https://thehackernews.com/2026/07/certcc-warns-of-hidden-admin-backdoor.html</link>
+    <guid isPermaLink="true">https://thehackernews.com/2026/07/certcc-warns-of-hidden-admin-backdoor.html</guid>
+    <pubDate>Tue, 07 Jul 2026 06:40:47 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://thehackernews.com/2026/07/certcc-warns-of-hidden-admin-backdoor.html">The Hacker News</source>
+    <description>Several versions of firmware released by Chinese network device manufacturer Tenda have been found to embed an undocumented authentication backdoor that enables administrative access to the devices&apos; web management interfaces, the CERT Coordination Center (CERT/CC) warned Monday. &quot;An attacker can exploit this vulnerability, tracked as CVE-2026-11405, to bypass the password verification process</description>
+  </item>
+  <item>
+    <title>Researchers make the case for a cybersecurity AI scientist</title>
+    <link>https://www.helpnetsecurity.com/2026/07/07/cybersecurity-ai-scientist-research/</link>
+    <guid isPermaLink="true">https://www.helpnetsecurity.com/2026/07/07/cybersecurity-ai-scientist-research/</guid>
+    <pubDate>Tue, 07 Jul 2026 06:30:18 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.helpnetsecurity.com/2026/07/07/cybersecurity-ai-scientist-research/">Help Net Security</source>
+    <description>Autonomous AI agents have started doing real security work. Language-model agents probe software for flaws, run penetration tests, and chain together attack steps that once needed a human operator. Research about security has stayed slower and more manual, built around expert scarcity and hand-designed experiments. A team at the Chinese Academy of Sciences wants to close that gap. In a recent paper, they define what they term the Cybersecurity AI Scientist. They describe a research … More → The </description>
   </item>
   <item>
     <title>Iran-Linked Hackers Use New Cavern C2 Framework to Target Israeli Organizations</title>
@@ -67,15 +76,6 @@
     <description>A previously undocumented threat actor known as Armored Likho has been attributed to cyber attacks targeting government agencies and the electric power sector across Russia, Brazil, and Kazakhstan. &quot;Armored Likho blends financially motivated campaigns targeting private individuals with targeted cyber espionage aimed at organizations,&quot; Kaspersky said in a technical analysis published today. &quot;</description>
   </item>
   <item>
-    <title>Chinese LLMs Broaden the Gap Between Attackers &amp; Defenders</title>
-    <link>https://www.darkreading.com/cyber-risk/chinese-llms-broaden-gap-between-attackers-and-defenders</link>
-    <guid isPermaLink="true">https://www.darkreading.com/cyber-risk/chinese-llms-broaden-gap-between-attackers-and-defenders</guid>
-    <pubDate>Fri, 03 Jul 2026 13:01:00 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.darkreading.com/cyber-risk/chinese-llms-broaden-gap-between-attackers-and-defenders">Dark Reading</source>
-    <description>Two new models from Chinese firms compete with top US mainstream and frontier models. Should cyber-defenders be worried?</description>
-  </item>
-  <item>
     <title>Armored Likho digging a snake pit: inside the covert BusySnake Stealer campaign</title>
     <link>https://securelist.com/tr/armored-likho-apt-with-busysnake-stealer/120292/</link>
     <guid isPermaLink="true">https://securelist.com/tr/armored-likho-apt-with-busysnake-stealer/120292/</guid>
@@ -94,15 +94,6 @@
     <description>MeetingTV wants to see the evidence</description>
   </item>
   <item>
-    <title>China-Linked Group Targets Southeast Asia Critical Systems</title>
-    <link>https://www.darkreading.com/threat-intelligence/china-linked-group-targets-southeast-asia-critical-systems</link>
-    <guid isPermaLink="true">https://www.darkreading.com/threat-intelligence/china-linked-group-targets-southeast-asia-critical-systems</guid>
-    <pubDate>Wed, 01 Jul 2026 01:00:01 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.darkreading.com/threat-intelligence/china-linked-group-targets-southeast-asia-critical-systems">Dark Reading</source>
-    <description>The group compromised at least 10 regional organizations, including two state-owned entities, and deployed a new backdoor.</description>
-  </item>
-  <item>
     <title>Four years into Ukraine invasion, Russia turns influence-ops back to US and Europe</title>
     <link>https://www.theregister.com/security/2026/06/29/four-years-into-ukraine-invasion-russia-turns-influence-ops-back-to-us-and-europe/5264011</link>
     <guid isPermaLink="true">https://www.theregister.com/security/2026/06/29/four-years-into-ukraine-invasion-russia-turns-influence-ops-back-to-us-and-europe/5264011</guid>
@@ -110,33 +101,6 @@
     <category>RU</category>
     <source url="https://www.theregister.com/security/2026/06/29/four-years-into-ukraine-invasion-russia-turns-influence-ops-back-to-us-and-europe/5264011">The Register — Security</source>
     <description>Not today, Putin</description>
-  </item>
-  <item>
-    <title>Iran, Russia, China Target Water Systems for Sabotage</title>
-    <link>https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage</link>
-    <guid isPermaLink="true">https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage</guid>
-    <pubDate>Mon, 29 Jun 2026 19:12:08 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage">Dark Reading</source>
-    <description>Nation-state attackers breach water systems through weak passwords, exposed PLCs, and poor segmentation — not sophisticated malware.</description>
-  </item>
-  <item>
-    <title>Iran, Russia, China Target Water Systems for Sabotage</title>
-    <link>https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage</link>
-    <guid isPermaLink="true">https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage</guid>
-    <pubDate>Mon, 29 Jun 2026 19:12:08 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage">Dark Reading</source>
-    <description>Nation-state attackers breach water systems through weak passwords, exposed PLCs, and poor segmentation — not sophisticated malware.</description>
-  </item>
-  <item>
-    <title>Iran, Russia, China Target Water Systems for Sabotage</title>
-    <link>https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage</link>
-    <guid isPermaLink="true">https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage</guid>
-    <pubDate>Mon, 29 Jun 2026 19:12:08 GMT</pubDate>
-    <category>IR</category>
-    <source url="https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage">Dark Reading</source>
-    <description>Nation-state attackers breach water systems through weak passwords, exposed PLCs, and poor segmentation — not sophisticated malware.</description>
   </item>
   <item>
     <title>Russian Intelligence Services Continue to Target Commercial Messaging Applications</title>
@@ -155,15 +119,6 @@
     <category>CN</category>
     <source url="https://www.theregister.com/security/2026/06/26/chinese-cybersecurity-company-claims-its-built-a-better-than-mythos-bug-finder/5262642">The Register — Security</source>
     <description>Qihoo 360, which the US has banned, says it’s needed as a deterrent to weaponized Anthropic models</description>
-  </item>
-  <item>
-    <title>Russian APT &apos;Gamaredon&apos; Upgrades Its Arsenal, Requiring New Defenses</title>
-    <link>https://www.darkreading.com/threat-intelligence/russia-apt-gamaredon-arsenal-defense</link>
-    <guid isPermaLink="true">https://www.darkreading.com/threat-intelligence/russia-apt-gamaredon-arsenal-defense</guid>
-    <pubDate>Thu, 25 Jun 2026 21:12:01 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://www.darkreading.com/threat-intelligence/russia-apt-gamaredon-arsenal-defense">Dark Reading</source>
-    <description>The FSB state-sponsored operation has gotten a lot better at loading its malware and hiding its servers.</description>
   </item>
   <item>
     <title>H.VIEW HV-500S6 IP Camera</title>
@@ -265,13 +220,13 @@
     <description>Warnings about helpdesk impersonation scams and Iran-linked hackers targeting critical sectors in the US, plus the most damaging scams of 2025 - here&apos;s some of what made the headlines this month</description>
   </item>
   <item>
-    <title>Defending against China-nexus covert networks of compromised devices</title>
-    <link>https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</link>
-    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
+    <title>Executive Summary: Defending against China-nexus covert networks of compromised devices</title>
+    <link>https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</link>
+    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
     <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
     <category>CN</category>
-    <source url="https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
-    <description>Explaining the widespread shift in tactics, techniques and procedures (TTPs) towards networks of compromised infrastructure, and how to defend against it</description>
+    <source url="https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
+    <description>Organisations should map and baseline their edge device traffic, especially VPN and remote access connections, and adopt dynamic threat feed filtering that includes known covert network indicators.</description>
   </item>
   <item>
     <title>International cyber agencies share fresh advice to defend against China-linked covert networks</title>
