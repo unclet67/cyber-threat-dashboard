@@ -4,6 +4,15 @@
   <link>https://unclet67.github.io/cyber-threat-dashboard/</link>
   <description>China / Russia / Iran / North Korea cyber and information-warfare reporting, collected hourly from 27 vetted feeds.</description>
   <item>
+    <title>Chinese hackers develop LONGLEASH malware to expand ORB network</title>
+    <link>https://www.bleepingcomputer.com/news/security/chinese-hackers-develop-longleash-malware-to-expand-orb-network/</link>
+    <guid isPermaLink="true">https://www.bleepingcomputer.com/news/security/chinese-hackers-develop-longleash-malware-to-expand-orb-network/</guid>
+    <pubDate>Tue, 07 Jul 2026 18:52:19 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.bleepingcomputer.com/news/security/chinese-hackers-develop-longleash-malware-to-expand-orb-network/">BleepingComputer</source>
+    <description>Chinese hackers tracked as &apos;UAT-7810&apos; are actively evolving their malware to expand their Operational Relay Box (ORB) network by compromising internet-facing networking devices, primarily unpatched Ruckus routers. [...]</description>
+  </item>
+  <item>
     <title>One Email Closer to the Edge: UNK_MassTraction &amp; the Physics of Exploitation</title>
     <link>https://www.proofpoint.com/us/blog/threat-insight/one-email-closer-edge-unkmasstraction-physics-exploitation</link>
     <guid isPermaLink="true">https://www.proofpoint.com/us/blog/threat-insight/one-email-closer-edge-unkmasstraction-physics-exploitation</guid>
