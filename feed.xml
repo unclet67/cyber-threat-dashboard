@@ -13,6 +13,15 @@
     <description>Analyst note: Proofpoint uses the UNK_ designator to define clusters of activity that are still developing and have not been observed for long enough to receive a numerical TA designation. Key Findings Since May 2026, Proofpoint Threat Research has been tracking a suspected China-aligned threat cluster named UNK_MassTraction exploiting Roundcube mailservers belonging to the physics and engineering departments of US and Canadian universities. The campaigns exploit multiple n-day vulnerabilities i</description>
   </item>
   <item>
+    <title>Spain arrests suspected member of pro-Russian hacktivist groups</title>
+    <link>https://www.bleepingcomputer.com/news/security/spain-arrests-suspected-member-of-pro-russian-hacktivist-groups/</link>
+    <guid isPermaLink="true">https://www.bleepingcomputer.com/news/security/spain-arrests-suspected-member-of-pro-russian-hacktivist-groups/</guid>
+    <pubDate>Tue, 07 Jul 2026 15:21:21 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.bleepingcomputer.com/news/security/spain-arrests-suspected-member-of-pro-russian-hacktivist-groups/">BleepingComputer</source>
+    <description>The National Police in Spain have arrested a man who is suspected of being an active member of the CyberArmy of Russia Reborn (CARR) and Z-Pentest, both pro-Russian hacktivist groups. [...]</description>
+  </item>
+  <item>
     <title>Iran-Linked Hackers Using Modular C&amp;C Framework in Cyberattacks</title>
     <link>https://www.securityweek.com/iran-linked-hackers-using-modular-cc-framework-in-cyberattacks/</link>
     <guid isPermaLink="true">https://www.securityweek.com/iran-linked-hackers-using-modular-cc-framework-in-cyberattacks/</guid>
@@ -67,7 +76,7 @@
     <description>Autonomous AI agents have started doing real security work. Language-model agents probe software for flaws, run penetration tests, and chain together attack steps that once needed a human operator. Research about security has stayed slower and more manual, built around expert scarcity and hand-designed experiments. A team at the Chinese Academy of Sciences wants to close that gap. In a recent paper, they define what they term the Cybersecurity AI Scientist. They describe a research … More → The </description>
   </item>
   <item>
-    <title>&apos;BusySnake&apos; Infostealer Slithers into Critical Infrastructure Networks</title>
+    <title>&apos;BusySnake&apos; Infostealer Slithers Into Critical Infrastructure Networks</title>
     <link>https://www.darkreading.com/cyberattacks-data-breaches/busysnake-infostealer-critical-infrastructure-networks</link>
     <guid isPermaLink="true">https://www.darkreading.com/cyberattacks-data-breaches/busysnake-infostealer-critical-infrastructure-networks</guid>
     <pubDate>Mon, 06 Jul 2026 21:37:56 GMT</pubDate>
@@ -218,15 +227,6 @@
     <category>RU</category>
     <source url="https://www.darkreading.com/threat-intelligence/russia-apt-gamaredon-arsenal-defense">Dark Reading</source>
     <description>The FSB state-sponsored operation has gotten a lot better at loading its malware and hiding its servers.</description>
-  </item>
-  <item>
-    <title>H.VIEW HV-500S6 IP Camera</title>
-    <link>https://www.cisa.gov/news-events/ics-advisories/icsa-26-176-05</link>
-    <guid isPermaLink="true">https://www.cisa.gov/news-events/ics-advisories/icsa-26-176-05</guid>
-    <pubDate>Thu, 25 Jun 2026 12:00:00 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.cisa.gov/news-events/ics-advisories/icsa-26-176-05">CISA Advisories</source>
-    <description>View CSAF Summary Successful exploitation of these vulnerabilities could allow an attacker to execute arbitrary code and upload malicious files to the affected device. The following versions of H.VIEW HV-500S6 IP Camera are affected: H.VIEW HV-500S6 IP Camera IPCAM_V4.06.88.251229&amp;nbsp; CVSS Vendor Equipment Vulnerabilities v3 7.2 H.VIEW H.VIEW HV-500S6 IP Camera Improper Neutralization of Special Elements used in an OS Command (&apos;OS Command Injection&apos;), Unrestricted Upload of File with Dangerous</description>
   </item>
   <item>
     <title>Gamaredon in 2025: Leveraging tunnels, workers, dead drops, and new alliances</title>
