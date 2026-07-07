@@ -13,6 +13,15 @@
     <description>Analyst note: Proofpoint uses the UNK_ designator to define clusters of activity that are still developing and have not been observed for long enough to receive a numerical TA designation. Key Findings Since May 2026, Proofpoint Threat Research has been tracking a suspected China-aligned threat cluster named UNK_MassTraction exploiting Roundcube mailservers belonging to the physics and engineering departments of US and Canadian universities. The campaigns exploit multiple n-day vulnerabilities i</description>
   </item>
   <item>
+    <title>Iran-Linked Hackers Using Modular C&amp;C Framework in Cyberattacks</title>
+    <link>https://www.securityweek.com/iran-linked-hackers-using-modular-cc-framework-in-cyberattacks/</link>
+    <guid isPermaLink="true">https://www.securityweek.com/iran-linked-hackers-using-modular-cc-framework-in-cyberattacks/</guid>
+    <pubDate>Tue, 07 Jul 2026 12:22:37 GMT</pubDate>
+    <category>IR</category>
+    <source url="https://www.securityweek.com/iran-linked-hackers-using-modular-cc-framework-in-cyberattacks/">SecurityWeek</source>
+    <description>Researchers say the Iran-linked threat actor used an adaptable modular malware framework and compromised IT service providers to reach high-value targets in Israel. The post Iran-Linked Hackers Using Modular C&amp;C Framework in Cyberattacks appeared first on SecurityWeek .</description>
+  </item>
+  <item>
     <title>Spain collars alleged pro-Russia hacktivist after FBI tip-off</title>
     <link>https://www.theregister.com/security/2026/07/07/alleged-pro-russia-hacktivist-arrested-in-palencia/5267569</link>
     <guid isPermaLink="true">https://www.theregister.com/security/2026/07/07/alleged-pro-russia-hacktivist-arrested-in-palencia/5267569</guid>
@@ -74,15 +83,6 @@
     <category>IR</category>
     <source url="https://thehackernews.com/2026/07/iran-linked-hackers-use-new-cavern-c2.html">The Hacker News</source>
     <description>An Iranian hacking group affiliated with Iran&apos;s Ministry of Intelligence and Security (MOIS) has been wielding a previously undocumented modular command-and-control (C2) framework dubbed Cavern (aka Cav3rn) targeting Israeli organizations. The activity, which has primarily singled out IT providers and government sectors, has been attributed to a threat cluster tracked by Check Point Research</description>
-  </item>
-  <item>
-    <title>Ukrainian media outlets now among &apos;priority targets&apos; for Russian hackers</title>
-    <link>https://therecord.media/ukraine-media-organizations-priority-hacking-targets-russia</link>
-    <guid isPermaLink="true">https://therecord.media/ukraine-media-organizations-priority-hacking-targets-russia</guid>
-    <pubDate>Mon, 06 Jul 2026 13:20:00 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://therecord.media/ukraine-media-organizations-priority-hacking-targets-russia">The Record (Recorded Future)</source>
-    <description>A top Ukrainian security official described two previously unreported attacks on TV media organizations and said Russia has ramped up hacking activities against the industry.</description>
   </item>
   <item>
     <title>Cavern Manticore: Exposing Iran-Linked Modular C2 Framework</title>
