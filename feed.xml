@@ -4,6 +4,15 @@
   <link>https://unclet67.github.io/cyber-threat-dashboard/</link>
   <description>China / Russia / Iran / North Korea cyber and information-warfare reporting, collected hourly from 27 vetted feeds.</description>
   <item>
+    <title>Suspected Chinese snoops caught breaking into universities&apos; Roundcube mailservers</title>
+    <link>https://www.theregister.com/security/2026/07/08/suspected-chinese-snoops-caught-breaking-into-universities-roundcube-mailservers/5268778</link>
+    <guid isPermaLink="true">https://www.theregister.com/security/2026/07/08/suspected-chinese-snoops-caught-breaking-into-universities-roundcube-mailservers/5268778</guid>
+    <pubDate>Wed, 08 Jul 2026 21:35:13 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.theregister.com/security/2026/07/08/suspected-chinese-snoops-caught-breaking-into-universities-roundcube-mailservers/5268778">The Register — Security</source>
+    <description>Proofpoint researcher tells The Reg: &apos;We estimate the total volume of targets would be a few dozen&apos;</description>
+  </item>
+  <item>
     <title>Hackers exploit Roundcube flaw to spy on academic researchers</title>
     <link>https://www.bleepingcomputer.com/news/security/hackers-exploit-roundcube-flaw-to-spy-on-academic-researchers/</link>
     <guid isPermaLink="true">https://www.bleepingcomputer.com/news/security/hackers-exploit-roundcube-flaw-to-spy-on-academic-researchers/</guid>
@@ -11,15 +20,6 @@
     <category>CN</category>
     <source url="https://www.bleepingcomputer.com/news/security/hackers-exploit-roundcube-flaw-to-spy-on-academic-researchers/">BleepingComputer</source>
     <description>A China-linked threat cluster has been exploiting vulnerable Roundcube servers at U.S. and Canadian universities to steal credentials and deploy backdoor malware. [...]</description>
-  </item>
-  <item>
-    <title>Taiwan charges two businessmen over alleged role in Chinese espionage campaign</title>
-    <link>https://therecord.media/taiwan-charges-businessmen-china-cyber-espionage-campaign</link>
-    <guid isPermaLink="true">https://therecord.media/taiwan-charges-businessmen-china-cyber-espionage-campaign</guid>
-    <pubDate>Wed, 08 Jul 2026 16:55:00 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://therecord.media/taiwan-charges-businessmen-china-cyber-espionage-campaign">The Record (Recorded Future)</source>
-    <description>A company based in Taiwan was leasing out accounts on the popular LINE messaging app to Chinese spies, according to prosecutors, who charged two men in the alleged scheme.</description>
   </item>
   <item>
     <title>China-Linked APT Expands Arsenal With New ‘Leash’ Backdoors</title>
@@ -38,15 +38,6 @@
     <category>CN</category>
     <source url="https://www.theregister.com/security/2026/07/08/china-ditch-older-claude-versions-with-backdoor-code/5268371">The Register — Security</source>
     <description>National vulnerability database claims monitoring mechanism can forward Chinese users&apos; data to remote servers</description>
-  </item>
-  <item>
-    <title>Spain arrests alleged supporter of pro-Russian hacktivist groups after FBI tip</title>
-    <link>https://therecord.media/spain-arrest-alleged-supporter-noname-carr-zpentest</link>
-    <guid isPermaLink="true">https://therecord.media/spain-arrest-alleged-supporter-noname-carr-zpentest</guid>
-    <pubDate>Wed, 08 Jul 2026 13:45:00 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://therecord.media/spain-arrest-alleged-supporter-noname-carr-zpentest">The Record (Recorded Future)</source>
-    <description>An FBI tip linked a man living in Spain to the hacking groups CyberArmy of Russia Reborn (CARR), Z-Pentest and NoName057(16).</description>
   </item>
   <item>
     <title>What Happens if China Hacks the US Water Supply? I Went to a Secret War Game to Find Out</title>
