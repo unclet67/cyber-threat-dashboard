@@ -4,6 +4,15 @@
   <link>https://unclet67.github.io/cyber-threat-dashboard/</link>
   <description>China / Russia / Iran / North Korea cyber and information-warfare reporting, collected hourly from 27 vetted feeds.</description>
   <item>
+    <title>China-Linked UAT-7810 Expands ORB Network With New LONGLEASH Malware</title>
+    <link>https://thehackernews.com/2026/07/china-linked-uat-7810-expands-orb.html</link>
+    <guid isPermaLink="true">https://thehackernews.com/2026/07/china-linked-uat-7810-expands-orb.html</guid>
+    <pubDate>Wed, 08 Jul 2026 09:04:33 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://thehackernews.com/2026/07/china-linked-uat-7810-expands-orb.html">The Hacker News</source>
+    <description>A Chinese threat actor tracked as UAT-7810 is actively refining its bespoke malware to expand its Operational Relay Box (ORB) network by breaking into internet-facing networking devices. According to findings from Cisco Talos, UAT-7810 is an advanced persistent threat (APT) actor that&apos;s responsible for maintaining and proliferating LapDogs, an ORB network that first came to light in June 2025.</description>
+  </item>
+  <item>
     <title>Spain arrests suspected hacker linked to Russian hacktivist campaign</title>
     <link>https://cyberscoop.com/spain-arrests-alleged-cyber-army-of-russia-reborn-member/</link>
     <guid isPermaLink="true">https://cyberscoop.com/spain-arrests-alleged-cyber-army-of-russia-reborn-member/</guid>
@@ -47,6 +56,15 @@
     <category>IR</category>
     <source url="https://www.securityweek.com/iran-linked-hackers-using-modular-cc-framework-in-cyberattacks/">SecurityWeek</source>
     <description>Researchers say the Iran-linked threat actor used an adaptable modular malware framework and compromised IT service providers to reach high-value targets in Israel. The post Iran-Linked Hackers Using Modular C&amp;C Framework in Cyberattacks appeared first on SecurityWeek .</description>
+  </item>
+  <item>
+    <title>Spain collars alleged pro-Russia hacktivist after FBI tip-off</title>
+    <link>https://www.theregister.com/security/2026/07/07/alleged-pro-russia-hacktivist-arrested-in-palencia/5267569</link>
+    <guid isPermaLink="true">https://www.theregister.com/security/2026/07/07/alleged-pro-russia-hacktivist-arrested-in-palencia/5267569</guid>
+    <pubDate>Tue, 07 Jul 2026 10:30:50 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.theregister.com/security/2026/07/07/alleged-pro-russia-hacktivist-arrested-in-palencia/5267569">The Register — Security</source>
+    <description>Palencia man suspected of links to CARR, Z-Pentest, and NoName057(16), plus helping a Ukrainian hacker flee to Russia</description>
   </item>
   <item>
     <title>Suspected China-Aligned Hackers Exploit Roundcube Flaws Against Universities</title>
@@ -148,6 +166,15 @@
     <description>An inside look at the active Armored Likho APT campaign. The attackers are using spear-phishing, AI-generated loaders, and a new Python-based tool, BusySnake Stealer, to target organizations in Russia, Kazakhstan, and Brazil.</description>
   </item>
   <item>
+    <title>Startup sues Palo Alto Networks&apos; Koi Security, saying an AI-hallucinated report falsely linked it to Chinese espionage</title>
+    <link>https://www.theregister.com/legal/2026/07/02/startup-sues-palo-alto-networks-koi-security-saying-an-ai-hallucinated-report-falsely-linked-it-to-chinese-espionage/5266201</link>
+    <guid isPermaLink="true">https://www.theregister.com/legal/2026/07/02/startup-sues-palo-alto-networks-koi-security-saying-an-ai-hallucinated-report-falsely-linked-it-to-chinese-espionage/5266201</guid>
+    <pubDate>Thu, 02 Jul 2026 22:47:46 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.theregister.com/legal/2026/07/02/startup-sues-palo-alto-networks-koi-security-saying-an-ai-hallucinated-report-falsely-linked-it-to-chinese-espionage/5266201">The Register — Security</source>
+    <description>MeetingTV wants to see the evidence</description>
+  </item>
+  <item>
     <title>China-Linked Group Targets Southeast Asia Critical Systems</title>
     <link>https://www.darkreading.com/threat-intelligence/china-linked-group-targets-southeast-asia-critical-systems</link>
     <guid isPermaLink="true">https://www.darkreading.com/threat-intelligence/china-linked-group-targets-southeast-asia-critical-systems</guid>
@@ -155,6 +182,15 @@
     <category>CN</category>
     <source url="https://www.darkreading.com/threat-intelligence/china-linked-group-targets-southeast-asia-critical-systems">Dark Reading</source>
     <description>The group compromised at least 10 regional organizations, including two state-owned entities, and deployed a new backdoor.</description>
+  </item>
+  <item>
+    <title>Four years into Ukraine invasion, Russia turns influence-ops back to US and Europe</title>
+    <link>https://www.theregister.com/security/2026/06/29/four-years-into-ukraine-invasion-russia-turns-influence-ops-back-to-us-and-europe/5264011</link>
+    <guid isPermaLink="true">https://www.theregister.com/security/2026/06/29/four-years-into-ukraine-invasion-russia-turns-influence-ops-back-to-us-and-europe/5264011</guid>
+    <pubDate>Mon, 29 Jun 2026 22:10:16 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.theregister.com/security/2026/06/29/four-years-into-ukraine-invasion-russia-turns-influence-ops-back-to-us-and-europe/5264011">The Register — Security</source>
+    <description>Not today, Putin</description>
   </item>
   <item>
     <title>Iran, Russia, China Target Water Systems for Sabotage</title>
@@ -191,6 +227,15 @@
     <category>RU</category>
     <source url="https://www.cisa.gov/resources-tools/resources/russian-intelligence-services-continue-target-commercial-messaging-applications">CISA Advisories</source>
     <description>CISA and the Federal Bureau of Investigation (FBI) issued an updated Public Service Announcement (PSA) warning of Russian Intelligence Services (RIS) cyber threat actors targeting commercial messaging applications in ongoing phishing campaigns. This PSA is an update to the March 2026 Russian Intelligence Services Target Commercial Messaging Application Accounts and provides recent tactics, recommended mitigations, and samples of phishing messages.&amp;nbsp;</description>
+  </item>
+  <item>
+    <title>Chinese cybersecurity company claims it’s built a better-than-Mythos bug finder</title>
+    <link>https://www.theregister.com/security/2026/06/26/chinese-cybersecurity-company-claims-its-built-a-better-than-mythos-bug-finder/5262642</link>
+    <guid isPermaLink="true">https://www.theregister.com/security/2026/06/26/chinese-cybersecurity-company-claims-its-built-a-better-than-mythos-bug-finder/5262642</guid>
+    <pubDate>Fri, 26 Jun 2026 01:49:35 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.theregister.com/security/2026/06/26/chinese-cybersecurity-company-claims-its-built-a-better-than-mythos-bug-finder/5262642">The Register — Security</source>
+    <description>Qihoo 360, which the US has banned, says it’s needed as a deterrent to weaponized Anthropic models</description>
   </item>
   <item>
     <title>Russian APT &apos;Gamaredon&apos; Upgrades Its Arsenal, Requiring New Defenses</title>
@@ -292,15 +337,6 @@
     <description>Warnings about helpdesk impersonation scams and Iran-linked hackers targeting critical sectors in the US, plus the most damaging scams of 2025 - here&apos;s some of what made the headlines this month</description>
   </item>
   <item>
-    <title>International cyber agencies share fresh advice to defend against China-linked covert networks</title>
-    <link>https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</link>
-    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</guid>
-    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks">NCSC UK</source>
-    <description>New advisory highlights how to defend against attacker tactics believed to be used by China-linked actors to hide malicious cyber activity.</description>
-  </item>
-  <item>
     <title>Executive Summary: Defending against China-nexus covert networks of compromised devices</title>
     <link>https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</link>
     <guid isPermaLink="true">https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
@@ -308,6 +344,15 @@
     <category>CN</category>
     <source url="https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
     <description>Organisations should map and baseline their edge device traffic, especially VPN and remote access connections, and adopt dynamic threat feed filtering that includes known covert network indicators.</description>
+  </item>
+  <item>
+    <title>International cyber agencies share fresh advice to defend against China-linked covert networks</title>
+    <link>https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</link>
+    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</guid>
+    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks">NCSC UK</source>
+    <description>New advisory highlights how to defend against attacker tactics believed to be used by China-linked actors to hide malicious cyber activity.</description>
   </item>
   <item>
     <title>GopherWhisper: A burrow full of malware</title>
