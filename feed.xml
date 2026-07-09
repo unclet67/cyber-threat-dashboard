@@ -13,6 +13,15 @@
     <description>A China-linked threat cluster has been exploiting vulnerable Roundcube servers at U.S. and Canadian universities to steal credentials and deploy backdoor malware. [...]</description>
   </item>
   <item>
+    <title>Taiwan charges two businessmen over alleged role in Chinese espionage campaign</title>
+    <link>https://therecord.media/taiwan-charges-businessmen-china-cyber-espionage-campaign</link>
+    <guid isPermaLink="true">https://therecord.media/taiwan-charges-businessmen-china-cyber-espionage-campaign</guid>
+    <pubDate>Wed, 08 Jul 2026 16:55:00 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://therecord.media/taiwan-charges-businessmen-china-cyber-espionage-campaign">The Record (Recorded Future)</source>
+    <description>A company based in Taiwan was leasing out accounts on the popular LINE messaging app to Chinese spies, according to prosecutors, who charged two men in the alleged scheme.</description>
+  </item>
+  <item>
     <title>China-Linked APT Expands Arsenal With New ‘Leash’ Backdoors</title>
     <link>https://www.securityweek.com/china-linked-apt-expands-arsenal-with-new-leash-backdoors/</link>
     <guid isPermaLink="true">https://www.securityweek.com/china-linked-apt-expands-arsenal-with-new-leash-backdoors/</guid>
@@ -20,6 +29,15 @@
     <category>CN</category>
     <source url="https://www.securityweek.com/china-linked-apt-expands-arsenal-with-new-leash-backdoors/">SecurityWeek</source>
     <description>Cisco says the threat actor behind the LapDogs campaign has expanded its SOHO router malware toolkit with LongLeash, DogLeash, and JarLeash backdoors. The post China-Linked APT Expands Arsenal With New ‘Leash’ Backdoors appeared first on SecurityWeek .</description>
+  </item>
+  <item>
+    <title>Spain arrests alleged supporter of pro-Russian hacktivist groups after FBI tip</title>
+    <link>https://therecord.media/spain-arrest-alleged-supporter-noname-carr-zpentest</link>
+    <guid isPermaLink="true">https://therecord.media/spain-arrest-alleged-supporter-noname-carr-zpentest</guid>
+    <pubDate>Wed, 08 Jul 2026 13:45:00 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://therecord.media/spain-arrest-alleged-supporter-noname-carr-zpentest">The Record (Recorded Future)</source>
+    <description>An FBI tip linked a man living in Spain to the hacking groups CyberArmy of Russia Reborn (CARR), Z-Pentest and NoName057(16).</description>
   </item>
   <item>
     <title>What Happens if China Hacks the US Water Supply? I Went to a Secret War Game to Find Out</title>
@@ -47,15 +65,6 @@
     <category>RU</category>
     <source url="https://cyberscoop.com/spain-arrests-alleged-cyber-army-of-russia-reborn-member/">CyberScoop</source>
     <description>Authorities didn’t name the man or file formal charges, but accuse him of participating in attacks linked to Cyber Army of Russia Reborn and NoName. The post Spain arrests suspected hacker linked to Russian hacktivist campaign appeared first on CyberScoop .</description>
-  </item>
-  <item>
-    <title>Chinese hackers develop LONGLEASH malware to expand ORB network</title>
-    <link>https://www.bleepingcomputer.com/news/security/chinese-hackers-develop-longleash-malware-to-expand-orb-network/</link>
-    <guid isPermaLink="true">https://www.bleepingcomputer.com/news/security/chinese-hackers-develop-longleash-malware-to-expand-orb-network/</guid>
-    <pubDate>Tue, 07 Jul 2026 18:52:19 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.bleepingcomputer.com/news/security/chinese-hackers-develop-longleash-malware-to-expand-orb-network/">BleepingComputer</source>
-    <description>Chinese hackers tracked as &apos;UAT-7810&apos; are actively evolving their malware to expand their Operational Relay Box (ORB) network by compromising internet-facing networking devices, primarily unpatched Ruckus routers. [...]</description>
   </item>
   <item>
     <title>One Email Closer to the Edge: UNK_MassTraction &amp; the Physics of Exploitation</title>
@@ -310,6 +319,15 @@
     <description>Warnings about helpdesk impersonation scams and Iran-linked hackers targeting critical sectors in the US, plus the most damaging scams of 2025 - here&apos;s some of what made the headlines this month</description>
   </item>
   <item>
+    <title>Defending against China-nexus covert networks of compromised devices</title>
+    <link>https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</link>
+    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
+    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
+    <description>Explaining the widespread shift in tactics, techniques and procedures (TTPs) towards networks of compromised infrastructure, and how to defend against it</description>
+  </item>
+  <item>
     <title>International cyber agencies share fresh advice to defend against China-linked covert networks</title>
     <link>https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</link>
     <guid isPermaLink="true">https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</guid>
@@ -317,15 +335,6 @@
     <category>CN</category>
     <source url="https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks">NCSC UK</source>
     <description>New advisory highlights how to defend against attacker tactics believed to be used by China-linked actors to hide malicious cyber activity.</description>
-  </item>
-  <item>
-    <title>Executive Summary: Defending against China-nexus covert networks of compromised devices</title>
-    <link>https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</link>
-    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
-    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
-    <description>Organisations should map and baseline their edge device traffic, especially VPN and remote access connections, and adopt dynamic threat feed filtering that includes known covert network indicators.</description>
   </item>
   <item>
     <title>GopherWhisper: A burrow full of malware</title>
