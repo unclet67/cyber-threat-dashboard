@@ -13,15 +13,6 @@
     <description>A China-linked threat cluster has been exploiting vulnerable Roundcube servers at U.S. and Canadian universities to steal credentials and deploy backdoor malware. [...]</description>
   </item>
   <item>
-    <title>Taiwan charges two businessmen over alleged role in Chinese espionage campaign</title>
-    <link>https://therecord.media/taiwan-charges-businessmen-china-cyber-espionage-campaign</link>
-    <guid isPermaLink="true">https://therecord.media/taiwan-charges-businessmen-china-cyber-espionage-campaign</guid>
-    <pubDate>Wed, 08 Jul 2026 16:55:00 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://therecord.media/taiwan-charges-businessmen-china-cyber-espionage-campaign">The Record (Recorded Future)</source>
-    <description>A company based in Taiwan was leasing out accounts on the popular LINE messaging app to Chinese spies, according to prosecutors, who charged two men in the alleged scheme.</description>
-  </item>
-  <item>
     <title>China-Linked APT Expands Arsenal With New ‘Leash’ Backdoors</title>
     <link>https://www.securityweek.com/china-linked-apt-expands-arsenal-with-new-leash-backdoors/</link>
     <guid isPermaLink="true">https://www.securityweek.com/china-linked-apt-expands-arsenal-with-new-leash-backdoors/</guid>
@@ -29,15 +20,6 @@
     <category>CN</category>
     <source url="https://www.securityweek.com/china-linked-apt-expands-arsenal-with-new-leash-backdoors/">SecurityWeek</source>
     <description>Cisco says the threat actor behind the LapDogs campaign has expanded its SOHO router malware toolkit with LongLeash, DogLeash, and JarLeash backdoors. The post China-Linked APT Expands Arsenal With New ‘Leash’ Backdoors appeared first on SecurityWeek .</description>
-  </item>
-  <item>
-    <title>Spain arrests alleged supporter of pro-Russian hacktivist groups after FBI tip</title>
-    <link>https://therecord.media/spain-arrest-alleged-supporter-noname-carr-zpentest</link>
-    <guid isPermaLink="true">https://therecord.media/spain-arrest-alleged-supporter-noname-carr-zpentest</guid>
-    <pubDate>Wed, 08 Jul 2026 13:45:00 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://therecord.media/spain-arrest-alleged-supporter-noname-carr-zpentest">The Record (Recorded Future)</source>
-    <description>An FBI tip linked a man living in Spain to the hacking groups CyberArmy of Russia Reborn (CARR), Z-Pentest and NoName057(16).</description>
   </item>
   <item>
     <title>What Happens if China Hacks the US Water Supply? I Went to a Secret War Game to Find Out</title>
@@ -83,15 +65,6 @@
     <category>CN</category>
     <source url="https://www.proofpoint.com/us/blog/threat-insight/one-email-closer-edge-unkmasstraction-physics-exploitation">Proofpoint Threat Insight</source>
     <description>Analyst note: Proofpoint uses the UNK_ designator to define clusters of activity that are still developing and have not been observed for long enough to receive a numerical TA designation. Key Findings Since May 2026, Proofpoint Threat Research has been tracking a suspected China-aligned threat cluster named UNK_MassTraction exploiting Roundcube mailservers belonging to the physics and engineering departments of US and Canadian universities. The campaigns exploit multiple n-day vulnerabilities i</description>
-  </item>
-  <item>
-    <title>Spain arrests suspected member of pro-Russian hacktivist groups</title>
-    <link>https://www.bleepingcomputer.com/news/security/spain-arrests-suspected-member-of-pro-russian-hacktivist-groups/</link>
-    <guid isPermaLink="true">https://www.bleepingcomputer.com/news/security/spain-arrests-suspected-member-of-pro-russian-hacktivist-groups/</guid>
-    <pubDate>Tue, 07 Jul 2026 15:21:21 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://www.bleepingcomputer.com/news/security/spain-arrests-suspected-member-of-pro-russian-hacktivist-groups/">BleepingComputer</source>
-    <description>The National Police in Spain have arrested a man who is suspected of being an active member of the CyberArmy of Russia Reborn (CARR) and Z-Pentest, both pro-Russian hacktivist groups. [...]</description>
   </item>
   <item>
     <title>Suspected China-Aligned Hackers Exploit Roundcube Flaws Against Universities</title>
