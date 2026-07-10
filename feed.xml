@@ -148,24 +148,6 @@
     <description>A suspected China-nexus threat activity cluster has been observed targeting Indian taxpayers, tax professionals, and corporate finance teams to deliver a remote access trojan designed to steal sensitive data from compromised hosts. The multi-stage campaign, codenamed Operation DragonReturn by Seqrite Labs, involves sending spear-phishing emails impersonating the Income Tax Department of India.</description>
   </item>
   <item>
-    <title>North Korea-Linked npm Packages Mimic Rollup Polyfills to Steal Developer Secrets</title>
-    <link>https://thehackernews.com/2026/07/north-korea-linked-npm-packages-mimic.html</link>
-    <guid isPermaLink="true">https://thehackernews.com/2026/07/north-korea-linked-npm-packages-mimic.html</guid>
-    <pubDate>Fri, 03 Jul 2026 16:07:15 GMT</pubDate>
-    <category>KP</category>
-    <source url="https://thehackernews.com/2026/07/north-korea-linked-npm-packages-mimic.html">The Hacker News</source>
-    <description>Threat actors with ties to North Korea have been linked to a fresh set of malicious npm packages that masquerade as Rollup polyfill tooling to facilitate remote access and data theft. According to JFrog, the packages &quot;rollup-packages-polyfill-core&quot; and &quot;rollup-runtime-polyfill-core&quot; mimic the legitimate &quot;rollup-plugin-polyfill-node&quot; project, down to the description, repository metadata, and</description>
-  </item>
-  <item>
-    <title>Armored Likho Targets Government Agencies, Power Sector with BusySnake Stealer</title>
-    <link>https://thehackernews.com/2026/07/armored-likho-targets-government.html</link>
-    <guid isPermaLink="true">https://thehackernews.com/2026/07/armored-likho-targets-government.html</guid>
-    <pubDate>Fri, 03 Jul 2026 13:36:33 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://thehackernews.com/2026/07/armored-likho-targets-government.html">The Hacker News</source>
-    <description>A previously undocumented threat actor known as Armored Likho has been attributed to cyber attacks targeting government agencies and the electric power sector across Russia, Brazil, and Kazakhstan. &quot;Armored Likho blends financially motivated campaigns targeting private individuals with targeted cyber espionage aimed at organizations,&quot; Kaspersky said in a technical analysis published today. &quot;</description>
-  </item>
-  <item>
     <title>Chinese LLMs Broaden the Gap Between Attackers &amp; Defenders</title>
     <link>https://www.darkreading.com/cyber-risk/chinese-llms-broaden-gap-between-attackers-and-defenders</link>
     <guid isPermaLink="true">https://www.darkreading.com/cyber-risk/chinese-llms-broaden-gap-between-attackers-and-defenders</guid>
@@ -346,15 +328,6 @@
     <description>Warnings about helpdesk impersonation scams and Iran-linked hackers targeting critical sectors in the US, plus the most damaging scams of 2025 - here&apos;s some of what made the headlines this month</description>
   </item>
   <item>
-    <title>Defending against China-nexus covert networks of compromised devices</title>
-    <link>https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</link>
-    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
-    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
-    <description>Explaining the widespread shift in tactics, techniques and procedures (TTPs) towards networks of compromised infrastructure, and how to defend against it</description>
-  </item>
-  <item>
     <title>International cyber agencies share fresh advice to defend against China-linked covert networks</title>
     <link>https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</link>
     <guid isPermaLink="true">https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</guid>
@@ -362,6 +335,15 @@
     <category>CN</category>
     <source url="https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks">NCSC UK</source>
     <description>New advisory highlights how to defend against attacker tactics believed to be used by China-linked actors to hide malicious cyber activity.</description>
+  </item>
+  <item>
+    <title>Executive Summary: Defending against China-nexus covert networks of compromised devices</title>
+    <link>https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</link>
+    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
+    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
+    <description>Organisations should map and baseline their edge device traffic, especially VPN and remote access connections, and adopt dynamic threat feed filtering that includes known covert network indicators.</description>
   </item>
   <item>
     <title>GopherWhisper: A burrow full of malware</title>
