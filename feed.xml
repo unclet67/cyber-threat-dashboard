@@ -157,15 +157,6 @@
     <description>Key Points Introduction Since early 2026, Check Point Research (CPR) has tracked a new modular command-and-control framework used by Cavern Manticore, an Iran-nexus APT group primarily targeting Israeli organizations, with a focus on IT providers, and government sectors. Cavern Manticore is an Iran MOIS (Ministry of Intelligence and Security)-linked actor, with links to the OilRig […] The post Cavern Manticore: Exposing Iran-Linked Modular C2 Framework appeared first on Check Point Research .</description>
   </item>
   <item>
-    <title>Suspected China-Nexus Hackers Use Fake Indian Tax Filing Utility to Deploy DcRAT</title>
-    <link>https://thehackernews.com/2026/07/suspected-china-nexus-hackers-use-fake.html</link>
-    <guid isPermaLink="true">https://thehackernews.com/2026/07/suspected-china-nexus-hackers-use-fake.html</guid>
-    <pubDate>Mon, 06 Jul 2026 10:58:16 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://thehackernews.com/2026/07/suspected-china-nexus-hackers-use-fake.html">The Hacker News</source>
-    <description>A suspected China-nexus threat activity cluster has been observed targeting Indian taxpayers, tax professionals, and corporate finance teams to deliver a remote access trojan designed to steal sensitive data from compromised hosts. The multi-stage campaign, codenamed Operation DragonReturn by Seqrite Labs, involves sending spear-phishing emails impersonating the Income Tax Department of India.</description>
-  </item>
-  <item>
     <title>Chinese LLMs Broaden the Gap Between Attackers &amp; Defenders</title>
     <link>https://www.darkreading.com/cyber-risk/chinese-llms-broaden-gap-between-attackers-and-defenders</link>
     <guid isPermaLink="true">https://www.darkreading.com/cyber-risk/chinese-llms-broaden-gap-between-attackers-and-defenders</guid>
