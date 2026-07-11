@@ -49,24 +49,6 @@
     <description>Obscurity isn&apos;t a defense. If your company has any Internet-facing vulnerability, you&apos;re at risk from multiple threats.</description>
   </item>
   <item>
-    <title>Suspected Chinese snoops caught breaking into universities&apos; Roundcube mailservers</title>
-    <link>https://www.theregister.com/security/2026/07/08/suspected-chinese-snoops-caught-breaking-into-universities-roundcube-mailservers/5268778</link>
-    <guid isPermaLink="true">https://www.theregister.com/security/2026/07/08/suspected-chinese-snoops-caught-breaking-into-universities-roundcube-mailservers/5268778</guid>
-    <pubDate>Wed, 08 Jul 2026 21:35:13 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.theregister.com/security/2026/07/08/suspected-chinese-snoops-caught-breaking-into-universities-roundcube-mailservers/5268778">The Register — Security</source>
-    <description>Proofpoint researcher tells The Reg: &apos;We estimate the total volume of targets would be a few dozen&apos;</description>
-  </item>
-  <item>
-    <title>China tells devs to ditch Claude Code over &apos;backdoor code&apos; fears</title>
-    <link>https://www.theregister.com/security/2026/07/08/china-ditch-older-claude-versions-with-backdoor-code/5268371</link>
-    <guid isPermaLink="true">https://www.theregister.com/security/2026/07/08/china-ditch-older-claude-versions-with-backdoor-code/5268371</guid>
-    <pubDate>Wed, 08 Jul 2026 13:58:07 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.theregister.com/security/2026/07/08/china-ditch-older-claude-versions-with-backdoor-code/5268371">The Register — Security</source>
-    <description>National vulnerability database claims monitoring mechanism can forward Chinese users&apos; data to remote servers</description>
-  </item>
-  <item>
     <title>What Happens if China Hacks the US Water Supply? I Went to a Secret War Game to Find Out</title>
     <link>https://www.wired.com/story/what-happens-if-china-hacks-the-us-water-supply-war-game-volt-typhoon/</link>
     <guid isPermaLink="true">https://www.wired.com/story/what-happens-if-china-hacks-the-us-water-supply-war-game-volt-typhoon/</guid>
@@ -101,15 +83,6 @@
     <category>CN</category>
     <source url="https://www.proofpoint.com/us/blog/threat-insight/one-email-closer-edge-unkmasstraction-physics-exploitation">Proofpoint Threat Insight</source>
     <description>Analyst note: Proofpoint uses the UNK_ designator to define clusters of activity that are still developing and have not been observed for long enough to receive a numerical TA designation. Key Findings Since May 2026, Proofpoint Threat Research has been tracking a suspected China-aligned threat cluster named UNK_MassTraction exploiting Roundcube mailservers belonging to the physics and engineering departments of US and Canadian universities. The campaigns exploit multiple n-day vulnerabilities i</description>
-  </item>
-  <item>
-    <title>Spain collars alleged pro-Russia hacktivist after FBI tip-off</title>
-    <link>https://www.theregister.com/security/2026/07/07/alleged-pro-russia-hacktivist-arrested-in-palencia/5267569</link>
-    <guid isPermaLink="true">https://www.theregister.com/security/2026/07/07/alleged-pro-russia-hacktivist-arrested-in-palencia/5267569</guid>
-    <pubDate>Tue, 07 Jul 2026 10:30:50 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://www.theregister.com/security/2026/07/07/alleged-pro-russia-hacktivist-arrested-in-palencia/5267569">The Register — Security</source>
-    <description>Palencia man suspected of links to CARR, Z-Pentest, and NoName057(16), plus helping a Ukrainian hacker flee to Russia</description>
   </item>
   <item>
     <title>Suspected China-Aligned Hackers Exploit Roundcube Flaws Against Universities</title>
@@ -184,15 +157,6 @@
     <description>An inside look at the active Armored Likho APT campaign. The attackers are using spear-phishing, AI-generated loaders, and a new Python-based tool, BusySnake Stealer, to target organizations in Russia, Kazakhstan, and Brazil.</description>
   </item>
   <item>
-    <title>Startup sues Palo Alto Networks&apos; Koi Security, saying an AI-hallucinated report falsely linked it to Chinese espionage</title>
-    <link>https://www.theregister.com/legal/2026/07/02/startup-sues-palo-alto-networks-koi-security-saying-an-ai-hallucinated-report-falsely-linked-it-to-chinese-espionage/5266201</link>
-    <guid isPermaLink="true">https://www.theregister.com/legal/2026/07/02/startup-sues-palo-alto-networks-koi-security-saying-an-ai-hallucinated-report-falsely-linked-it-to-chinese-espionage/5266201</guid>
-    <pubDate>Thu, 02 Jul 2026 22:47:46 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.theregister.com/legal/2026/07/02/startup-sues-palo-alto-networks-koi-security-saying-an-ai-hallucinated-report-falsely-linked-it-to-chinese-espionage/5266201">The Register — Security</source>
-    <description>MeetingTV wants to see the evidence</description>
-  </item>
-  <item>
     <title>China-Linked Group Targets Southeast Asia Critical Systems</title>
     <link>https://www.darkreading.com/threat-intelligence/china-linked-group-targets-southeast-asia-critical-systems</link>
     <guid isPermaLink="true">https://www.darkreading.com/threat-intelligence/china-linked-group-targets-southeast-asia-critical-systems</guid>
@@ -200,15 +164,6 @@
     <category>CN</category>
     <source url="https://www.darkreading.com/threat-intelligence/china-linked-group-targets-southeast-asia-critical-systems">Dark Reading</source>
     <description>The group compromised at least 10 regional organizations, including two state-owned entities, and deployed a new backdoor.</description>
-  </item>
-  <item>
-    <title>Four years into Ukraine invasion, Russia turns influence-ops back to US and Europe</title>
-    <link>https://www.theregister.com/security/2026/06/29/four-years-into-ukraine-invasion-russia-turns-influence-ops-back-to-us-and-europe/5264011</link>
-    <guid isPermaLink="true">https://www.theregister.com/security/2026/06/29/four-years-into-ukraine-invasion-russia-turns-influence-ops-back-to-us-and-europe/5264011</guid>
-    <pubDate>Mon, 29 Jun 2026 22:10:16 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://www.theregister.com/security/2026/06/29/four-years-into-ukraine-invasion-russia-turns-influence-ops-back-to-us-and-europe/5264011">The Register — Security</source>
-    <description>Not today, Putin</description>
   </item>
   <item>
     <title>Iran, Russia, China Target Water Systems for Sabotage</title>
