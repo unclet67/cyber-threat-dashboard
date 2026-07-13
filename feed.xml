@@ -4,6 +4,33 @@
   <link>https://unclet67.github.io/cyber-threat-dashboard/</link>
   <description>China / Russia / Iran / North Korea cyber and information-warfare reporting, collected hourly from 27 vetted feeds.</description>
   <item>
+    <title>Europe strikes out against Russia’s Turla over espionage, ‘destructive attacks’</title>
+    <link>https://cyberscoop.com/eu-uk-russian-cyberespionage-sanctions/</link>
+    <guid isPermaLink="true">https://cyberscoop.com/eu-uk-russian-cyberespionage-sanctions/</guid>
+    <pubDate>Mon, 13 Jul 2026 16:28:10 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://cyberscoop.com/eu-uk-russian-cyberespionage-sanctions/">CyberScoop</source>
+    <description>The EU, its members and the U.K. took action against Russian government officials and others while attributing the winter cyberattacks against Poland’s energy grid to the FSB. The post Europe strikes out against Russia’s Turla over espionage, ‘destructive attacks’ appeared first on CyberScoop .</description>
+  </item>
+  <item>
+    <title>EU and UK officially blame Russian spies for cyberattack on Poland&apos;s power grid</title>
+    <link>https://www.theregister.com/security/2026/07/13/uk-eu-officially-pin-poland-energy-cyberattack-on-russia/5270458</link>
+    <guid isPermaLink="true">https://www.theregister.com/security/2026/07/13/uk-eu-officially-pin-poland-energy-cyberattack-on-russia/5270458</guid>
+    <pubDate>Mon, 13 Jul 2026 15:39:52 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.theregister.com/security/2026/07/13/uk-eu-officially-pin-poland-energy-cyberattack-on-russia/5270458">The Register — Security</source>
+    <description>Sweeping sanctions and condemnation follow op that could have left half a million without power in the depths of winter</description>
+  </item>
+  <item>
+    <title>Officials once again warn defenders that Russian hackers are targeting network devices</title>
+    <link>https://cyberscoop.com/russian-fsb-cisco-joint-cybersecurity-advisory/</link>
+    <guid isPermaLink="true">https://cyberscoop.com/russian-fsb-cisco-joint-cybersecurity-advisory/</guid>
+    <pubDate>Mon, 13 Jul 2026 15:23:46 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://cyberscoop.com/russian-fsb-cisco-joint-cybersecurity-advisory/">CyberScoop</source>
+    <description>State-sponsored attackers are targeting critical infrastructure networks in defense, communications, energy, finance, government and health care. The post Officials once again warn defenders that Russian hackers are targeting network devices appeared first on CyberScoop .</description>
+  </item>
+  <item>
     <title>EU and UK blacklist Russia’s cyber operators over efforts to destabilize Europe</title>
     <link>https://www.helpnetsecurity.com/2026/07/13/eu-uk-russia-cyber-activity-sanctions/</link>
     <guid isPermaLink="true">https://www.helpnetsecurity.com/2026/07/13/eu-uk-russia-cyber-activity-sanctions/</guid>
@@ -20,6 +47,24 @@
     <category>RU</category>
     <source url="https://www.bleepingcomputer.com/news/security/uk-charges-suspects-linked-to-russian-coms-call-spoofing-platform/">BleepingComputer</source>
     <description>UK authorities charged five people following a National Crime Agency (NCA) investigation into Russian Coms, a major caller ID spoofing platform used by criminals to make over 1.8 million scam calls. [...]</description>
+  </item>
+  <item>
+    <title>Improve Router Hygiene to Protect Against Russian State-Sponsored Targeting</title>
+    <link>https://www.cisa.gov/news-events/cybersecurity-advisories/aa26-194a</link>
+    <guid isPermaLink="true">https://www.cisa.gov/news-events/cybersecurity-advisories/aa26-194a</guid>
+    <pubDate>Mon, 13 Jul 2026 12:00:00 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.cisa.gov/news-events/cybersecurity-advisories/aa26-194a">CISA Advisories</source>
+    <description>Russian Government-Sponsored Activity Targets Poorly Configured and Vulnerable Devices Across Critical Sectors Executive summary Russian Federal Security Service (FSB) Center 16 cyber actors continue to exploit poorly configured and vulnerable networking devices worldwide, opportunistically compromising multiple critical infrastructure sector networks. This joint Cybersecurity Advisory (CSA) builds on FBI’s Russian Government Cyber Actors Targeting Networking Devices, Critical Infrastructure Pub</description>
+  </item>
+  <item>
+    <title>Improve Router Hygiene to Protect Against Russian State-Sponsored Targeting</title>
+    <link>https://www.cisa.gov/news-events/cybersecurity-advisories/aa26-194a</link>
+    <guid isPermaLink="true">https://www.cisa.gov/news-events/cybersecurity-advisories/aa26-194a</guid>
+    <pubDate>Mon, 13 Jul 2026 12:00:00 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.cisa.gov/news-events/cybersecurity-advisories/aa26-194a">CISA Advisories</source>
+    <description>Russian Government-Sponsored Activity Targets Poorly Configured and Vulnerable Devices Across Critical Sectors Executive summary Russian Federal Security Service (FSB) Center 16 cyber actors continue to exploit poorly configured and vulnerable networking devices worldwide, opportunistically compromising multiple critical infrastructure sector networks. This joint Cybersecurity Advisory (CSA) builds on FBI’s Russian Government Cyber Actors Targeting Networking Devices, Critical Infrastructure Pub</description>
   </item>
   <item>
     <title>UK and Allies urge critical sectors to improve defences against Russian intelligence targeting</title>
@@ -139,15 +184,6 @@
     <description>A Chinese threat actor tracked as UAT-7810 is actively refining its bespoke malware to expand its Operational Relay Box (ORB) network by breaking into internet-facing networking devices. According to findings from Cisco Talos, UAT-7810 is an advanced persistent threat (APT) actor that&apos;s responsible for maintaining and proliferating LapDogs, an ORB network that first came to light in June 2025.</description>
   </item>
   <item>
-    <title>Spain arrests suspected hacker linked to Russian hacktivist campaign</title>
-    <link>https://cyberscoop.com/spain-arrests-alleged-cyber-army-of-russia-reborn-member/</link>
-    <guid isPermaLink="true">https://cyberscoop.com/spain-arrests-alleged-cyber-army-of-russia-reborn-member/</guid>
-    <pubDate>Tue, 07 Jul 2026 21:57:05 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://cyberscoop.com/spain-arrests-alleged-cyber-army-of-russia-reborn-member/">CyberScoop</source>
-    <description>Authorities didn’t name the man or file formal charges, but accuse him of participating in attacks linked to Cyber Army of Russia Reborn and NoName. The post Spain arrests suspected hacker linked to Russian hacktivist campaign appeared first on CyberScoop .</description>
-  </item>
-  <item>
     <title>One Email Closer to the Edge: UNK_MassTraction &amp; the Physics of Exploitation</title>
     <link>https://www.proofpoint.com/us/blog/threat-insight/one-email-closer-edge-unkmasstraction-physics-exploitation</link>
     <guid isPermaLink="true">https://www.proofpoint.com/us/blog/threat-insight/one-email-closer-edge-unkmasstraction-physics-exploitation</guid>
@@ -218,15 +254,6 @@
     <category>CN</category>
     <source url="https://www.darkreading.com/threat-intelligence/china-linked-group-targets-southeast-asia-critical-systems">Dark Reading</source>
     <description>The group compromised at least 10 regional organizations, including two state-owned entities, and deployed a new backdoor.</description>
-  </item>
-  <item>
-    <title>Four years into Ukraine invasion, Russia turns influence-ops back to US and Europe</title>
-    <link>https://www.theregister.com/security/2026/06/29/four-years-into-ukraine-invasion-russia-turns-influence-ops-back-to-us-and-europe/5264011</link>
-    <guid isPermaLink="true">https://www.theregister.com/security/2026/06/29/four-years-into-ukraine-invasion-russia-turns-influence-ops-back-to-us-and-europe/5264011</guid>
-    <pubDate>Mon, 29 Jun 2026 22:10:16 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://www.theregister.com/security/2026/06/29/four-years-into-ukraine-invasion-russia-turns-influence-ops-back-to-us-and-europe/5264011">The Register — Security</source>
-    <description>Not today, Putin</description>
   </item>
   <item>
     <title>Iran, Russia, China Target Water Systems for Sabotage</title>
