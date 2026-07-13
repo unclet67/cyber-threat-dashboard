@@ -4,6 +4,24 @@
   <link>https://unclet67.github.io/cyber-threat-dashboard/</link>
   <description>China / Russia / Iran / North Korea cyber and information-warfare reporting, collected hourly from 27 vetted feeds.</description>
   <item>
+    <title>EU and UK blacklist Russia’s cyber operators over efforts to destabilize Europe</title>
+    <link>https://www.helpnetsecurity.com/2026/07/13/eu-uk-russia-cyber-activity-sanctions/</link>
+    <guid isPermaLink="true">https://www.helpnetsecurity.com/2026/07/13/eu-uk-russia-cyber-activity-sanctions/</guid>
+    <pubDate>Mon, 13 Jul 2026 14:52:51 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.helpnetsecurity.com/2026/07/13/eu-uk-russia-cyber-activity-sanctions/">Help Net Security</source>
+    <description>The EU and the UK jointly sanctioned dozens of Russian individuals and entities, accusing Moscow of coordinating a malicious cyber ecosystem targeting Europe, its member states, and international partners. The UK sanctioned 24 individuals and entities, while the EU imposed restrictive measures on nine individuals and four entities. “Cybercriminals, self-proclaimed hacktivists and private companies linked to Russia, including actors operating under its instructions, direction or control, have als</description>
+  </item>
+  <item>
+    <title>UK charges suspects linked to Russian Coms call spoofing platform</title>
+    <link>https://www.bleepingcomputer.com/news/security/uk-charges-suspects-linked-to-russian-coms-call-spoofing-platform/</link>
+    <guid isPermaLink="true">https://www.bleepingcomputer.com/news/security/uk-charges-suspects-linked-to-russian-coms-call-spoofing-platform/</guid>
+    <pubDate>Mon, 13 Jul 2026 13:23:30 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.bleepingcomputer.com/news/security/uk-charges-suspects-linked-to-russian-coms-call-spoofing-platform/">BleepingComputer</source>
+    <description>UK authorities charged five people following a National Crime Agency (NCA) investigation into Russian Coms, a major caller ID spoofing platform used by criminals to make over 1.8 million scam calls. [...]</description>
+  </item>
+  <item>
     <title>UK and Allies urge critical sectors to improve defences against Russian intelligence targeting</title>
     <link>https://www.ncsc.gov.uk/news/uk-and-allies-urge-critical-sectors-to-improve-defences-against-russian-intelligence-targeting</link>
     <guid isPermaLink="true">https://www.ncsc.gov.uk/news/uk-and-allies-urge-critical-sectors-to-improve-defences-against-russian-intelligence-targeting</guid>
@@ -40,13 +58,13 @@
     <description>Cybersecurity agencies from the United States and eight other countries have issued a joint warning that Russian state hackers are targeting vulnerable and poorly configured routers to infiltrate critical infrastructure networks. [...]</description>
   </item>
   <item>
-    <title>China, India-Linked Hackers Both Targeted Same Pakistani Police Force</title>
-    <link>https://www.securityweek.com/china-india-linked-hackers-both-targeted-same-pakistani-police-force/</link>
-    <guid isPermaLink="true">https://www.securityweek.com/china-india-linked-hackers-both-targeted-same-pakistani-police-force/</guid>
-    <pubDate>Sun, 12 Jul 2026 16:58:32 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.securityweek.com/china-india-linked-hackers-both-targeted-same-pakistani-police-force/">SecurityWeek</source>
-    <description>Both foes and allies have targeted the Balochistan Police force in Pakistan for at least two years, according to SentinelOne. The post China, India-Linked Hackers Both Targeted Same Pakistani Police Force appeared first on SecurityWeek .</description>
+    <title>Russia&apos;s FSB blamed for Poland grid attack as UK and EU impose first joint cyber sanctions</title>
+    <link>https://therecord.media/russia-blamed-for-poland-grid-cyberattack-in-joint-uk-eu-sanctions-package</link>
+    <guid isPermaLink="true">https://therecord.media/russia-blamed-for-poland-grid-cyberattack-in-joint-uk-eu-sanctions-package</guid>
+    <pubDate>Sun, 12 Jul 2026 23:00:00 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://therecord.media/russia-blamed-for-poland-grid-cyberattack-in-joint-uk-eu-sanctions-package">The Record (Recorded Future)</source>
+    <description>The allies blamed Center 16, the FSB’s signals intelligence arm, for acts of attempted cyber sabotage targeting Poland’s energy sector and water treatment facilities, alongside “a wide range of malicious cyber activities with growing severity.”</description>
   </item>
   <item>
     <title>Hackers Weaponize Balochistan Police Portal in Multi-Group Espionage Campaigns</title>
@@ -146,24 +164,6 @@
     <category>RU</category>
     <source url="https://www.theregister.com/security/2026/07/07/alleged-pro-russia-hacktivist-arrested-in-palencia/5267569">The Register — Security</source>
     <description>Palencia man suspected of links to CARR, Z-Pentest, and NoName057(16), plus helping a Ukrainian hacker flee to Russia</description>
-  </item>
-  <item>
-    <title>Suspected China-Aligned Hackers Exploit Roundcube Flaws Against Universities</title>
-    <link>https://thehackernews.com/2026/07/suspected-china-aligned-hackers-exploit.html</link>
-    <guid isPermaLink="true">https://thehackernews.com/2026/07/suspected-china-aligned-hackers-exploit.html</guid>
-    <pubDate>Tue, 07 Jul 2026 09:10:51 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://thehackernews.com/2026/07/suspected-china-aligned-hackers-exploit.html">The Hacker News</source>
-    <description>A suspected China-aligned threat activity cluster has been observed exploiting Roundcube webmail software belonging to physics and engineering departments of U.S. and Canadian universities as part of a new campaign. The activity involves the exploitation of now-patched, critical security flaws in the open-source email solution, such as CVE-2024-42009 (CVSS score: 9.3), to siphon credentials,</description>
-  </item>
-  <item>
-    <title>CERT/CC Warns of Hidden Admin Backdoor in Tenda Router Firmware</title>
-    <link>https://thehackernews.com/2026/07/certcc-warns-of-hidden-admin-backdoor.html</link>
-    <guid isPermaLink="true">https://thehackernews.com/2026/07/certcc-warns-of-hidden-admin-backdoor.html</guid>
-    <pubDate>Tue, 07 Jul 2026 06:40:47 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://thehackernews.com/2026/07/certcc-warns-of-hidden-admin-backdoor.html">The Hacker News</source>
-    <description>Several versions of firmware released by Chinese network device manufacturer Tenda have been found to embed an undocumented authentication backdoor that enables administrative access to the devices&apos; web management interfaces, the CERT Coordination Center (CERT/CC) warned Monday. &quot;An attacker can exploit this vulnerability, tracked as CVE-2026-11405, to bypass the password verification process</description>
   </item>
   <item>
     <title>&apos;BusySnake&apos; Infostealer Slithers Into Critical Infrastructure Networks</title>
@@ -355,13 +355,13 @@
     <description>Warnings about helpdesk impersonation scams and Iran-linked hackers targeting critical sectors in the US, plus the most damaging scams of 2025 - here&apos;s some of what made the headlines this month</description>
   </item>
   <item>
-    <title>Defending against China-nexus covert networks of compromised devices</title>
-    <link>https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</link>
-    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
+    <title>Executive Summary: Defending against China-nexus covert networks of compromised devices</title>
+    <link>https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</link>
+    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
     <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
     <category>CN</category>
-    <source url="https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
-    <description>Explaining the widespread shift in tactics, techniques and procedures (TTPs) towards networks of compromised infrastructure, and how to defend against it</description>
+    <source url="https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
+    <description>Organisations should map and baseline their edge device traffic, especially VPN and remote access connections, and adopt dynamic threat feed filtering that includes known covert network indicators.</description>
   </item>
   <item>
     <title>International cyber agencies share fresh advice to defend against China-linked covert networks</title>
