@@ -148,15 +148,6 @@
     <description>A threat group researchers call &quot;Armored Likho&quot; has gained access to government agencies and electrical power entities in Russia, Brazil, and Kazakhstan.</description>
   </item>
   <item>
-    <title>Iran-Linked Hackers Use New Cavern C2 Framework to Target Israeli Organizations</title>
-    <link>https://thehackernews.com/2026/07/iran-linked-hackers-use-new-cavern-c2.html</link>
-    <guid isPermaLink="true">https://thehackernews.com/2026/07/iran-linked-hackers-use-new-cavern-c2.html</guid>
-    <pubDate>Mon, 06 Jul 2026 18:34:26 GMT</pubDate>
-    <category>IR</category>
-    <source url="https://thehackernews.com/2026/07/iran-linked-hackers-use-new-cavern-c2.html">The Hacker News</source>
-    <description>An Iranian hacking group affiliated with Iran&apos;s Ministry of Intelligence and Security (MOIS) has been wielding a previously undocumented modular command-and-control (C2) framework dubbed Cavern (aka Cav3rn) targeting Israeli organizations. The activity, which has primarily singled out IT providers and government sectors, has been attributed to a threat cluster tracked by Check Point Research</description>
-  </item>
-  <item>
     <title>Cavern Manticore: Exposing Iran-Linked Modular C2 Framework</title>
     <link>https://research.checkpoint.com/2026/cavern-manticore-exposing-iran-linked-modular-c2-framework/</link>
     <guid isPermaLink="true">https://research.checkpoint.com/2026/cavern-manticore-exposing-iran-linked-modular-c2-framework/</guid>
