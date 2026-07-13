@@ -4,6 +4,42 @@
   <link>https://unclet67.github.io/cyber-threat-dashboard/</link>
   <description>China / Russia / Iran / North Korea cyber and information-warfare reporting, collected hourly from 27 vetted feeds.</description>
   <item>
+    <title>UK and Allies urge critical sectors to improve defences against Russian intelligence targeting</title>
+    <link>https://www.ncsc.gov.uk/news/uk-and-allies-urge-critical-sectors-to-improve-defences-against-russian-intelligence-targeting</link>
+    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/uk-and-allies-urge-critical-sectors-to-improve-defences-against-russian-intelligence-targeting</guid>
+    <pubDate>Mon, 13 Jul 2026 12:00:00 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.ncsc.gov.uk/news/uk-and-allies-urge-critical-sectors-to-improve-defences-against-russian-intelligence-targeting">NCSC UK</source>
+    <description>New advisory highlights Russian state cyber actors’ global exploitation of poorly configured routers</description>
+  </item>
+  <item>
+    <title>EU sanctions Russian GRU military hackers over cyberattacks</title>
+    <link>https://www.bleepingcomputer.com/news/security/eu-and-uk-hit-russia-with-first-joint-cyber-sanctions-package/</link>
+    <guid isPermaLink="true">https://www.bleepingcomputer.com/news/security/eu-and-uk-hit-russia-with-first-joint-cyber-sanctions-package/</guid>
+    <pubDate>Mon, 13 Jul 2026 11:19:05 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.bleepingcomputer.com/news/security/eu-and-uk-hit-russia-with-first-joint-cyber-sanctions-package/">BleepingComputer</source>
+    <description>The European Union and the United Kingdom jointly sanctioned dozens of Russian individuals and entities and accused Russia of coordinating a network of hacking groups responsible for attacks across Europe. [...]</description>
+  </item>
+  <item>
+    <title>EU Targets Russian Intelligence Officers Accused of Running a Yearslong Cyber Spying Campaign</title>
+    <link>https://www.securityweek.com/eu-targets-russian-intelligence-officers-accused-of-running-a-yearslong-cyber-spying-campaign/</link>
+    <guid isPermaLink="true">https://www.securityweek.com/eu-targets-russian-intelligence-officers-accused-of-running-a-yearslong-cyber-spying-campaign/</guid>
+    <pubDate>Mon, 13 Jul 2026 10:07:36 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.securityweek.com/eu-targets-russian-intelligence-officers-accused-of-running-a-yearslong-cyber-spying-campaign/">SecurityWeek</source>
+    <description>The move targeted people and entities accused of links to an online spying network that the EU claims targeted governments and carried out sabotage operations against critical infrastructure. The post EU Targets Russian Intelligence Officers Accused of Running a Yearslong Cyber Spying Campaign appeared first on SecurityWeek .</description>
+  </item>
+  <item>
+    <title>US and allies warn of Russian critical infrastructure attacks</title>
+    <link>https://www.bleepingcomputer.com/news/security/us-and-allies-share-defense-tips-against-russian-hackers-targeting-critical-infrastructure/</link>
+    <guid isPermaLink="true">https://www.bleepingcomputer.com/news/security/us-and-allies-share-defense-tips-against-russian-hackers-targeting-critical-infrastructure/</guid>
+    <pubDate>Mon, 13 Jul 2026 09:32:23 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.bleepingcomputer.com/news/security/us-and-allies-share-defense-tips-against-russian-hackers-targeting-critical-infrastructure/">BleepingComputer</source>
+    <description>Cybersecurity agencies from the United States and eight other countries have issued a joint warning that Russian state hackers are targeting vulnerable and poorly configured routers to infiltrate critical infrastructure networks. [...]</description>
+  </item>
+  <item>
     <title>China, India-Linked Hackers Both Targeted Same Pakistani Police Force</title>
     <link>https://www.securityweek.com/china-india-linked-hackers-both-targeted-same-pakistani-police-force/</link>
     <guid isPermaLink="true">https://www.securityweek.com/china-india-linked-hackers-both-targeted-same-pakistani-police-force/</guid>
@@ -119,15 +155,6 @@
     <category>CN</category>
     <source url="https://thehackernews.com/2026/07/suspected-china-aligned-hackers-exploit.html">The Hacker News</source>
     <description>A suspected China-aligned threat activity cluster has been observed exploiting Roundcube webmail software belonging to physics and engineering departments of U.S. and Canadian universities as part of a new campaign. The activity involves the exploitation of now-patched, critical security flaws in the open-source email solution, such as CVE-2024-42009 (CVSS score: 9.3), to siphon credentials,</description>
-  </item>
-  <item>
-    <title>Suspected Chinese espionage group used a Roundcube exploit chain to burrow into universities</title>
-    <link>https://cyberscoop.com/china-espionage-attacks-us-canada-universities-proofpoint/</link>
-    <guid isPermaLink="true">https://cyberscoop.com/china-espionage-attacks-us-canada-universities-proofpoint/</guid>
-    <pubDate>Tue, 07 Jul 2026 09:00:00 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://cyberscoop.com/china-espionage-attacks-us-canada-universities-proofpoint/">CyberScoop</source>
-    <description>Proofpoint researchers said attackers targeted physics and engineering departments, and warn that the campaign is likely ongoing. The post Suspected Chinese espionage group used a Roundcube exploit chain to burrow into universities appeared first on CyberScoop .</description>
   </item>
   <item>
     <title>CERT/CC Warns of Hidden Admin Backdoor in Tenda Router Firmware</title>
