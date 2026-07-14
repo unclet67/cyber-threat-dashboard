@@ -4,6 +4,24 @@
   <link>https://unclet67.github.io/cyber-threat-dashboard/</link>
   <description>China / Russia / Iran / North Korea cyber and information-warfare reporting, collected hourly from 27 vetted feeds.</description>
   <item>
+    <title>US, Allies Warn of Russian Cyberattacks Targeting Critical Infrastructure Routers</title>
+    <link>https://www.securityweek.com/us-allies-warn-of-russian-cyberattacks-targeting-critical-infrastructure-routers/</link>
+    <guid isPermaLink="true">https://www.securityweek.com/us-allies-warn-of-russian-cyberattacks-targeting-critical-infrastructure-routers/</guid>
+    <pubDate>Tue, 14 Jul 2026 10:51:07 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.securityweek.com/us-allies-warn-of-russian-cyberattacks-targeting-critical-infrastructure-routers/">SecurityWeek</source>
+    <description>Multiple state-sponsored APTs are compromising poorly secured devices across critical infrastructure sector networks. The post US, Allies Warn of Russian Cyberattacks Targeting Critical Infrastructure Routers appeared first on SecurityWeek .</description>
+  </item>
+  <item>
+    <title>UK charges five persons linked to fraud platform behind more than a million scam calls</title>
+    <link>https://www.helpnetsecurity.com/2026/07/14/russian-coms-nca-charges-scam-calls/</link>
+    <guid isPermaLink="true">https://www.helpnetsecurity.com/2026/07/14/russian-coms-nca-charges-scam-calls/</guid>
+    <pubDate>Tue, 14 Jul 2026 09:18:14 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.helpnetsecurity.com/2026/07/14/russian-coms-nca-charges-scam-calls/">Help Net Security</source>
+    <description>Five people have been charged in the UK following a National Crime Agency (NCA) investigation into Russian Coms, a caller ID spoofing service used by fraudsters. Ayoub Sehailia, 28, Zakkaria Sehailia, 30, Usman Din, 30, Denis Ozmus, 29, and Fadila Salem, 53, all of London, are charged with offences that include conspiracy to supply articles for use in fraud, transferring and converting criminal property, and, for Zakkaria Sehailia, failing to comply with a notice to … More → The post UK charges </description>
+  </item>
+  <item>
     <title>Weak Security Continues to Fuel Russian Cyberattacks</title>
     <link>https://www.darkreading.com/endpoint-security/weak-security-fuel-russian-cyberattacks</link>
     <guid isPermaLink="true">https://www.darkreading.com/endpoint-security/weak-security-fuel-russian-cyberattacks</guid>
@@ -47,15 +65,6 @@
     <category>RU</category>
     <source url="https://cyberscoop.com/russian-fsb-cisco-joint-cybersecurity-advisory/">CyberScoop</source>
     <description>State-sponsored attackers are targeting critical infrastructure networks in defense, communications, energy, finance, government and health care. The post Officials once again warn defenders that Russian hackers are targeting network devices appeared first on CyberScoop .</description>
-  </item>
-  <item>
-    <title>EU and UK blacklist Russia’s cyber operators over efforts to destabilize Europe</title>
-    <link>https://www.helpnetsecurity.com/2026/07/13/eu-uk-russia-cyber-activity-sanctions/</link>
-    <guid isPermaLink="true">https://www.helpnetsecurity.com/2026/07/13/eu-uk-russia-cyber-activity-sanctions/</guid>
-    <pubDate>Mon, 13 Jul 2026 14:52:51 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://www.helpnetsecurity.com/2026/07/13/eu-uk-russia-cyber-activity-sanctions/">Help Net Security</source>
-    <description>The EU and the UK jointly sanctioned dozens of Russian individuals and entities, accusing Moscow of coordinating a malicious cyber ecosystem targeting Europe, its member states, and international partners. The UK sanctioned 24 individuals and entities, while the EU imposed restrictive measures on nine individuals and four entities. “Cybercriminals, self-proclaimed hacktivists and private companies linked to Russia, including actors operating under its instructions, direction or control, have als</description>
   </item>
   <item>
     <title>UK charges suspects linked to Russian Coms call spoofing platform</title>
@@ -382,15 +391,6 @@
     <description>Warnings about helpdesk impersonation scams and Iran-linked hackers targeting critical sectors in the US, plus the most damaging scams of 2025 - here&apos;s some of what made the headlines this month</description>
   </item>
   <item>
-    <title>International cyber agencies share fresh advice to defend against China-linked covert networks</title>
-    <link>https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</link>
-    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</guid>
-    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks">NCSC UK</source>
-    <description>New advisory highlights how to defend against attacker tactics believed to be used by China-linked actors to hide malicious cyber activity.</description>
-  </item>
-  <item>
     <title>Executive Summary: Defending against China-nexus covert networks of compromised devices</title>
     <link>https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</link>
     <guid isPermaLink="true">https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
@@ -398,6 +398,15 @@
     <category>CN</category>
     <source url="https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
     <description>Organisations should map and baseline their edge device traffic, especially VPN and remote access connections, and adopt dynamic threat feed filtering that includes known covert network indicators.</description>
+  </item>
+  <item>
+    <title>International cyber agencies share fresh advice to defend against China-linked covert networks</title>
+    <link>https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</link>
+    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</guid>
+    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks">NCSC UK</source>
+    <description>New advisory highlights how to defend against attacker tactics believed to be used by China-linked actors to hide malicious cyber activity.</description>
   </item>
   <item>
     <title>GopherWhisper: A burrow full of malware</title>
