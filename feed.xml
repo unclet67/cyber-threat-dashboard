@@ -4,15 +4,6 @@
   <link>https://unclet67.github.io/cyber-threat-dashboard/</link>
   <description>China / Russia / Iran / North Korea cyber and information-warfare reporting, collected hourly from 27 vetted feeds.</description>
   <item>
-    <title>NATO logistics, Ukrainian troops are top subjects of Russian camera hacks, advisory says</title>
-    <link>https://therecord.media/russian-intelligence-compromising-cameras-nato-ukraine-netherlands</link>
-    <guid isPermaLink="true">https://therecord.media/russian-intelligence-compromising-cameras-nato-ukraine-netherlands</guid>
-    <pubDate>Tue, 14 Jul 2026 13:55:00 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://therecord.media/russian-intelligence-compromising-cameras-nato-ukraine-netherlands">The Record (Recorded Future)</source>
-    <description>Dutch intelligence officials report that at least one Russian agency is compromising internet-connected cameras across Europe to spy on military logistics and Ukrainian personnel.</description>
-  </item>
-  <item>
     <title>&apos;The bots are alive!&apos; Jailbroken Gemini spun up new C2 server for Russian fraudster in just 6 minutes</title>
     <link>https://www.theregister.com/research/2026/07/14/the-bots-are-alive-jailbroken-gemini-spun-up-new-c2-server-for-russian-fraudster-in-just-6-minutes/5270131</link>
     <guid isPermaLink="true">https://www.theregister.com/research/2026/07/14/the-bots-are-alive-jailbroken-gemini-spun-up-new-c2-server-for-russian-fraudster-in-just-6-minutes/5270131</guid>
@@ -47,15 +38,6 @@
     <category>RU</category>
     <source url="https://www.darkreading.com/endpoint-security/weak-security-fuel-russian-cyberattacks">Dark Reading</source>
     <description>In a first, the UK and the EU jointly imposed sanctions on Russian individuals and entities for cyberattacks and disinformation campaigns in the region.</description>
-  </item>
-  <item>
-    <title>Russian celebrity journalist Ksenia Sobchak says hackers accessed Telegram channels via email breach</title>
-    <link>https://therecord.media/ksenia-sobchak-russian-hackers-leak</link>
-    <guid isPermaLink="true">https://therecord.media/ksenia-sobchak-russian-hackers-leak</guid>
-    <pubDate>Mon, 13 Jul 2026 17:15:00 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://therecord.media/ksenia-sobchak-russian-hackers-leak">The Record (Recorded Future)</source>
-    <description>Following the breach of several of her Telegram channels, controversial Russian journalist Ksenia Sobchak claimed published screenshots of her correspondence with political figures were fake.</description>
   </item>
   <item>
     <title>Europe strikes out against Russia’s Turla over espionage, ‘destructive attacks’</title>
@@ -119,24 +101,6 @@
     <category>RU</category>
     <source url="https://www.ncsc.gov.uk/news/uk-and-allies-urge-critical-sectors-to-improve-defences-against-russian-intelligence-targeting">NCSC UK</source>
     <description>New advisory highlights Russian state cyber actors’ global exploitation of poorly configured routers</description>
-  </item>
-  <item>
-    <title>EU sanctions Russian GRU military hackers over cyberattacks</title>
-    <link>https://www.bleepingcomputer.com/news/security/eu-and-uk-hit-russia-with-first-joint-cyber-sanctions-package/</link>
-    <guid isPermaLink="true">https://www.bleepingcomputer.com/news/security/eu-and-uk-hit-russia-with-first-joint-cyber-sanctions-package/</guid>
-    <pubDate>Mon, 13 Jul 2026 11:19:05 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://www.bleepingcomputer.com/news/security/eu-and-uk-hit-russia-with-first-joint-cyber-sanctions-package/">BleepingComputer</source>
-    <description>The European Union and the United Kingdom jointly sanctioned dozens of Russian individuals and entities and accused Russia of coordinating a network of hacking groups responsible for attacks across Europe. [...]</description>
-  </item>
-  <item>
-    <title>US and allies warn of Russian critical infrastructure attacks</title>
-    <link>https://www.bleepingcomputer.com/news/security/us-and-allies-share-defense-tips-against-russian-hackers-targeting-critical-infrastructure/</link>
-    <guid isPermaLink="true">https://www.bleepingcomputer.com/news/security/us-and-allies-share-defense-tips-against-russian-hackers-targeting-critical-infrastructure/</guid>
-    <pubDate>Mon, 13 Jul 2026 09:32:23 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://www.bleepingcomputer.com/news/security/us-and-allies-share-defense-tips-against-russian-hackers-targeting-critical-infrastructure/">BleepingComputer</source>
-    <description>Cybersecurity agencies from the United States and eight other countries have issued a joint warning that Russian state hackers are targeting vulnerable and poorly configured routers to infiltrate critical infrastructure networks. [...]</description>
   </item>
   <item>
     <title>Hackers Weaponize Balochistan Police Portal in Multi-Group Espionage Campaigns</title>
@@ -263,42 +227,6 @@
     <category>CN</category>
     <source url="https://www.darkreading.com/threat-intelligence/china-linked-group-targets-southeast-asia-critical-systems">Dark Reading</source>
     <description>The group compromised at least 10 regional organizations, including two state-owned entities, and deployed a new backdoor.</description>
-  </item>
-  <item>
-    <title>Iran, Russia, China Target Water Systems for Sabotage</title>
-    <link>https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage</link>
-    <guid isPermaLink="true">https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage</guid>
-    <pubDate>Mon, 29 Jun 2026 19:12:08 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage">Dark Reading</source>
-    <description>Nation-state attackers breach water systems through weak passwords, exposed PLCs, and poor segmentation — not sophisticated malware.</description>
-  </item>
-  <item>
-    <title>Iran, Russia, China Target Water Systems for Sabotage</title>
-    <link>https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage</link>
-    <guid isPermaLink="true">https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage</guid>
-    <pubDate>Mon, 29 Jun 2026 19:12:08 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage">Dark Reading</source>
-    <description>Nation-state attackers breach water systems through weak passwords, exposed PLCs, and poor segmentation — not sophisticated malware.</description>
-  </item>
-  <item>
-    <title>Iran, Russia, China Target Water Systems for Sabotage</title>
-    <link>https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage</link>
-    <guid isPermaLink="true">https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage</guid>
-    <pubDate>Mon, 29 Jun 2026 19:12:08 GMT</pubDate>
-    <category>IR</category>
-    <source url="https://www.darkreading.com/ics-ot-security/iran-russia-china-target-water-systems-sabotage">Dark Reading</source>
-    <description>Nation-state attackers breach water systems through weak passwords, exposed PLCs, and poor segmentation — not sophisticated malware.</description>
-  </item>
-  <item>
-    <title>Russian Intelligence Services Continue to Target Commercial Messaging Applications</title>
-    <link>https://www.cisa.gov/resources-tools/resources/russian-intelligence-services-continue-target-commercial-messaging-applications</link>
-    <guid isPermaLink="true">https://www.cisa.gov/resources-tools/resources/russian-intelligence-services-continue-target-commercial-messaging-applications</guid>
-    <pubDate>Fri, 26 Jun 2026 12:00:00 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://www.cisa.gov/resources-tools/resources/russian-intelligence-services-continue-target-commercial-messaging-applications">CISA Advisories</source>
-    <description>CISA and the Federal Bureau of Investigation (FBI) issued an updated Public Service Announcement (PSA) warning of Russian Intelligence Services (RIS) cyber threat actors targeting commercial messaging applications in ongoing phishing campaigns. This PSA is an update to the March 2026 Russian Intelligence Services Target Commercial Messaging Application Accounts and provides recent tactics, recommended mitigations, and samples of phishing messages.&amp;nbsp;</description>
   </item>
   <item>
     <title>Gamaredon in 2025: Leveraging tunnels, workers, dead drops, and new alliances</title>
