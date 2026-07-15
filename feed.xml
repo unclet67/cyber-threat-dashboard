@@ -22,15 +22,6 @@
     <description>Dutch intelligence officials report that at least one Russian agency is compromising internet-connected cameras across Europe to spy on military logistics and Ukrainian personnel.</description>
   </item>
   <item>
-    <title>&apos;The bots are alive!&apos; Jailbroken Gemini spun up new C2 server for Russian fraudster in just 6 minutes</title>
-    <link>https://www.theregister.com/research/2026/07/14/the-bots-are-alive-jailbroken-gemini-spun-up-new-c2-server-for-russian-fraudster-in-just-6-minutes/5270131</link>
-    <guid isPermaLink="true">https://www.theregister.com/research/2026/07/14/the-bots-are-alive-jailbroken-gemini-spun-up-new-c2-server-for-russian-fraudster-in-just-6-minutes/5270131</guid>
-    <pubDate>Tue, 14 Jul 2026 12:15:00 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://www.theregister.com/research/2026/07/14/the-bots-are-alive-jailbroken-gemini-spun-up-new-c2-server-for-russian-fraudster-in-just-6-minutes/5270131">The Register — Security</source>
-    <description>Human did 10% of the job, AI did 90%</description>
-  </item>
-  <item>
     <title>US, Allies Warn of Russian Cyberattacks Targeting Critical Infrastructure Routers</title>
     <link>https://www.securityweek.com/us-allies-warn-of-russian-cyberattacks-targeting-critical-infrastructure-routers/</link>
     <guid isPermaLink="true">https://www.securityweek.com/us-allies-warn-of-russian-cyberattacks-targeting-critical-infrastructure-routers/</guid>
@@ -38,15 +29,6 @@
     <category>RU</category>
     <source url="https://www.securityweek.com/us-allies-warn-of-russian-cyberattacks-targeting-critical-infrastructure-routers/">SecurityWeek</source>
     <description>Multiple state-sponsored APTs are compromising poorly secured devices across critical infrastructure sector networks. The post US, Allies Warn of Russian Cyberattacks Targeting Critical Infrastructure Routers appeared first on SecurityWeek .</description>
-  </item>
-  <item>
-    <title>UK charges five persons linked to fraud platform behind more than a million scam calls</title>
-    <link>https://www.helpnetsecurity.com/2026/07/14/russian-coms-nca-charges-scam-calls/</link>
-    <guid isPermaLink="true">https://www.helpnetsecurity.com/2026/07/14/russian-coms-nca-charges-scam-calls/</guid>
-    <pubDate>Tue, 14 Jul 2026 09:18:14 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://www.helpnetsecurity.com/2026/07/14/russian-coms-nca-charges-scam-calls/">Help Net Security</source>
-    <description>Five people have been charged in the UK following a National Crime Agency (NCA) investigation into Russian Coms, a caller ID spoofing service used by fraudsters. Ayoub Sehailia, 28, Zakkaria Sehailia, 30, Usman Din, 30, Denis Ozmus, 29, and Fadila Salem, 53, all of London, are charged with offences that include conspiracy to supply articles for use in fraud, transferring and converting criminal property, and, for Zakkaria Sehailia, failing to comply with a notice to … More → The post UK charges </description>
   </item>
   <item>
     <title>Weak Security Continues to Fuel Russian Cyberattacks</title>
@@ -65,15 +47,6 @@
     <category>RU</category>
     <source url="https://cyberscoop.com/eu-uk-russian-cyberespionage-sanctions/">CyberScoop</source>
     <description>The EU, its members and the U.K. took action against Russian government officials and others while attributing the winter cyberattacks against Poland’s energy grid to the FSB. The post Europe strikes out against Russia’s Turla over espionage, ‘destructive attacks’ appeared first on CyberScoop .</description>
-  </item>
-  <item>
-    <title>EU and UK officially blame Russian spies for cyberattack on Poland&apos;s power grid</title>
-    <link>https://www.theregister.com/security/2026/07/13/uk-eu-officially-pin-poland-energy-cyberattack-on-russia/5270458</link>
-    <guid isPermaLink="true">https://www.theregister.com/security/2026/07/13/uk-eu-officially-pin-poland-energy-cyberattack-on-russia/5270458</guid>
-    <pubDate>Mon, 13 Jul 2026 15:39:52 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://www.theregister.com/security/2026/07/13/uk-eu-officially-pin-poland-energy-cyberattack-on-russia/5270458">The Register — Security</source>
-    <description>Sweeping sanctions and condemnation follow op that could have left half a million without power in the depths of winter</description>
   </item>
   <item>
     <title>Officials once again warn defenders that Russian hackers are targeting network devices</title>
@@ -139,24 +112,6 @@
     <description>Obscurity isn&apos;t a defense. If your company has any Internet-facing vulnerability, you&apos;re at risk from multiple threats.</description>
   </item>
   <item>
-    <title>Suspected Chinese snoops caught breaking into universities&apos; Roundcube mailservers</title>
-    <link>https://www.theregister.com/security/2026/07/08/suspected-chinese-snoops-caught-breaking-into-universities-roundcube-mailservers/5268778</link>
-    <guid isPermaLink="true">https://www.theregister.com/security/2026/07/08/suspected-chinese-snoops-caught-breaking-into-universities-roundcube-mailservers/5268778</guid>
-    <pubDate>Wed, 08 Jul 2026 21:35:13 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.theregister.com/security/2026/07/08/suspected-chinese-snoops-caught-breaking-into-universities-roundcube-mailservers/5268778">The Register — Security</source>
-    <description>Proofpoint researcher tells The Reg: &apos;We estimate the total volume of targets would be a few dozen&apos;</description>
-  </item>
-  <item>
-    <title>China tells devs to ditch Claude Code over &apos;backdoor code&apos; fears</title>
-    <link>https://www.theregister.com/security/2026/07/08/china-ditch-older-claude-versions-with-backdoor-code/5268371</link>
-    <guid isPermaLink="true">https://www.theregister.com/security/2026/07/08/china-ditch-older-claude-versions-with-backdoor-code/5268371</guid>
-    <pubDate>Wed, 08 Jul 2026 13:58:07 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.theregister.com/security/2026/07/08/china-ditch-older-claude-versions-with-backdoor-code/5268371">The Register — Security</source>
-    <description>National vulnerability database claims monitoring mechanism can forward Chinese users&apos; data to remote servers</description>
-  </item>
-  <item>
     <title>What Happens if China Hacks the US Water Supply? I Went to a Secret War Game to Find Out</title>
     <link>https://www.wired.com/story/what-happens-if-china-hacks-the-us-water-supply-war-game-volt-typhoon/</link>
     <guid isPermaLink="true">https://www.wired.com/story/what-happens-if-china-hacks-the-us-water-supply-war-game-volt-typhoon/</guid>
@@ -173,15 +128,6 @@
     <category>CN</category>
     <source url="https://www.proofpoint.com/us/blog/threat-insight/one-email-closer-edge-unkmasstraction-physics-exploitation">Proofpoint Threat Insight</source>
     <description>Analyst note: Proofpoint uses the UNK_ designator to define clusters of activity that are still developing and have not been observed for long enough to receive a numerical TA designation. Key Findings Since May 2026, Proofpoint Threat Research has been tracking a suspected China-aligned threat cluster named UNK_MassTraction exploiting Roundcube mailservers belonging to the physics and engineering departments of US and Canadian universities. The campaigns exploit multiple n-day vulnerabilities i</description>
-  </item>
-  <item>
-    <title>Spain collars alleged pro-Russia hacktivist after FBI tip-off</title>
-    <link>https://www.theregister.com/security/2026/07/07/alleged-pro-russia-hacktivist-arrested-in-palencia/5267569</link>
-    <guid isPermaLink="true">https://www.theregister.com/security/2026/07/07/alleged-pro-russia-hacktivist-arrested-in-palencia/5267569</guid>
-    <pubDate>Tue, 07 Jul 2026 10:30:50 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://www.theregister.com/security/2026/07/07/alleged-pro-russia-hacktivist-arrested-in-palencia/5267569">The Register — Security</source>
-    <description>Palencia man suspected of links to CARR, Z-Pentest, and NoName057(16), plus helping a Ukrainian hacker flee to Russia</description>
   </item>
   <item>
     <title>&apos;BusySnake&apos; Infostealer Slithers Into Critical Infrastructure Networks</title>
@@ -218,15 +164,6 @@
     <category>RU</category>
     <source url="https://securelist.com/tr/armored-likho-apt-with-busysnake-stealer/120292/">Kaspersky Securelist</source>
     <description>An inside look at the active Armored Likho APT campaign. The attackers are using spear-phishing, AI-generated loaders, and a new Python-based tool, BusySnake Stealer, to target organizations in Russia, Kazakhstan, and Brazil.</description>
-  </item>
-  <item>
-    <title>Startup sues Palo Alto Networks&apos; Koi Security, saying an AI-hallucinated report falsely linked it to Chinese espionage</title>
-    <link>https://www.theregister.com/legal/2026/07/02/startup-sues-palo-alto-networks-koi-security-saying-an-ai-hallucinated-report-falsely-linked-it-to-chinese-espionage/5266201</link>
-    <guid isPermaLink="true">https://www.theregister.com/legal/2026/07/02/startup-sues-palo-alto-networks-koi-security-saying-an-ai-hallucinated-report-falsely-linked-it-to-chinese-espionage/5266201</guid>
-    <pubDate>Thu, 02 Jul 2026 22:47:46 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.theregister.com/legal/2026/07/02/startup-sues-palo-alto-networks-koi-security-saying-an-ai-hallucinated-report-falsely-linked-it-to-chinese-espionage/5266201">The Register — Security</source>
-    <description>MeetingTV wants to see the evidence</description>
   </item>
   <item>
     <title>China-Linked Group Targets Southeast Asia Critical Systems</title>
@@ -319,15 +256,6 @@
     <description>Warnings about helpdesk impersonation scams and Iran-linked hackers targeting critical sectors in the US, plus the most damaging scams of 2025 - here&apos;s some of what made the headlines this month</description>
   </item>
   <item>
-    <title>Defending against China-nexus covert networks of compromised devices</title>
-    <link>https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</link>
-    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
-    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
-    <description>Explaining the widespread shift in tactics, techniques and procedures (TTPs) towards networks of compromised infrastructure, and how to defend against it</description>
-  </item>
-  <item>
     <title>International cyber agencies share fresh advice to defend against China-linked covert networks</title>
     <link>https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</link>
     <guid isPermaLink="true">https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</guid>
@@ -335,6 +263,15 @@
     <category>CN</category>
     <source url="https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks">NCSC UK</source>
     <description>New advisory highlights how to defend against attacker tactics believed to be used by China-linked actors to hide malicious cyber activity.</description>
+  </item>
+  <item>
+    <title>Executive Summary: Defending against China-nexus covert networks of compromised devices</title>
+    <link>https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</link>
+    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
+    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
+    <description>Organisations should map and baseline their edge device traffic, especially VPN and remote access connections, and adopt dynamic threat feed filtering that includes known covert network indicators.</description>
   </item>
   <item>
     <title>GopherWhisper: A burrow full of malware</title>
