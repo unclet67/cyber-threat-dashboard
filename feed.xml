@@ -4,6 +4,24 @@
   <link>https://unclet67.github.io/cyber-threat-dashboard/</link>
   <description>China / Russia / Iran / North Korea cyber and information-warfare reporting, collected hourly from 27 vetted feeds.</description>
   <item>
+    <title>Zelensky appoints Ukraine&apos;s acting security service chief as acting defense minister</title>
+    <link>https://therecord.media/ukraine-acting-defense-minister-yevhenii-khmara</link>
+    <guid isPermaLink="true">https://therecord.media/ukraine-acting-defense-minister-yevhenii-khmara</guid>
+    <pubDate>Fri, 17 Jul 2026 12:50:00 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://therecord.media/ukraine-acting-defense-minister-yevhenii-khmara">The Record (Recorded Future)</source>
+    <description>Yevhenii Khmara, a major general with deep experience in intelligence, counterterrorism and long-range strikes against Russia, is Ukraine&apos;s new acting defense minister.</description>
+  </item>
+  <item>
+    <title>Armenia Detains Russian Tourist on U.S. Warrant for REvil Hacker, Lawyers Say Wrong Man</title>
+    <link>https://thehackernews.com/2026/07/armenia-detains-russian-tourist-on-us.html</link>
+    <guid isPermaLink="true">https://thehackernews.com/2026/07/armenia-detains-russian-tourist-on-us.html</guid>
+    <pubDate>Fri, 17 Jul 2026 10:53:31 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://thehackernews.com/2026/07/armenia-detains-russian-tourist-on-us.html">The Hacker News</source>
+    <description>Armenia has held a Russian tourist named Aleksandr Ermakov in a detention center since June 28, on a U.S. extradition request for a REvil ransomware suspect named Aleksandr Ermakov. His wife, Maria Yurova, told REN TV that border officers pulled him out of the departure hall at Yerevan&apos;s Zvartnots airport, held up a phone with a photo of him off his VKontakte page, and walked him into a side</description>
+  </item>
+  <item>
     <title>New GoSerpent Malware Targets Southeast Asian Governments and Diplomats for Espionage</title>
     <link>https://thehackernews.com/2026/07/new-goserpent-malware-targets-southeast.html</link>
     <guid isPermaLink="true">https://thehackernews.com/2026/07/new-goserpent-malware-targets-southeast.html</guid>
@@ -20,15 +38,6 @@
     <category>RU</category>
     <source url="https://cyberscoop.com/russian-nationals-medialand-mlcloud-indicted-bulletproof-hosting/">CyberScoop</source>
     <description>Officials accused three Russian nationals, Media Land and ML.Cloud of supporting cyberattacks spanning 21 U.S. states and other countries, resulting in losses surpassing $62 million. The post Russian trio indicted for allegedly running bulletproof hosting providers that spurred cybercrime appeared first on CyberScoop .</description>
-  </item>
-  <item>
-    <title>Sandworm hackers have a CAPTCHA trick for Ukrainians</title>
-    <link>https://therecord.media/ukraine-sandworm-hacks-captcha-powershell</link>
-    <guid isPermaLink="true">https://therecord.media/ukraine-sandworm-hacks-captcha-powershell</guid>
-    <pubDate>Thu, 16 Jul 2026 13:50:00 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://therecord.media/ukraine-sandworm-hacks-captcha-powershell">The Record (Recorded Future)</source>
-    <description>Rather than verifying they are human, the CAPTCHA users are instructed to copy and paste a PowerShell command into their Windows computers.</description>
   </item>
   <item>
     <title>HelloNet campaign — new malicious modules launched through the ViPNet update system</title>
@@ -119,15 +128,6 @@
     <category>RU</category>
     <source url="https://www.ncsc.gov.uk/news/uk-and-allies-urge-critical-sectors-to-improve-defences-against-russian-intelligence-targeting">NCSC UK</source>
     <description>New advisory highlights Russian state cyber actors’ global exploitation of poorly configured routers</description>
-  </item>
-  <item>
-    <title>Hackers Weaponize Balochistan Police Portal in Multi-Group Espionage Campaigns</title>
-    <link>https://thehackernews.com/2026/07/hackers-weaponize-balochistan-police.html</link>
-    <guid isPermaLink="true">https://thehackernews.com/2026/07/hackers-weaponize-balochistan-police.html</guid>
-    <pubDate>Sat, 11 Jul 2026 17:49:31 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://thehackernews.com/2026/07/hackers-weaponize-balochistan-police.html">The Hacker News</source>
-    <description>Cybersecurity researchers have disclosed details of sustained cyber espionage activity against several Pakistani law enforcement organizations undertaken by suspected China- and India-aligned threat actors between February 2024 and April 2026. &quot;At Balochistan Police, the compromised assets included servers hosting web applications that manage police and citizen data, such as criminal and</description>
   </item>
   <item>
     <title>Iran&apos;s Cyber Crosshairs Focus Beyond Critical Infrastructure</title>
@@ -299,6 +299,15 @@
     <category>IR</category>
     <source url="https://www.welivesecurity.com/en/videos/month-security-tony-anscombe-april-2026/">ESET WeLiveSecurity</source>
     <description>Warnings about helpdesk impersonation scams and Iran-linked hackers targeting critical sectors in the US, plus the most damaging scams of 2025 - here&apos;s some of what made the headlines this month</description>
+  </item>
+  <item>
+    <title>International cyber agencies share fresh advice to defend against China-linked covert networks</title>
+    <link>https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</link>
+    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</guid>
+    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks">NCSC UK</source>
+    <description>New advisory highlights how to defend against attacker tactics believed to be used by China-linked actors to hide malicious cyber activity.</description>
   </item>
   <item>
     <title>Executive Summary: Defending against China-nexus covert networks of compromised devices</title>
