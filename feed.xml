@@ -4,6 +4,15 @@
   <link>https://unclet67.github.io/cyber-threat-dashboard/</link>
   <description>China / Russia / Iran / North Korea cyber and information-warfare reporting, collected hourly from 27 vetted feeds.</description>
   <item>
+    <title>In Other News: Iran Tracks US Military Phones, CrashStealer macOS Malware, CVD Blueprint</title>
+    <link>https://www.securityweek.com/in-other-news-iran-tracks-us-military-phones-crashstealer-macos-malware-cvd-blueprint/</link>
+    <guid isPermaLink="true">https://www.securityweek.com/in-other-news-iran-tracks-us-military-phones-crashstealer-macos-malware-cvd-blueprint/</guid>
+    <pubDate>Fri, 17 Jul 2026 14:28:21 GMT</pubDate>
+    <category>IR</category>
+    <source url="https://www.securityweek.com/in-other-news-iran-tracks-us-military-phones-crashstealer-macos-malware-cvd-blueprint/">SecurityWeek</source>
+    <description>Noteworthy stories that might have slipped under the radar: OpenClaw AI agents exploited via WhatsApp, ransomware hits naval defense firm TKMS, Lidl discloses data breach. The post In Other News: Iran Tracks US Military Phones, CrashStealer macOS Malware, CVD Blueprint appeared first on SecurityWeek .</description>
+  </item>
+  <item>
     <title>Zelensky appoints Ukraine&apos;s acting security service chief as acting defense minister</title>
     <link>https://therecord.media/ukraine-acting-defense-minister-yevhenii-khmara</link>
     <guid isPermaLink="true">https://therecord.media/ukraine-acting-defense-minister-yevhenii-khmara</guid>
@@ -56,15 +65,6 @@
     <category>CN</category>
     <source url="https://thehackernews.com/2026/07/daxin-resurfaces-in-taiwan-alongside.html">The Hacker News</source>
     <description>An advanced malware previously attributed to a China-linked threat actor has resurfaced after more than four years within a Taiwan manufacturing firm, along with a previously unreported backdoor dubbed Stupig. Daxin (&quot;srt64.sys&quot;), as the kernel-mode rootkit is referred to, was first documented by Broadcom-owned Symantec in March 2022, with evidence indicating its use in targeted attacks aimed</description>
-  </item>
-  <item>
-    <title>Russian hackers trojanize WebEx, Zoom apps to push Starland malware</title>
-    <link>https://www.bleepingcomputer.com/news/security/russian-hackers-trojanize-webex-zoom-apps-to-push-starland-malware/</link>
-    <guid isPermaLink="true">https://www.bleepingcomputer.com/news/security/russian-hackers-trojanize-webex-zoom-apps-to-push-starland-malware/</guid>
-    <pubDate>Thu, 16 Jul 2026 10:19:34 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://www.bleepingcomputer.com/news/security/russian-hackers-trojanize-webex-zoom-apps-to-push-starland-malware/">BleepingComputer</source>
-    <description>A financially motivated Russian threat actor tracked as UAT-11795 is using trojanized software to steal credentials and cryptocurrency by deploying a new backdoor called Starland RAT. [...]</description>
   </item>
   <item>
     <title>UAT-11795 deploys novel Starland RAT and bespoke WLDR C2 implant in financially motivated campaign</title>
@@ -301,6 +301,15 @@
     <description>Warnings about helpdesk impersonation scams and Iran-linked hackers targeting critical sectors in the US, plus the most damaging scams of 2025 - here&apos;s some of what made the headlines this month</description>
   </item>
   <item>
+    <title>Defending against China-nexus covert networks of compromised devices</title>
+    <link>https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</link>
+    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
+    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
+    <description>Explaining the widespread shift in tactics, techniques and procedures (TTPs) towards networks of compromised infrastructure, and how to defend against it</description>
+  </item>
+  <item>
     <title>International cyber agencies share fresh advice to defend against China-linked covert networks</title>
     <link>https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</link>
     <guid isPermaLink="true">https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</guid>
@@ -308,15 +317,6 @@
     <category>CN</category>
     <source url="https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks">NCSC UK</source>
     <description>New advisory highlights how to defend against attacker tactics believed to be used by China-linked actors to hide malicious cyber activity.</description>
-  </item>
-  <item>
-    <title>Executive Summary: Defending against China-nexus covert networks of compromised devices</title>
-    <link>https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</link>
-    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
-    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
-    <description>Organisations should map and baseline their edge device traffic, especially VPN and remote access connections, and adopt dynamic threat feed filtering that includes known covert network indicators.</description>
   </item>
   <item>
     <title>GopherWhisper: A burrow full of malware</title>
