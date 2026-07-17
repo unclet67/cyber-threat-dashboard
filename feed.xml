@@ -4,6 +4,15 @@
   <link>https://unclet67.github.io/cyber-threat-dashboard/</link>
   <description>China / Russia / Iran / North Korea cyber and information-warfare reporting, collected hourly from 27 vetted feeds.</description>
   <item>
+    <title>New GoSerpent Malware Targets Southeast Asian Governments and Diplomats for Espionage</title>
+    <link>https://thehackernews.com/2026/07/new-goserpent-malware-targets-southeast.html</link>
+    <guid isPermaLink="true">https://thehackernews.com/2026/07/new-goserpent-malware-targets-southeast.html</guid>
+    <pubDate>Fri, 17 Jul 2026 08:46:45 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://thehackernews.com/2026/07/new-goserpent-malware-targets-southeast.html">The Hacker News</source>
+    <description>Cybersecurity researchers have discovered a previously undocumented malware called GoSerpent that has been put to use in cyber attacks targeting entities in Southeast Asia since late 2025 with a focus on long-term access and intelligence gathering. Russian cybersecurity company Kaspersky, which uncovered the activity in February 2026, said it was aimed at government and diplomatic entities in</description>
+  </item>
+  <item>
     <title>Russian trio indicted for allegedly running bulletproof hosting providers that spurred cybercrime</title>
     <link>https://cyberscoop.com/russian-nationals-medialand-mlcloud-indicted-bulletproof-hosting/</link>
     <guid isPermaLink="true">https://cyberscoop.com/russian-nationals-medialand-mlcloud-indicted-bulletproof-hosting/</guid>
@@ -29,15 +38,6 @@
     <category>RU</category>
     <source url="https://securelist.com/tr/hellonet-vipnet/120700/">Kaspersky Securelist</source>
     <description>We identified targeted infection attempts against large Russian organizations using the ViPNet update system (a software suite for creating secure networks).</description>
-  </item>
-  <item>
-    <title>Russian cybercriminal used jailbroken Gemini CLI to rebuild botnet infrastructure in six minutes</title>
-    <link>https://www.helpnetsecurity.com/2026/07/16/jailbroken-google-gemini-cli-botnet/</link>
-    <guid isPermaLink="true">https://www.helpnetsecurity.com/2026/07/16/jailbroken-google-gemini-cli-botnet/</guid>
-    <pubDate>Thu, 16 Jul 2026 12:08:46 GMT</pubDate>
-    <category>RU</category>
-    <source url="https://www.helpnetsecurity.com/2026/07/16/jailbroken-google-gemini-cli-botnet/">Help Net Security</source>
-    <description>A Russian-speaking threat actor known as “bandcampro” used a jailbroken Gemini CLI, Google’s open-source terminal-based AI agent, to deploy and operate a small command-and-control (C2) botnet, according to TrendAI. Operational overview (Source: TrendAI) In more than 200 sessions between March 19 and April 21, 2026, the threat actor worked with Gemini to deploy and operate infrastructure that controlled eight computers inside a dental clinic and gain access to the clinic’s OpenDental database. Po</description>
   </item>
   <item>
     <title>Daxin Resurfaces in Taiwan Alongside Stupig Pre-Login SYSTEM Backdoor</title>
@@ -67,6 +67,15 @@
     <description>Cisco Talos is disclosing UAT-11795, a sophisticated, Russian-speaking, financially motivated adversary that has been conducting a malicious campaign targeting users in the U.S. and Europe since at least June 2025.</description>
   </item>
   <item>
+    <title>&apos;The bots are alive!&apos; Jailbroken Gemini spun up new C2 server for Russian fraudster in just 6 minutes</title>
+    <link>https://www.theregister.com/research/2026/07/14/the-bots-are-alive-jailbroken-gemini-spun-up-new-c2-server-for-russian-fraudster-in-just-6-minutes/5270131</link>
+    <guid isPermaLink="true">https://www.theregister.com/research/2026/07/14/the-bots-are-alive-jailbroken-gemini-spun-up-new-c2-server-for-russian-fraudster-in-just-6-minutes/5270131</guid>
+    <pubDate>Tue, 14 Jul 2026 12:15:00 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.theregister.com/research/2026/07/14/the-bots-are-alive-jailbroken-gemini-spun-up-new-c2-server-for-russian-fraudster-in-just-6-minutes/5270131">The Register — Security</source>
+    <description>Human did 10% of the job, AI did 90%</description>
+  </item>
+  <item>
     <title>Weak Security Continues to Fuel Russian Cyberattacks</title>
     <link>https://www.darkreading.com/endpoint-security/weak-security-fuel-russian-cyberattacks</link>
     <guid isPermaLink="true">https://www.darkreading.com/endpoint-security/weak-security-fuel-russian-cyberattacks</guid>
@@ -74,6 +83,15 @@
     <category>RU</category>
     <source url="https://www.darkreading.com/endpoint-security/weak-security-fuel-russian-cyberattacks">Dark Reading</source>
     <description>In a first, the UK and the EU jointly imposed sanctions on Russian individuals and entities for cyberattacks and disinformation campaigns in the region.</description>
+  </item>
+  <item>
+    <title>EU and UK officially blame Russian spies for cyberattack on Poland&apos;s power grid</title>
+    <link>https://www.theregister.com/security/2026/07/13/uk-eu-officially-pin-poland-energy-cyberattack-on-russia/5270458</link>
+    <guid isPermaLink="true">https://www.theregister.com/security/2026/07/13/uk-eu-officially-pin-poland-energy-cyberattack-on-russia/5270458</guid>
+    <pubDate>Mon, 13 Jul 2026 15:39:52 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.theregister.com/security/2026/07/13/uk-eu-officially-pin-poland-energy-cyberattack-on-russia/5270458">The Register — Security</source>
+    <description>Sweeping sanctions and condemnation follow op that could have left half a million without power in the depths of winter</description>
   </item>
   <item>
     <title>Improve Router Hygiene to Protect Against Russian State-Sponsored Targeting</title>
@@ -121,6 +139,24 @@
     <description>Obscurity isn&apos;t a defense. If your company has any Internet-facing vulnerability, you&apos;re at risk from multiple threats.</description>
   </item>
   <item>
+    <title>Suspected Chinese snoops caught breaking into universities&apos; Roundcube mailservers</title>
+    <link>https://www.theregister.com/security/2026/07/08/suspected-chinese-snoops-caught-breaking-into-universities-roundcube-mailservers/5268778</link>
+    <guid isPermaLink="true">https://www.theregister.com/security/2026/07/08/suspected-chinese-snoops-caught-breaking-into-universities-roundcube-mailservers/5268778</guid>
+    <pubDate>Wed, 08 Jul 2026 21:35:13 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.theregister.com/security/2026/07/08/suspected-chinese-snoops-caught-breaking-into-universities-roundcube-mailservers/5268778">The Register — Security</source>
+    <description>Proofpoint researcher tells The Reg: &apos;We estimate the total volume of targets would be a few dozen&apos;</description>
+  </item>
+  <item>
+    <title>China tells devs to ditch Claude Code over &apos;backdoor code&apos; fears</title>
+    <link>https://www.theregister.com/security/2026/07/08/china-ditch-older-claude-versions-with-backdoor-code/5268371</link>
+    <guid isPermaLink="true">https://www.theregister.com/security/2026/07/08/china-ditch-older-claude-versions-with-backdoor-code/5268371</guid>
+    <pubDate>Wed, 08 Jul 2026 13:58:07 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.theregister.com/security/2026/07/08/china-ditch-older-claude-versions-with-backdoor-code/5268371">The Register — Security</source>
+    <description>National vulnerability database claims monitoring mechanism can forward Chinese users&apos; data to remote servers</description>
+  </item>
+  <item>
     <title>What Happens if China Hacks the US Water Supply? I Went to a Secret War Game to Find Out</title>
     <link>https://www.wired.com/story/what-happens-if-china-hacks-the-us-water-supply-war-game-volt-typhoon/</link>
     <guid isPermaLink="true">https://www.wired.com/story/what-happens-if-china-hacks-the-us-water-supply-war-game-volt-typhoon/</guid>
@@ -137,6 +173,15 @@
     <category>CN</category>
     <source url="https://www.proofpoint.com/us/blog/threat-insight/one-email-closer-edge-unkmasstraction-physics-exploitation">Proofpoint Threat Insight</source>
     <description>Analyst note: Proofpoint uses the UNK_ designator to define clusters of activity that are still developing and have not been observed for long enough to receive a numerical TA designation. Key Findings Since May 2026, Proofpoint Threat Research has been tracking a suspected China-aligned threat cluster named UNK_MassTraction exploiting Roundcube mailservers belonging to the physics and engineering departments of US and Canadian universities. The campaigns exploit multiple n-day vulnerabilities i</description>
+  </item>
+  <item>
+    <title>Spain collars alleged pro-Russia hacktivist after FBI tip-off</title>
+    <link>https://www.theregister.com/security/2026/07/07/alleged-pro-russia-hacktivist-arrested-in-palencia/5267569</link>
+    <guid isPermaLink="true">https://www.theregister.com/security/2026/07/07/alleged-pro-russia-hacktivist-arrested-in-palencia/5267569</guid>
+    <pubDate>Tue, 07 Jul 2026 10:30:50 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.theregister.com/security/2026/07/07/alleged-pro-russia-hacktivist-arrested-in-palencia/5267569">The Register — Security</source>
+    <description>Palencia man suspected of links to CARR, Z-Pentest, and NoName057(16), plus helping a Ukrainian hacker flee to Russia</description>
   </item>
   <item>
     <title>&apos;BusySnake&apos; Infostealer Slithers Into Critical Infrastructure Networks</title>
@@ -256,22 +301,13 @@
     <description>Warnings about helpdesk impersonation scams and Iran-linked hackers targeting critical sectors in the US, plus the most damaging scams of 2025 - here&apos;s some of what made the headlines this month</description>
   </item>
   <item>
-    <title>Defending against China-nexus covert networks of compromised devices</title>
-    <link>https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</link>
-    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
+    <title>Executive Summary: Defending against China-nexus covert networks of compromised devices</title>
+    <link>https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</link>
+    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices</guid>
     <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
     <category>CN</category>
-    <source url="https://www.ncsc.gov.uk/news/defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
-    <description>Explaining the widespread shift in tactics, techniques and procedures (TTPs) towards networks of compromised infrastructure, and how to defend against it</description>
-  </item>
-  <item>
-    <title>International cyber agencies share fresh advice to defend against China-linked covert networks</title>
-    <link>https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</link>
-    <guid isPermaLink="true">https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks</guid>
-    <pubDate>Thu, 23 Apr 2026 12:00:00 GMT</pubDate>
-    <category>CN</category>
-    <source url="https://www.ncsc.gov.uk/news/international-cyber-agencies-fresh-advice-defend-against-china-linked-covert-networks">NCSC UK</source>
-    <description>New advisory highlights how to defend against attacker tactics believed to be used by China-linked actors to hide malicious cyber activity.</description>
+    <source url="https://www.ncsc.gov.uk/news/executive-summary-defending-against-china-nexus-covert-networks-of-compromised-devices">NCSC UK</source>
+    <description>Organisations should map and baseline their edge device traffic, especially VPN and remote access connections, and adopt dynamic threat feed filtering that includes known covert network indicators.</description>
   </item>
   <item>
     <title>GopherWhisper: A burrow full of malware</title>
