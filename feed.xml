@@ -4,6 +4,24 @@
   <link>https://unclet67.github.io/cyber-threat-dashboard/</link>
   <description>China / Russia / Iran / North Korea cyber and information-warfare reporting, collected hourly from 27 vetted feeds.</description>
   <item>
+    <title>The Good, the Bad and the Ugly in Cybersecurity – Week 29</title>
+    <link>https://www.sentinelone.com/blog/the-good-the-bad-and-the-ugly-in-cybersecurity-week-29-8/</link>
+    <guid isPermaLink="true">https://www.sentinelone.com/blog/the-good-the-bad-and-the-ugly-in-cybersecurity-week-29-8/</guid>
+    <pubDate>Fri, 17 Jul 2026 16:40:44 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.sentinelone.com/blog/the-good-the-bad-and-the-ugly-in-cybersecurity-week-29-8/">SentinelOne Blog</source>
+    <description>Authorities sanction Russian-based cybercriminals, attackers deploy Starland malware, and 300 imposter GitHub repos push BoryptGrab infostealer.</description>
+  </item>
+  <item>
+    <title>GoldenEyeDog Subgroup Linked to DigiCert Breach and Code-Signing Certificate Theft</title>
+    <link>https://thehackernews.com/2026/07/goldeneyedog-subgroup-linked-to.html</link>
+    <guid isPermaLink="true">https://thehackernews.com/2026/07/goldeneyedog-subgroup-linked-to.html</guid>
+    <pubDate>Fri, 17 Jul 2026 16:39:16 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://thehackernews.com/2026/07/goldeneyedog-subgroup-linked-to.html">The Hacker News</source>
+    <description>Cybersecurity researchers have attributed the April 2026 DigiCert security incident to a threat activity cluster dubbed CylindricalCanine. Expel, which shared technical details of the event, described the threat actor as a sub-group of GoldenEyeDog (aka APT-Q-27, Dragon Breath, and Miuuti Group), a Chinese cybercrime group known for its targeting of the gambling and gaming sectors using</description>
+  </item>
+  <item>
     <title>In Other News: Iran Tracks US Military Phones, CrashStealer macOS Malware, CVD Blueprint</title>
     <link>https://www.securityweek.com/in-other-news-iran-tracks-us-military-phones-crashstealer-macos-malware-cvd-blueprint/</link>
     <guid isPermaLink="true">https://www.securityweek.com/in-other-news-iran-tracks-us-military-phones-crashstealer-macos-malware-cvd-blueprint/</guid>
