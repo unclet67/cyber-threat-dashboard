@@ -85,6 +85,15 @@
     <description>We identified targeted infection attempts against large Russian organizations using the ViPNet update system (a software suite for creating secure networks).</description>
   </item>
   <item>
+    <title>Russian cybercriminal used jailbroken Gemini CLI to rebuild botnet infrastructure in six minutes</title>
+    <link>https://www.helpnetsecurity.com/2026/07/16/jailbroken-google-gemini-cli-botnet/</link>
+    <guid isPermaLink="true">https://www.helpnetsecurity.com/2026/07/16/jailbroken-google-gemini-cli-botnet/</guid>
+    <pubDate>Thu, 16 Jul 2026 12:08:46 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.helpnetsecurity.com/2026/07/16/jailbroken-google-gemini-cli-botnet/">Help Net Security</source>
+    <description>A Russian-speaking threat actor known as “bandcampro” used a jailbroken Gemini CLI, Google’s open-source terminal-based AI agent, to deploy and operate a small command-and-control (C2) botnet, according to TrendAI. Operational overview (Source: TrendAI) In more than 200 sessions between March 19 and April 21, 2026, the threat actor worked with Gemini to deploy and operate infrastructure that controlled eight computers inside a dental clinic and gain access to the clinic’s OpenDental database. Po</description>
+  </item>
+  <item>
     <title>Daxin Resurfaces in Taiwan Alongside Stupig Pre-Login SYSTEM Backdoor</title>
     <link>https://thehackernews.com/2026/07/daxin-resurfaces-in-taiwan-alongside.html</link>
     <guid isPermaLink="true">https://thehackernews.com/2026/07/daxin-resurfaces-in-taiwan-alongside.html</guid>
