@@ -1,0 +1,95 @@
+{
+  "source": "Curated from public CISA and vendor advisories. Not exhaustive — verify via the linked NVD / CISA KEV entries.",
+  "actors": [
+    {
+      "names": ["APT41", "Wicked Panda", "Brass Typhoon", "Barium", "Winnti", "Double Dragon"],
+      "cves": [
+        { "id": "CVE-2019-19781", "product": "Citrix ADC / Gateway", "note": "2020 global intrusion campaign (FireEye/Mandiant)." },
+        { "id": "CVE-2020-10189", "product": "Zoho ManageEngine Desktop Central", "note": "2020 global campaign." },
+        { "id": "CVE-2019-3396", "product": "Atlassian Confluence", "note": "2020 global campaign." }
+      ]
+    },
+    {
+      "names": ["Hafnium", "Silk Typhoon"],
+      "cves": [
+        { "id": "CVE-2021-26855", "product": "Microsoft Exchange", "note": "ProxyLogon (SSRF)." },
+        { "id": "CVE-2021-26857", "product": "Microsoft Exchange", "note": "ProxyLogon." },
+        { "id": "CVE-2021-26858", "product": "Microsoft Exchange", "note": "ProxyLogon." },
+        { "id": "CVE-2021-27065", "product": "Microsoft Exchange", "note": "ProxyLogon." }
+      ]
+    },
+    {
+      "names": ["Volt Typhoon", "VANGUARD PANDA", "BRONZE SILHOUETTE", "Insidious Taurus"],
+      "cves": [
+        { "id": "CVE-2024-39717", "product": "Versa Director", "note": "Attributed by Lumen Black Lotus Labs / CISA." }
+      ]
+    },
+    {
+      "names": ["APT40", "Leviathan", "Kryptonite Panda", "Gingham Typhoon", "TEMP.Periscope"],
+      "cves": [
+        { "id": "CVE-2021-31207", "product": "Microsoft Exchange", "note": "ProxyShell (CISA AA24-190A)." },
+        { "id": "CVE-2021-34473", "product": "Microsoft Exchange", "note": "ProxyShell." },
+        { "id": "CVE-2021-34523", "product": "Microsoft Exchange", "note": "ProxyShell." },
+        { "id": "CVE-2019-19781", "product": "Citrix ADC", "note": "Edge-device exploitation." },
+        { "id": "CVE-2020-5902", "product": "F5 BIG-IP", "note": "Edge-device exploitation." }
+      ]
+    },
+    {
+      "names": ["APT28", "Fancy Bear", "Forest Blizzard", "Sofacy", "Sednit", "STRONTIUM"],
+      "cves": [
+        { "id": "CVE-2023-23397", "product": "Microsoft Outlook", "note": "NTLM-relay privilege escalation (Microsoft/CISA)." },
+        { "id": "CVE-2022-38028", "product": "Windows Print Spooler", "note": "GooseEgg tool (Microsoft)." },
+        { "id": "CVE-2023-38831", "product": "RARLAB WinRAR", "note": "Spear-phishing archives." }
+      ]
+    },
+    {
+      "names": ["APT29", "Cozy Bear", "Midnight Blizzard", "NOBELIUM", "The Dukes"],
+      "cves": [
+        { "id": "CVE-2023-42793", "product": "JetBrains TeamCity", "note": "SVR exploitation (CISA/NSA AA23-347A)." }
+      ]
+    },
+    {
+      "names": ["Sandworm", "APT44", "Voodoo Bear", "Seashell Blizzard", "Telebots"],
+      "cves": [
+        { "id": "CVE-2014-4114", "product": "Microsoft Windows OLE", "note": "Original Sandworm campaign." },
+        { "id": "CVE-2023-38831", "product": "RARLAB WinRAR", "note": "Ukraine-focused stealer delivery." }
+      ]
+    },
+    {
+      "names": ["APT34", "OilRig", "Helix Kitten", "Hazel Sandstorm", "Crambus"],
+      "cves": [
+        { "id": "CVE-2017-11882", "product": "Microsoft Office Equation Editor", "note": "Weaponized documents." }
+      ]
+    },
+    {
+      "names": ["MuddyWater", "Static Kitten", "Seedworm", "Mango Sandstorm", "Mercury"],
+      "cves": [
+        { "id": "CVE-2017-0199", "product": "Microsoft Office / WordPad", "note": "Weaponized documents." },
+        { "id": "CVE-2017-11882", "product": "Microsoft Office Equation Editor", "note": "Weaponized documents." }
+      ]
+    },
+    {
+      "names": ["Pioneer Kitten", "Fox Kitten", "Parisite", "UNC757", "Rubidium"],
+      "cves": [
+        { "id": "CVE-2019-11510", "product": "Pulse Secure VPN", "note": "Edge-device access (CISA AA20-259A / AA24-241A)." },
+        { "id": "CVE-2019-19781", "product": "Citrix ADC", "note": "Edge-device access." },
+        { "id": "CVE-2022-1388", "product": "F5 BIG-IP", "note": "Edge-device access." }
+      ]
+    },
+    {
+      "names": ["Lazarus Group", "Lazarus", "Hidden Cobra", "Diamond Sleet", "Labyrinth Chollima"],
+      "cves": [
+        { "id": "CVE-2021-44228", "product": "Apache Log4j (Log4Shell)", "note": "Internet-facing exploitation." },
+        { "id": "CVE-2022-0609", "product": "Google Chrome", "note": "Zero-day (Operation, Google TAG)." }
+      ]
+    },
+    {
+      "names": ["Andariel", "Onyx Sleet", "Silent Chollima", "Stonefly"],
+      "cves": [
+        { "id": "CVE-2023-46604", "product": "Apache ActiveMQ", "note": "CISA AA24-207A." },
+        { "id": "CVE-2021-44228", "product": "Apache Log4j (Log4Shell)", "note": "CISA AA24-207A." },
+        { "id": "CVE-2022-24990", "product": "TerraMaster NAS", "note": "CISA AA24-207A." }
+      ]
+    }
+  ]
+}

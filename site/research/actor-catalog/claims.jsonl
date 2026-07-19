@@ -1,0 +1,5 @@
+{"claim_id":"claim-001","claim":"Threat-actor names represent activity clusters rather than guaranteed legal identities.","status":"supported","evidence_ids":["ev-001"]}
+{"claim_id":"claim-002","claim":"Alias and group boundaries can overlap or differ across vendors, so similarity alone should not trigger automatic merging.","status":"supported","evidence_ids":["ev-002"]}
+{"claim_id":"claim-003","claim":"Microsoft contributed 163 source records to this catalog build.","status":"supported","evidence_ids":["ev-003"]}
+{"claim_id":"claim-004","claim":"Google Threat Intelligence/Mandiant contributed 41 public APT designators to this catalog build.","status":"supported","evidence_ids":["ev-004"]}
+{"claim_id":"claim-005","claim":"MISP Galaxy provided the broadest source corpus in this build with 1,017 threat-actor records.","status":"supported","evidence_ids":["ev-005"]}

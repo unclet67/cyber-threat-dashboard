@@ -1,0 +1,7 @@
+{
+  "date": "2026-07-14",
+  "objective": "Build a comprehensive public-source threat actor catalog for the Cyber Threat Dashboard.",
+  "scope": "Named public threat groups and activity clusters from MITRE ATT&CK, Microsoft Threat Intelligence, Google Threat Intelligence/Mandiant, and MISP Galaxy.",
+  "normalization": "Merge exact normalized names and aliases only; preserve similarity-only or disputed relationships as separate records.",
+  "limitations": "No public source is exhaustive. Vendor cluster boundaries and attribution confidence differ."
+}

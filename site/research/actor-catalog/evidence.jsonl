@@ -1,0 +1,5 @@
+{"evidence_id":"ev-001","source_id":"mitre-groups","locator":"Groups index introduction","quote":"Groups are activity clusters that are tracked by a common name in the security community.","supports":["claim-001"]}
+{"evidence_id":"ev-002","source_id":"mitre-groups","locator":"Groups index introduction","quote":"Organizations' group definitions may partially overlap.","supports":["claim-002"]}
+{"evidence_id":"ev-003","source_id":"microsoft-mapping","locator":"dataset rows","observation":"The retrieved official JSON contained 163 publicly mapped Microsoft threat actor records.","supports":["claim-003"]}
+{"evidence_id":"ev-004","source_id":"google-apt","locator":"APT group profiles","observation":"The public Google/Mandiant page exposed 41 distinct normalized APT designators during retrieval.","supports":["claim-004"]}
+{"evidence_id":"ev-005","source_id":"misp-galaxy","locator":"values array","observation":"The retrieved threat-actor cluster contained 1,017 records with aliases, country metadata, and references where available.","supports":["claim-005"]}
