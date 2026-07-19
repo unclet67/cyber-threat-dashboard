@@ -40,6 +40,15 @@
     <description>Noteworthy stories that might have slipped under the radar: OpenClaw AI agents exploited via WhatsApp, ransomware hits naval defense firm TKMS, Lidl discloses data breach. The post In Other News: Iran Tracks US Military Phones, CrashStealer macOS Malware, CVD Blueprint appeared first on SecurityWeek .</description>
   </item>
   <item>
+    <title>Zelensky appoints Ukraine&apos;s acting security service chief as acting defense minister</title>
+    <link>https://therecord.media/ukraine-acting-defense-minister-yevhenii-khmara</link>
+    <guid isPermaLink="true">https://therecord.media/ukraine-acting-defense-minister-yevhenii-khmara</guid>
+    <pubDate>Fri, 17 Jul 2026 12:50:00 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://therecord.media/ukraine-acting-defense-minister-yevhenii-khmara">The Record (Recorded Future)</source>
+    <description>Yevhenii Khmara, a major general with deep experience in intelligence, counterterrorism and long-range strikes against Russia, is Ukraine&apos;s new acting defense minister.</description>
+  </item>
+  <item>
     <title>Armenia Detains Russian Tourist on U.S. Warrant for REvil Hacker, Lawyers Say Wrong Man</title>
     <link>https://thehackernews.com/2026/07/armenia-detains-russian-tourist-on-us.html</link>
     <guid isPermaLink="true">https://thehackernews.com/2026/07/armenia-detains-russian-tourist-on-us.html</guid>
@@ -94,6 +103,15 @@
     <description>Cisco Talos is disclosing UAT-11795, a sophisticated, Russian-speaking, financially motivated adversary that has been conducting a malicious campaign targeting users in the U.S. and Europe since at least June 2025.</description>
   </item>
   <item>
+    <title>&apos;The bots are alive!&apos; Jailbroken Gemini spun up new C2 server for Russian fraudster in just 6 minutes</title>
+    <link>https://www.theregister.com/research/2026/07/14/the-bots-are-alive-jailbroken-gemini-spun-up-new-c2-server-for-russian-fraudster-in-just-6-minutes/5270131</link>
+    <guid isPermaLink="true">https://www.theregister.com/research/2026/07/14/the-bots-are-alive-jailbroken-gemini-spun-up-new-c2-server-for-russian-fraudster-in-just-6-minutes/5270131</guid>
+    <pubDate>Tue, 14 Jul 2026 12:15:00 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.theregister.com/research/2026/07/14/the-bots-are-alive-jailbroken-gemini-spun-up-new-c2-server-for-russian-fraudster-in-just-6-minutes/5270131">The Register — Security</source>
+    <description>Human did 10% of the job, AI did 90%</description>
+  </item>
+  <item>
     <title>Weak Security Continues to Fuel Russian Cyberattacks</title>
     <link>https://www.darkreading.com/endpoint-security/weak-security-fuel-russian-cyberattacks</link>
     <guid isPermaLink="true">https://www.darkreading.com/endpoint-security/weak-security-fuel-russian-cyberattacks</guid>
@@ -101,6 +119,15 @@
     <category>RU</category>
     <source url="https://www.darkreading.com/endpoint-security/weak-security-fuel-russian-cyberattacks">Dark Reading</source>
     <description>In a first, the UK and the EU jointly imposed sanctions on Russian individuals and entities for cyberattacks and disinformation campaigns in the region.</description>
+  </item>
+  <item>
+    <title>EU and UK officially blame Russian spies for cyberattack on Poland&apos;s power grid</title>
+    <link>https://www.theregister.com/security/2026/07/13/uk-eu-officially-pin-poland-energy-cyberattack-on-russia/5270458</link>
+    <guid isPermaLink="true">https://www.theregister.com/security/2026/07/13/uk-eu-officially-pin-poland-energy-cyberattack-on-russia/5270458</guid>
+    <pubDate>Mon, 13 Jul 2026 15:39:52 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.theregister.com/security/2026/07/13/uk-eu-officially-pin-poland-energy-cyberattack-on-russia/5270458">The Register — Security</source>
+    <description>Sweeping sanctions and condemnation follow op that could have left half a million without power in the depths of winter</description>
   </item>
   <item>
     <title>Improve Router Hygiene to Protect Against Russian State-Sponsored Targeting</title>
@@ -139,6 +166,24 @@
     <description>Obscurity isn&apos;t a defense. If your company has any Internet-facing vulnerability, you&apos;re at risk from multiple threats.</description>
   </item>
   <item>
+    <title>Suspected Chinese snoops caught breaking into universities&apos; Roundcube mailservers</title>
+    <link>https://www.theregister.com/security/2026/07/08/suspected-chinese-snoops-caught-breaking-into-universities-roundcube-mailservers/5268778</link>
+    <guid isPermaLink="true">https://www.theregister.com/security/2026/07/08/suspected-chinese-snoops-caught-breaking-into-universities-roundcube-mailservers/5268778</guid>
+    <pubDate>Wed, 08 Jul 2026 21:35:13 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.theregister.com/security/2026/07/08/suspected-chinese-snoops-caught-breaking-into-universities-roundcube-mailservers/5268778">The Register — Security</source>
+    <description>Proofpoint researcher tells The Reg: &apos;We estimate the total volume of targets would be a few dozen&apos;</description>
+  </item>
+  <item>
+    <title>China tells devs to ditch Claude Code over &apos;backdoor code&apos; fears</title>
+    <link>https://www.theregister.com/security/2026/07/08/china-ditch-older-claude-versions-with-backdoor-code/5268371</link>
+    <guid isPermaLink="true">https://www.theregister.com/security/2026/07/08/china-ditch-older-claude-versions-with-backdoor-code/5268371</guid>
+    <pubDate>Wed, 08 Jul 2026 13:58:07 GMT</pubDate>
+    <category>CN</category>
+    <source url="https://www.theregister.com/security/2026/07/08/china-ditch-older-claude-versions-with-backdoor-code/5268371">The Register — Security</source>
+    <description>National vulnerability database claims monitoring mechanism can forward Chinese users&apos; data to remote servers</description>
+  </item>
+  <item>
     <title>What Happens if China Hacks the US Water Supply? I Went to a Secret War Game to Find Out</title>
     <link>https://www.wired.com/story/what-happens-if-china-hacks-the-us-water-supply-war-game-volt-typhoon/</link>
     <guid isPermaLink="true">https://www.wired.com/story/what-happens-if-china-hacks-the-us-water-supply-war-game-volt-typhoon/</guid>
@@ -155,6 +200,15 @@
     <category>CN</category>
     <source url="https://www.proofpoint.com/us/blog/threat-insight/one-email-closer-edge-unkmasstraction-physics-exploitation">Proofpoint Threat Insight</source>
     <description>Analyst note: Proofpoint uses the UNK_ designator to define clusters of activity that are still developing and have not been observed for long enough to receive a numerical TA designation. Key Findings Since May 2026, Proofpoint Threat Research has been tracking a suspected China-aligned threat cluster named UNK_MassTraction exploiting Roundcube mailservers belonging to the physics and engineering departments of US and Canadian universities. The campaigns exploit multiple n-day vulnerabilities i</description>
+  </item>
+  <item>
+    <title>Spain collars alleged pro-Russia hacktivist after FBI tip-off</title>
+    <link>https://www.theregister.com/security/2026/07/07/alleged-pro-russia-hacktivist-arrested-in-palencia/5267569</link>
+    <guid isPermaLink="true">https://www.theregister.com/security/2026/07/07/alleged-pro-russia-hacktivist-arrested-in-palencia/5267569</guid>
+    <pubDate>Tue, 07 Jul 2026 10:30:50 GMT</pubDate>
+    <category>RU</category>
+    <source url="https://www.theregister.com/security/2026/07/07/alleged-pro-russia-hacktivist-arrested-in-palencia/5267569">The Register — Security</source>
+    <description>Palencia man suspected of links to CARR, Z-Pentest, and NoName057(16), plus helping a Ukrainian hacker flee to Russia</description>
   </item>
   <item>
     <title>&apos;BusySnake&apos; Infostealer Slithers Into Critical Infrastructure Networks</title>
