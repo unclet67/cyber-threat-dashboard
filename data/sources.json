@@ -11,6 +11,7 @@
   "countries": {
     "CN": {
       "name": "China",
+      "genericTerms": ["China", "PRC", "Chinese", "Beijing"],
       "flag": "🇨🇳",
       "short": "PRC",
       "color": "CN",
@@ -33,6 +34,7 @@
     },
     "RU": {
       "name": "Russia",
+      "genericTerms": ["Russia", "Russian", "Moscow"],
       "flag": "🇷🇺",
       "short": "Russia",
       "color": "RU",
@@ -56,6 +58,7 @@
     },
     "IR": {
       "name": "Iran",
+      "genericTerms": ["Iran", "Iranian", "Tehran"],
       "flag": "🇮🇷",
       "short": "Iran",
       "color": "IR",
@@ -78,6 +81,7 @@
     },
     "KP": {
       "name": "North Korea",
+      "genericTerms": ["North Korea", "DPRK", "North Korean", "Pyongyang"],
       "flag": "🇰🇵",
       "short": "DPRK",
       "color": "KP",

@@ -2,6 +2,8 @@
 // Pure logic shared by the collector (fetch-news.mjs) and the unit tests.
 // No I/O here — everything is deterministic and testable.
 
+export { buildClassifier, buildRelationshipClassifier, scoreArticle } from '../intel-model.mjs';
+
 export const escapeRegex = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 export function decode(s) {
@@ -43,21 +45,6 @@ export function parseItems(xml) {
     date: decode(tag(b, 'pubDate') || tag(b, 'updated') || tag(b, 'published') || tag(b, 'dc:date') || tag(b, 'date')),
     desc: decode(tag(b, 'description') || tag(b, 'summary') || tag(b, 'content')),
   }));
-}
-
-// Build the country classifier: strong terms match anywhere; ambiguous (weak) terms only in
-// the title — avoids false positives like "MSS" (managed security services) tagging China.
-export function buildClassifier(countries, weakTerms = []) {
-  const WEAK = new Set(weakTerms);
-  const rxFor = terms => terms.length ? new RegExp('\\b(' + terms.map(escapeRegex).join('|') + ')\\b', 'i') : null;
-  const RX = Object.fromEntries(Object.entries(countries).map(([c, v]) => {
-    const all = [v.name, ...v.terms];
-    return [c, { strong: rxFor(all.filter(t => !WEAK.has(t))), weak: rxFor(all.filter(t => WEAK.has(t))) }];
-  }));
-  return (title, desc) => Object.keys(RX).filter(c => {
-    const { strong, weak } = RX[c];
-    return (strong && strong.test(`${title} ${desc}`)) || (weak && weak.test(title));
-  });
 }
 
 // Fuzzy cross-outlet dedup helpers (same story, different headline/outlet).

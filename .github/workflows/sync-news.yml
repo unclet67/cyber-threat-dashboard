@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -31,25 +31,34 @@ jobs:
         with:
           node-version: '20'
 
+      # Generated data is kept out of main. Restore the latest snapshot so the
+      # rolling archive and daily enrichment survive between workflow runs.
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            data/news.json
+            data/kev.json
+            data/archive.json
+            data/attack.json
+            data/epss.json
+            feed.xml
+          key: generated-data-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            generated-data-${{ runner.os }}-
+
       - name: Collect news.json and kev.json
         run: node scripts/fetch-news.mjs
 
-      - name: Commit data if it changed
-        run: |
-          git add data/news.json data/kev.json data/archive.json feed.xml
-          if git diff --cached --quiet; then
-            echo "No data changes — nothing to commit."
-          else
-            git config user.name  "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git commit -m "chore: refresh news + KEV feed [skip ci]"
-            # Rebase-and-retry: another workflow (news/enrichment/deploy) may push
-            # concurrently; our file sets are disjoint, so rebasing is always safe.
-            for i in 1 2 3; do
-              git pull --rebase origin main && git push && break
-              echo "push attempt $i failed; retrying" && sleep 5
-            done
-          fi
+      - uses: actions/cache/save@v4
+        with:
+          path: |
+            data/news.json
+            data/kev.json
+            data/archive.json
+            data/attack.json
+            data/epss.json
+            feed.xml
+          key: generated-data-${{ runner.os }}-${{ github.run_id }}
 
       # Publish the refreshed site (including news.json) to Pages.
       - uses: actions/configure-pages@v5

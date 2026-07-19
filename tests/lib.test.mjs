@@ -6,7 +6,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
-import { decode, extractLink, parseItems, buildClassifier, sigWords, jaccard, norm, hostOf } from '../scripts/lib.mjs';
+import { decode, extractLink, parseItems, buildClassifier, buildRelationshipClassifier, scoreArticle, sigWords, jaccard, norm, hostOf } from '../scripts/lib.mjs';
 
 // ---------- feed parsing ----------
 
@@ -80,6 +80,35 @@ test('multi-country stories tag every matching country', () => {
 
 test('whole-word matching: no substring hits', () => {
   assert.deepEqual(classify('Graduate students research plasma', ''), []);
+});
+
+test('relationship classifier separates sponsor, victim, criminal, and incidental geography', () => {
+  const countries={RU:{name:'Russia',genericTerms:['Russia','Russian','Moscow'],terms:['Russia','Russian','Moscow','GRU','Sandworm']}};
+  const rel=buildRelationshipClassifier(countries,['GRU']);
+  assert.equal(rel('Russian state-sponsored hackers target energy networks','').relationships[0].relationship,'sponsor');
+  assert.equal(rel('Improve defenses against Russian state-sponsored targeting','').relationships[0].relationship,'sponsor');
+  assert.equal(rel('Hackers target Russian government agencies with malware','').relationships[0].relationship,'victim');
+  assert.equal(rel('Russian national indicted for ransomware attacks','').relationships[0].relationship,'criminal');
+  assert.deepEqual(rel('Kaspersky publishes malware research','A Russian cybersecurity company analyzed the sample.').relationships,[]);
+  assert.deepEqual(rel('Software market update','Revenue increased in Russia.').relationships,[]);
+});
+
+test('priority scoring is bounded and explains operational relevance', () => {
+  const now=Date.parse('2026-07-19T12:00:00Z');
+  const scored=scoreArticle({title:'State-sponsored wiper exploits CVE-2026-9999 against power grid',seendate:'20260719100000',relationship:'sponsor',confidence:'high'},{now,kevSet:new Set(['CVE-2026-9999'])});
+  assert.equal(scored.level,'Priority');
+  assert.ok(scored.score<=100);
+  assert.ok(scored.reasons.includes('explicit sponsor attribution'));
+  assert.ok(scored.reasons.includes('CISA KEV match'));
+});
+
+test('HTML exposes an accessible tab contract and Workbench backup controls', () => {
+  const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
+  assert.match(html,/role="tablist"/);
+  assert.equal((html.match(/role="tabpanel"/g)||[]).length,9);
+  assert.match(html,/aria-live="polite"/);
+  assert.match(html,/id="workbenchExport"/);
+  assert.match(html,/id="workbenchImport"/);
 });
 
 // ---------- fuzzy dedup ----------

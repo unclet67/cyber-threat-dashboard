@@ -7,7 +7,7 @@
 // source of truth shared with the browser UI). Pure logic lives in lib.mjs (tested).
 
 import { readFile, writeFile } from 'node:fs/promises';
-import { buildClassifier, parseItems, sigWords, jaccard, norm, fmtSeen, hostOf, runPool, buildRss } from './lib.mjs';
+import { buildRelationshipClassifier, parseItems, sigWords, jaccard, norm, fmtSeen, hostOf, runPool, buildRss } from './lib.mjs';
 
 const SOURCES = JSON.parse(await readFile(new URL('../data/sources.json', import.meta.url), 'utf8'));
 const COUNTRIES = SOURCES.countries;
@@ -17,7 +17,7 @@ const LOOKBACK_DAYS = 90;   // matches the UI's largest lookback option
 const MAX_ITEMS = 500;      // cap output size
 const CONCURRENCY = 6;
 
-const classify = buildClassifier(COUNTRIES, SOURCES.weakTerms);
+const classify = buildRelationshipClassifier(COUNTRIES, SOURCES.weakTerms);
 
 async function fetchText(url, ms = 20000) {
   const ctl = new AbortController();
@@ -54,11 +54,23 @@ await runPool(FEEDS, CONCURRENCY, async ([name, url]) => {
       const dt = it.date ? new Date(it.date) : null;
       const valid = dt && !isNaN(dt);
       if (valid && dt.getTime() < cutoff) continue;
-      const codes = classify(it.title, it.desc);
-      if (!codes.length) continue;
+      const classification = classify(it.title, it.desc);
+      if (!classification.relevant) continue;
       const seendate = valid ? fmtSeen(dt) : '';
-      for (const c of codes) {
-        collected.push({ title: it.title, url: it.link, domain: hostOf(it.link), seendate, sourceCountry: name, c, summary: (it.desc || '').slice(0, 500) });
+      for (const relationship of classification.relationships) {
+        collected.push({
+          title: it.title,
+          url: it.link,
+          domain: hostOf(it.link),
+          seendate,
+          sourceCountry: name,
+          c: relationship.country,
+          relationship: relationship.relationship,
+          confidence: relationship.confidence,
+          evidence: relationship.evidence,
+          activityType: classification.activityType,
+          summary: (it.desc || '').slice(0, 500),
+        });
         kept++;
       }
     }
