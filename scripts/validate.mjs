@@ -13,7 +13,10 @@ const ok = m => console.log('✓ ' + m);
 // 1. App JS must parse (compile-only; browser globals are never executed):
 //    app.js plus any inline <script> blocks left in index.html (the pre-paint theme snippet).
 try {
-  new vm.Script(readFileSync('app.js', 'utf8'), { filename: 'app.js' });
+  const appSource = readFileSync('app.js', 'utf8');
+  // The browser app is an ES module; its imported model is syntax-checked
+  // separately. Remove only the import declaration for compile-only VM parsing.
+  new vm.Script(appSource.replace(/^import[^;]+;\s*/m, ''), { filename: 'app.js' });
   const html = readFileSync('index.html', 'utf8');
   const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/gi)].map(m => m[1]);
   scripts.forEach((code, i) => new vm.Script(code, { filename: `index.html#script${i}` }));
@@ -36,6 +39,8 @@ try {
     for (const k of ['title', 'url', 'c']) if (!it[k]) throw new Error(`item ${i} missing "${k}"`);
     if (!COUNTRIES.has(it.c)) throw new Error(`item ${i} invalid country "${it.c}"`);
     if (!/^https?:\/\//.test(it.url)) throw new Error(`item ${i} url not http(s): ${it.url}`);
+    if ('relationship' in it && !['sponsor','victim','criminal','context'].includes(it.relationship)) throw new Error(`item ${i} invalid relationship "${it.relationship}"`);
+    if ('confidence' in it && !['high','medium','low'].includes(it.confidence)) throw new Error(`item ${i} invalid confidence "${it.confidence}"`);
   });
   if ('feedsStatus' in data) {
     if (!Array.isArray(data.feedsStatus)) throw new Error('"feedsStatus" is not an array');

@@ -23,6 +23,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Overlay the latest generated snapshot without adding hourly bot commits
+      # to the source branch. A first deployment safely falls back to checked-in data.
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            data/news.json
+            data/kev.json
+            data/archive.json
+            data/attack.json
+            data/epss.json
+            feed.xml
+          key: generated-data-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            generated-data-${{ runner.os }}-
+
       - uses: actions/configure-pages@v5
 
       # Static single-file site — publish the repo root as-is (no build step).

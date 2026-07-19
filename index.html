@@ -25,30 +25,31 @@
 
   <div class="controls">
     <div class="tabs" id="tabs" role="tablist" aria-label="Dashboard sections">
-      <button type="button" class="tab active" role="tab" aria-selected="true" data-tab="overview">Overview</button>
-      <button type="button" class="tab" role="tab" aria-selected="false" data-tab="news">Recent News</button>
-      <button type="button" class="tab" role="tab" aria-selected="false" data-tab="actors">APT / Actor Catalog</button>
-      <button type="button" class="tab" role="tab" aria-selected="false" data-tab="crosswalk">Name Crosswalk</button>
-      <button type="button" class="tab" role="tab" aria-selected="false" data-tab="kev">KEV (Exploited)</button>
-      <button type="button" class="tab" role="tab" aria-selected="false" data-tab="diamond">Diamond Model</button>
-      <button type="button" class="tab" role="tab" aria-selected="false" data-tab="trends">Trends</button>
-      <button type="button" class="tab" role="tab" aria-selected="false" data-tab="workbench">Workbench</button>
-      <button type="button" class="tab" role="tab" aria-selected="false" data-tab="sources">Sources & Caveats</button>
+      <button type="button" id="overviewTab" class="tab active" role="tab" aria-selected="true" aria-controls="overviewPanel" tabindex="0" data-tab="overview">Overview</button>
+      <button type="button" id="newsTab" class="tab" role="tab" aria-selected="false" aria-controls="newsPanel" tabindex="-1" data-tab="news">Recent News</button>
+      <button type="button" id="actorsTab" class="tab" role="tab" aria-selected="false" aria-controls="actorsPanel" tabindex="-1" data-tab="actors">APT / Actor Catalog</button>
+      <button type="button" id="crosswalkTab" class="tab" role="tab" aria-selected="false" aria-controls="crosswalkPanel" tabindex="-1" data-tab="crosswalk">Name Crosswalk</button>
+      <button type="button" id="kevTab" class="tab" role="tab" aria-selected="false" aria-controls="kevPanel" tabindex="-1" data-tab="kev">KEV (Exploited)</button>
+      <button type="button" id="diamondTab" class="tab" role="tab" aria-selected="false" aria-controls="diamondPanel" tabindex="-1" data-tab="diamond">Diamond Model</button>
+      <button type="button" id="trendsTab" class="tab" role="tab" aria-selected="false" aria-controls="trendsPanel" tabindex="-1" data-tab="trends">Trends</button>
+      <button type="button" id="workbenchTab" class="tab" role="tab" aria-selected="false" aria-controls="workbenchPanel" tabindex="-1" data-tab="workbench">Workbench</button>
+      <button type="button" id="sourcesTab" class="tab" role="tab" aria-selected="false" aria-controls="sourcesPanel" tabindex="-1" data-tab="sources">Sources & Caveats</button>
     </div>
     <button class="primary" id="refreshNews">Refresh live news</button>
     <button id="refreshActors">Refresh APT catalog</button>
     <button id="copyBrief" title="Copy the current (filtered) news as a Markdown brief">📋 Copy brief</button>
     <button id="themeToggle" title="Toggle light/dark theme" aria-label="Toggle theme">🌙</button>
-    <select id="countryFilter" title="Country filter">
+    <label class="control-field"><span>Country</span><select id="countryFilter">
       <option value="ALL">All countries</option><option value="CN">China</option><option value="RU">Russia</option><option value="IR">Iran</option><option value="KP">North Korea</option>
-    </select>
-    <select id="newsSource" title="News source"><option value="prebuilt" selected>Source: Hourly feed (prebuilt)</option><option value="gdelt">Source: GDELT API</option><option value="gnews">Source: Google News</option><option value="feeds">Source: Cyber news feeds (live)</option></select>
-    <select id="timespan" title="News lookback"><option value="7">7 days</option><option value="14" selected>14 days</option><option value="30">30 days</option><option value="90">90 days</option></select>
-    <input id="search" placeholder="Search actors/news/aliases, e.g., Salt Typhoon, GRU, wiper, disinformation" />
-    <span class="status" id="status">Ready</span>
+    </select></label>
+    <label class="control-field news-control"><span>Source</span><select id="newsSource"><option value="prebuilt" selected>Hourly feed (prebuilt)</option><option value="gdelt">GDELT API</option><option value="gnews">Google News</option><option value="feeds">Cyber news feeds (live)</option></select></label>
+    <label class="control-field news-control"><span>Lookback</span><select id="timespan"><option value="7">7 days</option><option value="14" selected>14 days</option><option value="30">30 days</option><option value="90">90 days</option></select></label>
+    <label class="control-field news-control"><span>Sort</span><select id="newsSort"><option value="priority">Operational priority</option><option value="newest" selected>Newest first</option></select></label>
+    <label class="control-field search-field"><span>Search</span><input id="search" placeholder="Actor, alias, CVE, sector, or activity" /></label>
+    <span class="status" id="status" role="status" aria-live="polite">Ready</span>
   </div>
 
-  <section id="overviewPanel">
+  <section id="overviewPanel" role="tabpanel" aria-labelledby="overviewTab" tabindex="0">
     <div class="two-col">
       <div class="card">
         <h2>Operational Snapshot</h2>
@@ -57,30 +58,34 @@
         <div class="side-list" id="snapshotList"></div>
       </div>
       <div class="card">
-        <h2>Priority Watch Items</h2>
-        <div class="small-card"><h3>China</h3><p>Telecom backbone access, critical-infrastructure pre-positioning, strategic technology theft, diaspora and Taiwan-related influence activity.</p></div>
-        <div class="small-card"><h3>Russia</h3><p>Ukraine-war cyber effects, GRU-linked disruptive operations, NATO/defense targeting, election influence and hack-and-leak activity.</p></div>
-        <div class="small-card"><h3>Iran</h3><p>Regional espionage, destructive/wiper activity, hack-and-leak personas, ransomware enablement, Israeli and Gulf targets.</p></div>
-        <div class="small-card"><h3>North Korea</h3><p>Cryptocurrency theft, defense/aerospace espionage, supply-chain abuse, fake IT worker schemes, nuclear/missile program support.</p></div>
+        <h2>What Changed</h2>
+        <p class="section-note">The newest high-priority collection changes in the selected window. Scores explain why an item surfaced.</p>
+        <div class="side-list" id="changeList"></div>
+        <details class="standing-priorities"><summary>Standing collection priorities</summary>
+          <div class="small-card"><h3>China</h3><p>Telecom backbone access, critical-infrastructure pre-positioning, strategic technology theft, diaspora and Taiwan-related influence activity.</p></div>
+          <div class="small-card"><h3>Russia</h3><p>Ukraine-war cyber effects, GRU-linked disruptive operations, NATO/defense targeting, election influence and hack-and-leak activity.</p></div>
+          <div class="small-card"><h3>Iran</h3><p>Regional espionage, destructive/wiper activity, hack-and-leak personas, ransomware enablement, Israeli and Gulf targets.</p></div>
+          <div class="small-card"><h3>North Korea</h3><p>Cryptocurrency theft, defense/aerospace espionage, supply-chain abuse, fake IT worker schemes, nuclear/missile program support.</p></div>
+        </details>
       </div>
     </div>
   </section>
 
-  <section id="newsPanel" class="hidden">
+  <section id="newsPanel" class="hidden" role="tabpanel" aria-labelledby="newsTab" tabindex="0" hidden>
     <h2>Recent Cyber & Information Warfare News</h2>
     <p class="section-note">Pick a <strong>Source</strong>, then click <strong>Refresh live news</strong>. <strong>Hourly feed (prebuilt)</strong> — the default — loads <span class="mono">data/news.json</span>, regenerated hourly by a GitHub Action that fetches all feeds server-side (no proxy, instant load). The live sources below fetch on demand from the browser. <strong>GDELT API</strong> queries the global news index directly. <strong>Google News</strong> runs the same per-country cyber query against Google News and aggregates thousands of outlets. <strong>Cyber news feeds</strong> reaches out to major cyber-security outlets (The Hacker News, BleepingComputer, Krebs, CyberScoop, The Register, WIRED, and more — see Sources tab) via their RSS feeds and keeps Big&nbsp;4-relevant items. Results are deduplicated and ranked by likely operational relevance.</p>
     <div id="feedHealth" class="section-note" style="margin-top:-2px"></div>
     <div id="newsGrid" class="news-grid"></div>
   </section>
 
-  <section id="actorsPanel" class="hidden">
+  <section id="actorsPanel" class="hidden" role="tabpanel" aria-labelledby="actorsTab" tabindex="0" hidden>
     <h2>APT / Threat Actor Catalog</h2>
     <p class="section-note">The catalog attempts to live-load all CN/RU/IR/KP country-tagged actors from MISP Galaxy Threat Actor and Microsoft Activity Group data. If live sources fail, it displays the built-in curated fallback list.</p>
     <div class="table-wrap"><table id="actorTable"><thead><tr><th>Country</th><th>Actor / Group</th><th>Aliases / Vendor Names</th><th>Notes</th><th>Source</th></tr></thead><tbody></tbody></table></div>
     <p class="section-note" style="margin-top:8px">Tip: click any actor row to open its <strong>name crosswalk</strong> — every vendor's name for that actor.</p>
   </section>
 
-  <section id="crosswalkPanel" class="hidden">
+  <section id="crosswalkPanel" class="hidden" role="tabpanel" aria-labelledby="crosswalkTab" tabindex="0" hidden>
     <h2>Threat Actor Name Crosswalk</h2>
     <p class="section-note">Answer one question fast: <em>"this vendor calls the actor X — what does everyone else call it?"</em> Search a name or alias below; each row maps the actor across vendor naming schemes (derived from the loaded catalog + the provider conventions). Click a row for the full breakdown.</p>
     <div class="table-wrap"><table id="crosswalkTable"><thead><tr><th>Actor</th><th>Providers</th><th>Origin</th><th>Other names &amp; aliases</th></tr></thead><tbody></tbody></table></div>
@@ -90,14 +95,14 @@
     </div>
   </section>
 
-  <section id="kevPanel" class="hidden">
+  <section id="kevPanel" class="hidden" role="tabpanel" aria-labelledby="kevTab" tabindex="0" hidden>
     <h2>Known Exploited Vulnerabilities (CISA KEV)</h2>
     <p class="section-note">The most recently added entries from the <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog" target="_blank" rel="noreferrer">CISA KEV catalog</a> — vulnerabilities with reliable evidence of active in-the-wild exploitation. KEV is <strong>not nation-state attributed</strong>, so it is not filtered by country; use the search box to filter by CVE, vendor, or product. The 🔒 flag marks known ransomware-campaign use; <strong>EPSS</strong> is FIRST’s modeled probability of exploitation in the next 30 days (refreshed daily).</p>
     <div id="kevHealth" class="section-note" style="margin-top:-2px"></div>
     <div class="table-wrap"><table id="kevTable"><thead><tr><th>CVE</th><th>Vendor / Product</th><th>Vulnerability</th><th>Added</th><th>Due</th><th title="FIRST EPSS — probability of exploitation in the next 30 days">EPSS</th><th>Ransomware</th><th>Linked actors</th></tr></thead><tbody></tbody></table></div>
   </section>
 
-  <section id="diamondPanel" class="hidden">
+  <section id="diamondPanel" class="hidden" role="tabpanel" aria-labelledby="diamondTab" tabindex="0" hidden>
     <h2>Diamond Model Mapper</h2>
     <p class="section-note">Map a news story onto the <a href="https://www.activeresponse.org/the-diamond-model/" target="_blank" rel="noreferrer">Diamond Model of Intrusion Analysis</a> — Adversary, Capability, Infrastructure, Victim. Pick a story below (or click <strong>◆ Diamond</strong> on any card in Recent News). Vertices are auto-extracted from the headline as a starting point — confirm against the full article.</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:6px">
@@ -106,7 +111,7 @@
     <div id="diamondView"></div>
   </section>
 
-  <section id="trendsPanel" class="hidden">
+  <section id="trendsPanel" class="hidden" role="tabpanel" aria-labelledby="trendsTab" tabindex="0" hidden>
     <h2>Activity Trends</h2>
     <p class="section-note">Stories per country per day, from the rolling archive the hourly sync maintains (<span class="mono">data/archive.json</span>). Hover for exact counts; the table below has the raw data.</p>
     <div id="trendNote" class="section-note"></div>
@@ -119,7 +124,7 @@
     </div>
   </section>
 
-  <section id="workbenchPanel" class="hidden">
+  <section id="workbenchPanel" class="hidden" role="tabpanel" aria-labelledby="workbenchTab" tabindex="0" hidden>
     <h2>Analyst Workbench</h2>
     <p class="section-note">Pins, notes, and watchlists live <strong>in this browser</strong> (localStorage) — nothing leaves your machine. Pin stories from Recent News with the 📌 button; pinned items lead the 📋 Copy brief export.</p>
     <div class="two-col">
@@ -135,11 +140,14 @@
         <h3 style="margin-top:20px">📦 Machine-readable exports</h3>
         <p class="section-note">Export the current (filtered) news — detected actors and CVEs included — as a <strong>STIX 2.1 bundle</strong> for MISP / OpenCTI, or subscribe to the curated stream as <a href="feed.xml">RSS</a> / consume <a href="data/news.json">data/news.json</a> directly.</p>
         <button id="stixExport">⬇ STIX 2.1 bundle (filtered news)</button>
+        <h3 style="margin-top:20px">Browser backup</h3>
+        <p class="section-note">Download or restore your pinned stories, notes, and watch terms. The backup contains no feed data.</p>
+        <div class="backup-actions"><button id="workbenchExport">⬇ Download backup</button><button id="workbenchImport">⬆ Restore backup</button><input id="workbenchFile" type="file" accept="application/json,.json" hidden></div>
       </div>
     </div>
   </section>
 
-  <section id="sourcesPanel" class="hidden">
+  <section id="sourcesPanel" class="hidden" role="tabpanel" aria-labelledby="sourcesTab" tabindex="0" hidden>
     <h2>Sources, Feeds, and Caveats</h2>
     <div class="two-col">
       <div class="card">
@@ -154,7 +162,7 @@
           <li><a href="https://www.cisa.gov/news-events/cybersecurity-advisories" target="_blank" rel="noreferrer">CISA Cybersecurity Advisories</a> — U.S. government advisories.</li>
         </ul>
         <h3>Hourly prebuilt feed</h3>
-        <p class="section-note">The default <strong>Hourly feed (prebuilt)</strong> source reads <span class="mono">data/news.json</span>, regenerated every hour by the <span class="mono">Sync news feed</span> GitHub Action (<span class="mono">scripts/fetch-news.mjs</span>). It fetches all feeds server-side — no CORS proxy, no rate limits, instant load — and commits the result. The live sources below remain available as an on-demand fallback.</p>
+        <p class="section-note">The default <strong>Hourly feed (prebuilt)</strong> source reads <span class="mono">data/news.json</span>, regenerated every hour by the <span class="mono">Sync news feed</span> GitHub Action (<span class="mono">scripts/fetch-news.mjs</span>). It fetches all feeds server-side — no CORS proxy, no rate limits, instant load — and publishes a cached data snapshot without adding hourly bot commits to the source branch. The live sources below remain available as an on-demand fallback.</p>
         <h3>Google News &amp; cyber news feeds (RSS)</h3>
         <p class="section-note"><strong>Google News</strong> runs the same per-country cyber query (see Overview) against the Google News RSS search endpoint, aggregating thousands of outlets with a <span class="mono">when:</span> recency window tied to the lookback selector. The <strong>Cyber news feeds</strong> source option reads RSS/Atom from cyber-security press (The Hacker News, BleepingComputer, Krebs on Security, CyberScoop, SecurityWeek, Dark Reading, The Record, Help Net Security, The Register, WIRED), vendor threat-research blogs (Microsoft, Cisco Talos, Palo Alto Unit 42, CrowdStrike, SentinelOne, ESET, Kaspersky Securelist, Check Point, Fortinet, Proofpoint), and government/community sources (SANS ISC, CISA), then keeps items mentioning China, Russia, Iran, or North Korea. Feeds are fetched with limited concurrency through the proxy. Because most outlets do not send CORS headers, feed requests are routed through a public CORS proxy (allorigins / corsproxy.io). If feeds fail to load, the proxy may be rate-limited or down — switch back to the GDELT source. Edit the feed list in <span class="mono">data/sources.json</span> (the single source of truth for the hourly collector and this page) to add or remove outlets.</p>
       </div>
@@ -189,6 +197,6 @@
     <div id="cwBody"></div>
   </div>
 </div>
-<script src="app.js"></script>
+<script type="module" src="app.js"></script>
 </body>
 </html>

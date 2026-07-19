@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -30,25 +30,32 @@ jobs:
         with:
           node-version: '20'
 
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            data/news.json
+            data/kev.json
+            data/archive.json
+            data/attack.json
+            data/epss.json
+            feed.xml
+          key: generated-data-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            generated-data-${{ runner.os }}-
+
       - name: Collect attack.json and epss.json
         run: node scripts/fetch-enrichment.mjs
 
-      - name: Commit data if it changed
-        run: |
-          git add data/attack.json data/epss.json
-          if git diff --cached --quiet; then
-            echo "No enrichment changes — nothing to commit."
-          else
-            git config user.name  "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git commit -m "chore: refresh ATT&CK + EPSS enrichment [skip ci]"
-            # Rebase-and-retry: another workflow (news/enrichment/deploy) may push
-            # concurrently; our file sets are disjoint, so rebasing is always safe.
-            for i in 1 2 3; do
-              git pull --rebase origin main && git push && break
-              echo "push attempt $i failed; retrying" && sleep 5
-            done
-          fi
+      - uses: actions/cache/save@v4
+        with:
+          path: |
+            data/news.json
+            data/kev.json
+            data/archive.json
+            data/attack.json
+            data/epss.json
+            feed.xml
+          key: generated-data-${{ runner.os }}-${{ github.run_id }}
 
       # Publish the refreshed site (including the enrichment data) to Pages.
       - uses: actions/configure-pages@v5

@@ -1,22 +1,17 @@
+import { buildRelationshipClassifier, relationshipLabel, scoreArticle } from './intel-model.mjs';
+
 /* Big 4 Cyber & IW Threat Dashboard — application logic.
    Config: data/sources.json · Data: produced hourly by scripts/fetch-news.mjs */
 let COUNTRIES={  // inline fallback; canonical config in data/sources.json (loaded by loadSources)
-  CN:{name:'China',flag:'🇨🇳',short:'PRC',color:'CN',terms:['China','PRC','Chinese','Beijing','PLA','MSS','Salt Typhoon','Volt Typhoon','Flax Typhoon','APT41','APT40','Mustang Panda','Storm-0558'],focus:'Telecom, critical infrastructure, strategic espionage, IP theft, Taiwan/US targeting, influence activity.'},
-  RU:{name:'Russia',flag:'🇷🇺',short:'Russia',color:'RU',terms:['Russia','Russian','Moscow','GRU','SVR','FSB','Sandworm','APT28','APT29','Fancy Bear','Cozy Bear','Gamaredon','Turla','Star Blizzard'],focus:'Wartime cyber operations, disruptive attacks, NATO/defense espionage, hack-and-leak, election influence.'},
-  IR:{name:'Iran',flag:'🇮🇷',short:'Iran',color:'IR',terms:['Iran','Iranian','Tehran','IRGC','MOIS','APT33','APT34','APT35','APT42','MuddyWater','OilRig','Charming Kitten','CyberAv3ngers'],focus:'Regional espionage, hack-and-leak, wipers, ransomware enablement, Israel/Gulf/US targeting.'},
-  KP:{name:'North Korea',flag:'🇰🇵',short:'DPRK',color:'KP',terms:['North Korea','DPRK','Lazarus','Kimsuky','APT38','APT37','APT43','Andariel','Bluenoroff','Emerald Sleet','Diamond Sleet'],focus:'Crypto theft, defense/aerospace espionage, IT worker schemes, sanctions evasion, nuclear/missile support.'}
+  CN:{name:'China',flag:'🇨🇳',short:'PRC',color:'CN',genericTerms:['China','PRC','Chinese','Beijing'],terms:['China','PRC','Chinese','Beijing','PLA','MSS','Salt Typhoon','Volt Typhoon','Flax Typhoon','APT41','APT40','Mustang Panda','Storm-0558'],focus:'Telecom, critical infrastructure, strategic espionage, IP theft, Taiwan/US targeting, influence activity.'},
+  RU:{name:'Russia',flag:'🇷🇺',short:'Russia',color:'RU',genericTerms:['Russia','Russian','Moscow'],terms:['Russia','Russian','Moscow','GRU','SVR','FSB','Sandworm','APT28','APT29','Fancy Bear','Cozy Bear','Gamaredon','Turla','Star Blizzard'],focus:'Wartime cyber operations, disruptive attacks, NATO/defense espionage, hack-and-leak, election influence.'},
+  IR:{name:'Iran',flag:'🇮🇷',short:'Iran',color:'IR',genericTerms:['Iran','Iranian','Tehran'],terms:['Iran','Iranian','Tehran','IRGC','MOIS','APT33','APT34','APT35','APT42','MuddyWater','OilRig','Charming Kitten','CyberAv3ngers'],focus:'Regional espionage, hack-and-leak, wipers, ransomware enablement, Israel/Gulf/US targeting.'},
+  KP:{name:'North Korea',flag:'🇰🇵',short:'DPRK',color:'KP',genericTerms:['North Korea','DPRK','North Korean','Pyongyang'],terms:['North Korea','DPRK','North Korean','Pyongyang','Lazarus','Kimsuky','APT38','APT37','APT43','Andariel','Bluenoroff','Emerald Sleet','Diamond Sleet'],focus:'Crypto theft, defense/aerospace espionage, IT worker schemes, sanctions evasion, nuclear/missile support.'}
 };
 function escapeRegex(s){return String(s).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
 // Ambiguous short acronyms (e.g. MSS = managed security services) only count in titles; overridden from sources.json.
 let WEAK_TERMS=new Set(['PLA','MSS','GRU','SVR','FSB']);
-function rxFor(terms){return terms.length?new RegExp('\\b('+terms.map(escapeRegex).join('|')+')\\b','i'):null;}
-function buildCountryRx(){return Object.fromEntries(Object.keys(COUNTRIES).map(code=>{
-  const all=[COUNTRIES[code].name,...COUNTRIES[code].terms];
-  return [code,{strong:rxFor(all.filter(t=>!WEAK_TERMS.has(t))),weak:rxFor(all.filter(t=>WEAK_TERMS.has(t)))}];
-}));}
-let COUNTRY_RX=buildCountryRx();
-// Strong terms match anywhere; weak/ambiguous terms only in the title.
-function classifyCountries(title,desc){return Object.keys(COUNTRY_RX).filter(code=>{const{strong,weak}=COUNTRY_RX[code];return (strong&&strong.test(`${title} ${desc||''}`))||(weak&&weak.test(title));});}
+let classifyRelationships=buildRelationshipClassifier(COUNTRIES,[...WEAK_TERMS]);
 // Feeds load from data/sources.json (single source of truth, shared with the collector).
 let CYBER_FEEDS=[];
 async function loadSources(){
@@ -24,7 +19,7 @@ async function loadSources(){
     const r=await fetch('data/sources.json?_='+Date.now(),{cache:'no-store'});
     if(!r.ok) throw new Error(r.status);
     const d=await r.json();
-    if(d&&d.countries&&Array.isArray(d.feeds)){ COUNTRIES=d.countries; CYBER_FEEDS=d.feeds; if(Array.isArray(d.weakTerms)) WEAK_TERMS=new Set(d.weakTerms); COUNTRY_RX=buildCountryRx(); }
+    if(d&&d.countries&&Array.isArray(d.feeds)){ COUNTRIES=d.countries; CYBER_FEEDS=d.feeds; if(Array.isArray(d.weakTerms)) WEAK_TERMS=new Set(d.weakTerms); classifyRelationships=buildRelationshipClassifier(COUNTRIES,[...WEAK_TERMS]); }
   }catch(e){ /* offline: keep the inline fallback COUNTRIES; live feeds unavailable */ }
 }
 // Public CORS proxies, tried in order, so the browser can read feeds that lack CORS headers.
@@ -126,6 +121,7 @@ let actors=[...FALLBACK_ACTORS.map(x=>({...x,source:'Curated fallback'}))];
 let news=[];
 let liveActorLoaded=false;
 let prebuiltMeta=null;
+let dataLoading=true;
 const byId=id=>document.getElementById(id);
 function relTime(iso){
   const t=Date.parse(iso); if(isNaN(t)) return '';
@@ -198,7 +194,7 @@ function renderActors(){
     const refs=(a.refs||[]).map(safeUrl).filter(Boolean).slice(0,2).map((r,i)=>`<a href="${r}" target="_blank" rel="noreferrer">ref ${i+1}</a>`).join(' ');
     const cveN=cvesForActor(a).length; const cveChip=cveN?` <span class="tag high" title="Known exploited CVEs">${cveN} CVE${cveN>1?'s':''}</span>`:'';
     tr.innerHTML=`<td><span class="pill ${a.c}">${COUNTRIES[a.c].flag} ${COUNTRIES[a.c].name}</span></td><td><div class="actor-name">${escapeHtml(a.n)}${cveChip}</div></td><td class="aliases">${(a.a||[]).slice(0,18).map(escapeHtml).join(', ')||'<span class="muted">—</span>'}</td><td>${escapeHtml((a.d||'').slice(0,360))}${a.d&&a.d.length>360?'…':''}</td><td>${escapeHtml(a.source||'')}${refs?'<br>'+refs:''}</td>`;
-    tr.className='clickable'; tr.title='Open name crosswalk'; tr.addEventListener('click',()=>openCrosswalk(a));
+    tr.className='clickable'; tr.title='Open name crosswalk'; tr.tabIndex=0; tr.setAttribute('role','button'); tr.addEventListener('click',()=>openCrosswalk(a)); tr.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openCrosswalk(a);}});
     tbody.appendChild(tr);
   }
 }
@@ -208,9 +204,12 @@ function safeUrl(u){const s=String(u||'').trim();return /^https?:\/\//i.test(s)?
 function renderCards(){
   const wrap=byId('countryCards'); wrap.innerHTML='';
   for(const code of Object.keys(COUNTRIES)){
-    const c=COUNTRIES[code]; const ac=actors.filter(a=>a.c===code).length; const nc=news.filter(n=>n.c===code).length;
+    const c=COUNTRIES[code]; const ac=actors.filter(a=>a.c===code).length; const nc=new Set(news.filter(n=>n.c===code).map(n=>n.url||n.title)).size;
     const div=document.createElement('div'); div.className='card country-card'; div.dataset.country=code;
-    div.innerHTML=`<div class="country-head"><span class="flag">${c.flag}</span><span class="country-name">${c.name}</span><span class="pill ${code}">${c.short}</span></div><div class="stat-row"><div class="stat"><b>${ac}</b><span>actors</span></div><div class="stat"><b>${nc}</b><span>news</span></div><div class="stat"><b>${liveActorLoaded?'Live':'Fallback'}</b><span>APT data</span></div></div><div class="focus">${c.focus}</div>`;
+    const reportValue=dataLoading?'…':nc;
+    const actorValue=dataLoading?'…':ac;
+    const catalogValue=dataLoading?'Loading':(liveActorLoaded?'Live':'Fallback');
+    div.innerHTML=`<div class="country-head"><span class="flag">${c.flag}</span><span class="country-name">${c.name}</span><span class="pill ${code}">${c.short}</span></div><div class="stat-row"><div class="stat"><b>${actorValue}</b><span>actors</span></div><div class="stat"><b>${reportValue}</b><span>matching reports</span></div><div class="stat"><b>${catalogValue}</b><span>actor catalog</span></div></div><div class="focus">${c.focus}</div>`;
     wrap.appendChild(div);
   }
 }
@@ -218,19 +217,36 @@ function renderSnapshot(){
   const wrap=byId('snapshotList'); wrap.innerHTML='';
   for(const code of Object.keys(COUNTRIES)){
     const c=COUNTRIES[code];
-    const topActors=actors.filter(a=>a.c===code).slice(0,7).map(a=>a.n).join(', ');
+    const candidates=news.filter(n=>n.c===code&&n.relationship==='sponsor').map(n=>({n,priority:priorityFor(n)})).sort((a,b)=>b.priority.score-a.priority.score||String(b.n.seendate||'').localeCompare(String(a.n.seendate||'')));
+    const top=candidates[0];
     const div=document.createElement('div'); div.className='small-card';
-    div.innerHTML=`<h3>${c.flag} ${c.name}</h3><p><strong>Focus:</strong> ${c.focus}</p><p><strong>Examples in catalog:</strong> ${escapeHtml(topActors)}${actors.filter(a=>a.c===code).length>7?', …':''}</p>`;
+    if(dataLoading) div.innerHTML=`<h3>${c.flag} ${c.name}</h3><p class="section-note">Loading current reporting…</p>`;
+    else if(top) div.innerHTML=`<h3>${c.flag} ${c.name}</h3><a class="news-title compact-title" href="${safeUrl(top.n.url)||'#'}" target="_blank" rel="noreferrer">${escapeHtml(top.n.title)}</a><p class="section-note">Priority ${top.priority.score}/100 · ${escapeHtml(top.priority.reasons.join(' · '))}</p>`;
+    else div.innerHTML=`<h3>${c.flag} ${c.name}</h3><p><strong>No explicitly attributed reporting matched the selected window.</strong></p><p class="section-note">This is a collection result, not an assessment that no activity occurred. Standing priority: ${escapeHtml(c.focus)}</p>`;
     wrap.appendChild(div);
   }
 }
-function severityFor(article){
-  const t=[article.title,article.summary,article.seendate,article.domain,article.url].join(' ').toLowerCase();
-  const hi=['critical infrastructure','telecom','telecommunications','wiper','zero-day','zero day','cisa','fbi','nsa','sanction','indictment','apt','ransomware','election','influence operation','disinformation'];
-  const med=['hack','malware','espionage','phishing','botnet','propaganda','social media','leak','cyber'];
-  if(hi.some(x=>t.includes(x))) return ['High interest','high'];
-  if(med.some(x=>t.includes(x))) return ['Monitor','medium'];
-  return ['Context','info'];
+function renderChanges(){
+  const wrap=byId('changeList'); if(!wrap) return;
+  if(dataLoading){ wrap.innerHTML='<div class="small-card"><p class="section-note">Loading and scoring current collection…</p></div>'; return; }
+  const seen=new Set();
+  const changes=news.map(n=>({n,priority:priorityFor(n)}))
+    .sort((a,b)=>b.priority.score-a.priority.score||String(b.n.seendate||'').localeCompare(String(a.n.seendate||'')))
+    .filter(({n})=>{ const key=n.url||n.title; if(seen.has(key)) return false; seen.add(key); return true; }).slice(0,4);
+  if(!changes.length){ wrap.innerHTML='<div class="small-card"><p><strong>No reportable changes matched this window.</strong></p><p class="section-note">Try a longer lookback or another source. This describes collection, not adversary inactivity.</p></div>'; return; }
+  wrap.innerHTML=changes.map(({n,priority})=>`<div class="small-card"><div class="news-meta"><span class="tag ${priority.cssClass}">${priority.level} · ${priority.score}/100</span><span>${COUNTRIES[n.c]?.flag||''} ${escapeHtml(relationshipLabel(n.relationship))}</span></div><a class="news-title compact-title" href="${safeUrl(n.url)||'#'}" target="_blank" rel="noreferrer">${escapeHtml(n.title)}</a><p class="score-reasons"><strong>Why:</strong> ${escapeHtml(priority.reasons.join(' · '))}</p></div>`).join('');
+}
+function priorityFor(article){
+  return scoreArticle(article,{kevSet:new Set(kev.map(v=>v.cve))});
+}
+function classifiedCopies(base,title=base.title||'',summary=base.summary||''){
+  const result=classifyRelationships(title,summary);
+  return result.relationships.map(rel=>({...base,c:rel.country,relationship:rel.relationship,confidence:rel.confidence,evidence:rel.evidence,activityType:result.activityType,summary}));
+}
+function normalizeNewsItem(item){
+  if(item.relationship&&item.confidence) return item;
+  const inferred=classifiedCopies(item,item.title,item.summary||'').find(candidate=>candidate.c===item.c);
+  return inferred||{...item,relationship:'context',confidence:'low',activityType:'cyber-activity',evidence:'Legacy feed item; relationship not yet classified.'};
 }
 function queryFor(code){
   const cyber='(cyber OR hack OR hacker OR malware OR ransomware OR espionage OR "zero day" OR vulnerability OR "critical infrastructure" OR telecom OR wiper OR "information warfare" OR disinformation OR propaganda OR "influence operation" OR botnet OR "hack and leak")';
@@ -238,6 +254,7 @@ function queryFor(code){
   return `${cyber} ${country}`;
 }
 async function refreshNewsGdelt(){
+  dataLoading=true; renderCards(); renderSnapshot(); renderNews();
   setStatus('Loading live news…');
   const days=byId('timespan').value; const all=[];
   for(const code of Object.keys(COUNTRIES)){
@@ -245,12 +262,13 @@ async function refreshNewsGdelt(){
     const url=`https://api.gdeltproject.org/api/v2/doc/doc?query=${encodeURIComponent(q)}&mode=ArtList&format=json&maxrecords=25&sort=HybridRel&timespan=${days}d`;
     try{
       const r=await fetchT(url); if(!r.ok) throw new Error(r.status+' '+r.statusText); const j=await r.json();
-      (j.articles||[]).forEach(x=>all.push({...x,c:code}));
+      for(const x of (j.articles||[])) all.push(...classifiedCopies({...x,sourceCountry:x.sourcecountry||x.domain||'GDELT'},x.title||'',x.summary||''));
     }catch(e){ console.warn('News source failed',code,e); }
   }
   const seen=new Set(); news=[];
   for(const n of all){ const key=norm(n.title||'')||n.url; if(!seen.has(key)){seen.add(key); news.push(n);} }
   news.sort((a,b)=>String(b.seendate||'').localeCompare(String(a.seendate||'')));
+  dataLoading=false;
   if(news.length) setStatus(`Loaded ${news.length} live news items`); else setStatus('No live news returned; check browser internet/CORS settings');
   renderAll();
 }
@@ -264,6 +282,7 @@ function refreshNews(){
 }
 // Load the hourly, server-collected feed (news.json) — same-origin, no CORS proxy.
 async function fetchPrebuilt(){
+  dataLoading=true; renderCards(); renderSnapshot(); renderNews();
   setStatus('Loading prebuilt feed…');
   try{
     const r=await fetch('data/news.json?_='+Date.now(),{cache:'no-store'});
@@ -271,7 +290,7 @@ async function fetchPrebuilt(){
     const data=await r.json();
     prebuiltMeta={generated:data.generated||null,feeds:data.feeds||0,status:Array.isArray(data.feedsStatus)?data.feedsStatus:[]};
     const days=parseInt(byId('timespan').value,10)||14; const cutoff=Date.now()-days*86400000;
-    news=(data.items||[]).filter(n=>{
+    news=(data.items||[]).map(normalizeNewsItem).filter(n=>{
       if(!COUNTRIES[n.c]) return false;
       const s=String(n.seendate||''); if(s.length<8) return true;
       const dt=new Date(`${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}T${s.slice(8,10)||'00'}:${s.slice(10,12)||'00'}:${s.slice(12,14)||'00'}Z`);
@@ -285,6 +304,7 @@ async function fetchPrebuilt(){
   }catch(e){
     news=[]; prebuiltMeta=null; setStatus('No prebuilt feed found (news.json) — it is generated hourly by the Sync news feed workflow, or pick a live source.');
   }
+  dataLoading=false;
   renderAll();
 }
 // Cross-origin fetch with a hard timeout so a hung proxy/API can't stall the UI forever.
@@ -326,6 +346,7 @@ function parseFeed(xmlText){
   return out;
 }
 async function fetchCyberFeeds(){
+  dataLoading=true; renderCards(); renderSnapshot(); renderNews();
   setStatus('Reaching out to cyber news sources…');
   const days=parseInt(byId('timespan').value,10)||14; const cutoff=Date.now()-days*86400000;
   const collected=[]; let okFeeds=0;
@@ -335,22 +356,23 @@ async function fetchCyberFeeds(){
       for(const it of items){
         const dt=it.dateStr?new Date(it.dateStr):null; const valid=dt&&!isNaN(dt);
         if(valid&&dt.getTime()<cutoff) continue;
-        const codes=classifyCountries(it.title,it.desc); if(!codes.length) continue;
         let domain=''; try{ domain=new URL(it.link).hostname.replace(/^www\./,''); }catch(e){}
         const seendate=valid?dt.toISOString().replace(/[-:T.Z]/g,'').slice(0,14):'';
-        for(const c of codes) collected.push({title:it.title,url:it.link,domain,seendate,sourceCountry:f.name,c});
+        collected.push(...classifiedCopies({title:it.title,url:it.link,domain,seendate,sourceCountry:f.name},it.title,it.desc));
       }
     }catch(e){ console.warn('Feed failed',f.name,e); }
   });
   const seen=new Set(); news=[];
   for(const n of collected){ const key=n.c+'|'+norm(n.title); if(!seen.has(key)){seen.add(key); news.push(n);} }
   news.sort((a,b)=>String(b.seendate||'').localeCompare(String(a.seendate||'')));
+  dataLoading=false;
   if(news.length) setStatus(`Loaded ${news.length} Big 4-relevant items from ${okFeeds}/${CYBER_FEEDS.length} cyber news feeds`);
   else if(okFeeds) setStatus(`Reached ${okFeeds} feed(s) but found no Big 4-relevant items in the last ${days} days`);
   else setStatus('Could not reach cyber news feeds — the CORS proxy may be unavailable. Try the GDELT source instead.');
   renderAll();
 }
 async function fetchGoogleNews(){
+  dataLoading=true; renderCards(); renderSnapshot(); renderNews();
   setStatus('Searching Google News…');
   const days=parseInt(byId('timespan').value,10)||14;
   const collected=[]; let okQ=0;
@@ -364,13 +386,14 @@ async function fetchGoogleNews(){
         if(i>0){ outlet=title.slice(i+3).trim(); title=title.slice(0,i).trim(); }
         const dt=it.dateStr?new Date(it.dateStr):null; const valid=dt&&!isNaN(dt);
         const seendate=valid?dt.toISOString().replace(/[-:T.Z]/g,'').slice(0,14):'';
-        collected.push({title,url:it.link,domain:outlet||'news.google.com',seendate,sourceCountry:'Google News',c:code});
+        collected.push(...classifiedCopies({title,url:it.link,domain:outlet||'news.google.com',seendate,sourceCountry:'Google News'},title,it.desc));
       }
     }catch(e){ console.warn('Google News query failed',code,e); }
   }));
   const seen=new Set(); news=[];
   for(const n of collected){ const key=n.c+'|'+norm(n.title); if(!seen.has(key)){seen.add(key); news.push(n);} }
   news.sort((a,b)=>String(b.seendate||'').localeCompare(String(a.seendate||'')));
+  dataLoading=false;
   if(news.length) setStatus(`Loaded ${news.length} Google News items across ${okQ}/4 country searches`);
   else if(okQ) setStatus('Google News returned no items — try a longer lookback or another source');
   else setStatus('Could not reach Google News — the CORS proxy may be unavailable. Try another source.');
@@ -405,22 +428,28 @@ function actorsInText(text){
 }
 function renderNews(){
   const wrap=byId('newsGrid'); wrap.innerHTML='';
-  const matched=news.filter(newsMatches);
+  const matched=news.filter(newsMatches).map(n=>({n,priority:priorityFor(n)}));
+  const sort=byId('newsSort')?.value||'newest';
+  matched.sort((a,b)=>sort==='priority'
+    ? b.priority.score-a.priority.score||String(b.n.seendate||'').localeCompare(String(a.n.seendate||''))
+    : String(b.n.seendate||'').localeCompare(String(a.n.seendate||''))||b.priority.score-a.priority.score);
   if(!matched.length){
-    wrap.innerHTML=`<div class="news-card"><div class="news-title">No live articles loaded yet.</div><p class="section-note">The default <strong>Hourly feed (prebuilt)</strong> loads automatically once the Sync news feed workflow has run. Otherwise pick a live <strong>Source</strong> (GDELT API, Google News, or Cyber news feeds) and click “Refresh live news.” If a local <code>file://</code> page blocks network access, host this file over HTTP (e.g. <code>python3 -m http.server</code>) or use the source links in the Sources tab.</p></div>`; return;
+    const title=dataLoading?'Loading current reporting…':'No matching reports in the selected period.';
+    const note=dataLoading?'The dashboard is loading and classifying the latest feed.':'This is a collection result, not evidence that no activity occurred. Try a longer lookback, another source, or broader filters.';
+    wrap.innerHTML=`<div class="news-card empty-state" role="status"><div class="news-title">${title}</div><p class="section-note">${note}</p></div>`; return;
   }
   // Group by article URL so a story tagged to multiple countries shows one card with multiple flags.
   const groups=[]; const byKey=new Map();
-  for(const n of matched){
+  for(const scored of matched){ const n=scored.n;
     const key=n.url||n.title; let g=byKey.get(key);
-    if(!g){ g={item:n,countries:[]}; groups.push(g); byKey.set(key,g); }
-    if(COUNTRIES[n.c]&&!g.countries.includes(n.c)) g.countries.push(n.c);
+    if(!g){ g={item:n,priority:scored.priority,relationships:[]}; groups.push(g); byKey.set(key,g); }
+    if(COUNTRIES[n.c]&&!g.relationships.some(rel=>rel.c===n.c)) g.relationships.push({c:n.c,relationship:n.relationship||'context',confidence:n.confidence||'low'});
   }
   for(const g of groups.slice(0,60)){
-    const n=g.item; const [sev,cls]=severityFor(n); const date=n.seendate?String(n.seendate).replace(/(\d{4})(\d{2})(\d{2}).*/, '$1-$2-$3'):'Recent';
-    const pills=g.countries.map(c=>`<span class="pill ${c}">${COUNTRIES[c].flag} ${COUNTRIES[c].name}</span>`).join('');
+    const n=g.item; const priority=g.priority; const date=n.seendate?String(n.seendate).replace(/(\d{4})(\d{2})(\d{2}).*/, '$1-$2-$3'):'Recent';
+    const pills=g.relationships.map(rel=>`<span class="pill ${rel.c}" title="${escapeHtml(rel.confidence)} confidence">${COUNTRIES[rel.c].flag} ${COUNTRIES[rel.c].name} · ${escapeHtml(relationshipLabel(rel.relationship))}</span>`).join('');
     const div=document.createElement('div'); div.className='news-card';
-    div.innerHTML=`<div class="news-meta">${pills}<span>${escapeHtml(date)}</span><span>${escapeHtml(n.domain||'')}</span></div><a class="news-title" href="${safeUrl(n.url)||'#'}" target="_blank" rel="noreferrer">${escapeHtml(n.title||'Untitled')}</a><div class="tagbar"><span class="tag ${cls}">${sev}</span><span class="tag">${escapeHtml(n.sourceCountry||'source')}</span></div>`;
+    div.innerHTML=`<div class="news-meta">${pills}<span>${escapeHtml(date)}</span><span>${escapeHtml(n.domain||'')}</span></div><a class="news-title" href="${safeUrl(n.url)||'#'}" target="_blank" rel="noreferrer">${escapeHtml(n.title||'Untitled')}</a><div class="tagbar"><span class="tag ${priority.cssClass}" title="${escapeHtml(priority.reasons.join('; '))}">${priority.level} · ${priority.score}/100</span><span class="tag">${escapeHtml(n.activityType||'cyber-activity')}</span><span class="tag">${escapeHtml(n.sourceCountry||'source')}</span></div><p class="score-reasons"><strong>Why:</strong> ${escapeHtml(priority.reasons.join(' · '))}</p>`;
     const acts=actorsInText([n.title,n.summary].filter(Boolean).join(' '));
     if(acts.length){
       const bar=document.createElement('div'); bar.className='actor-tags';
@@ -630,7 +659,7 @@ function renderCrosswalk(){
     const c=COUNTRIES[a.c]||{flag:'',name:a.c};
     const tr=document.createElement('tr'); tr.className='clickable'; tr.title='Open name crosswalk';
     tr.innerHTML=`<td><div class="actor-name">${escapeHtml(a.n)}</div></td><td>${provs.map(escapeHtml).join(', ')||'<span class="muted">—</span>'}</td><td><span class="pill ${a.c}">${c.flag} ${escapeHtml(c.name)}</span></td><td class="aliases">${(a.a||[]).slice(0,14).map(escapeHtml).join(', ')||'—'}</td>`;
-    tr.addEventListener('click',()=>openCrosswalk(a));
+    tr.tabIndex=0; tr.setAttribute('role','button'); tr.addEventListener('click',()=>openCrosswalk(a)); tr.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openCrosswalk(a);}});
     tbody.appendChild(tr);
   }
 }
@@ -712,7 +741,7 @@ function mapToDiamond(item){
   const k=item.url||item.title; const idx=diamondList.findIndex(n=>(n.url||n.title)===k);
   byId('diamondSelect').value=idx>=0?String(idx):''; diamondCurrent=item; renderDiamond();
 }
-function renderAll(){renderCards(); renderSnapshot(); renderActors(); renderNews(); renderFeedHealth(); renderKev(); renderCrosswalk(); renderDiamondOptions(); renderWorkbench(); const pm=byId('newsSource').value==='prebuilt'&&prebuiltMeta&&prebuiltMeta.generated; byId('updatedStamp').textContent=pm?('Feed updated '+relTime(prebuiltMeta.generated)):('Last rendered: '+new Date().toLocaleString());}
+function renderAll(){renderCards(); renderSnapshot(); renderChanges(); renderActors(); renderNews(); renderFeedHealth(); renderKev(); renderCrosswalk(); renderDiamondOptions(); renderWorkbench(); const pm=byId('newsSource').value==='prebuilt'&&prebuiltMeta&&prebuiltMeta.generated; byId('updatedStamp').textContent=pm?('Feed updated '+relTime(prebuiltMeta.generated)):('Last rendered: '+new Date().toLocaleString());}
 // ---- Analyst workbench: pins + notes + keyword watchlist (localStorage only) ----
 function lsGet(k,fb){ try{ const v=JSON.parse(localStorage.getItem('ctd:'+k)); return v==null?fb:v; }catch(e){ return fb; } }
 function lsSet(k,v){ try{ localStorage.setItem('ctd:'+k,JSON.stringify(v)); }catch(e){} }
@@ -751,6 +780,25 @@ function renderWorkbench(){
     s.addEventListener('click',()=>{ watchTerms=watchTerms.filter(x=>x!==t); lsSet('watch',watchTerms); renderWorkbench(); renderNews(); });
     wl.appendChild(s);
   }
+}
+function downloadJson(filename,value){
+  const blob=new Blob([JSON.stringify(value,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; document.body.appendChild(a); a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);
+}
+function exportWorkbench(){
+  downloadJson(`cyber-dashboard-workbench-${new Date().toISOString().slice(0,10)}.json`,{schemaVersion:1,exportedAt:new Date().toISOString(),pins,watchTerms});
+  setStatus(`Workbench backup downloaded — ${Object.keys(pins).length} pin(s), ${watchTerms.length} watch term(s)`);
+}
+async function importWorkbenchFile(file){
+  try{
+    const data=JSON.parse(await file.text());
+    if(data.schemaVersion!==1||!data.pins||typeof data.pins!=='object'||Array.isArray(data.pins)||!Array.isArray(data.watchTerms)) throw new Error('unsupported backup format');
+    const cleanPins={};
+    for(const [key,pin] of Object.entries(data.pins)) if(pin&&typeof pin==='object'&&typeof pin.title==='string') cleanPins[String(key)]={...pin,title:String(pin.title),note:String(pin.note||'')};
+    pins=cleanPins; watchTerms=[...new Set(data.watchTerms.filter(t=>typeof t==='string').map(t=>t.trim()).filter(Boolean))].slice(0,100);
+    lsSet('pins',pins); lsSet('watch',watchTerms); renderWorkbench(); renderNews(); setStatus(`Workbench restored — ${Object.keys(pins).length} pin(s), ${watchTerms.length} watch term(s)`);
+  }catch(e){ setStatus(`Backup not restored: ${e.message}`); }
 }
 // ---- STIX 2.1 export of the current (filtered) news ----
 function stixId(type){ return `${type}--${(crypto.randomUUID?crypto.randomUUID():'00000000-0000-4000-8000-'+String(Date.now()).padStart(12,'0'))}`; }
@@ -827,6 +875,7 @@ function renderTrends(){
   svg+='</svg>';
   el.innerHTML=svg+'<div class="trend-tip" id="trendTip" style="display:none"></div>';
   const svgEl=el.querySelector('svg'), cross=el.querySelector('#trendCross'), tip=byId('trendTip');
+  svgEl.setAttribute('tabindex','0'); svgEl.setAttribute('aria-describedby','trendNote');
   svgEl.addEventListener('mousemove',ev=>{
     const rect=svgEl.getBoundingClientRect(); const sx=(ev.clientX-rect.left)*(W/rect.width);
     const i=Math.max(0,Math.min(es.length-1,Math.round((sx-L)/iw*(es.length-1))));
@@ -864,19 +913,17 @@ function applyHash(){
 }
 window.addEventListener('hashchange',applyHash);
 function activate(tab){
-  document.querySelectorAll('#tabs .tab').forEach(t=>{const on=t.dataset.tab===tab;t.classList.toggle('active',on);t.setAttribute('aria-selected',on?'true':'false');});
-  byId('overviewPanel').classList.toggle('hidden',tab!=='overview');
-  byId('newsPanel').classList.toggle('hidden',tab!=='news');
-  byId('actorsPanel').classList.toggle('hidden',tab!=='actors');
-  byId('crosswalkPanel').classList.toggle('hidden',tab!=='crosswalk');
-  byId('kevPanel').classList.toggle('hidden',tab!=='kev');
-  byId('diamondPanel').classList.toggle('hidden',tab!=='diamond');
-  byId('trendsPanel').classList.toggle('hidden',tab!=='trends');
-  byId('workbenchPanel').classList.toggle('hidden',tab!=='workbench');
-  byId('sourcesPanel').classList.toggle('hidden',tab!=='sources');
+  document.querySelectorAll('#tabs .tab').forEach(t=>{const on=t.dataset.tab===tab;t.classList.toggle('active',on);t.setAttribute('aria-selected',on?'true':'false');t.tabIndex=on?0:-1;});
+  for(const name of ['overview','news','actors','crosswalk','kev','diamond','trends','workbench','sources']){ const panel=byId(name+'Panel'), off=name!==tab; panel.classList.toggle('hidden',off); panel.hidden=off; }
   updateHash();
 }
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>activate(t.dataset.tab)));
+byId('tabs').addEventListener('keydown',e=>{
+  if(!['ArrowRight','ArrowLeft','Home','End'].includes(e.key)) return;
+  const tabs=[...document.querySelectorAll('#tabs .tab')], current=tabs.indexOf(document.activeElement); if(current<0) return;
+  e.preventDefault(); const next=e.key==='Home'?0:e.key==='End'?tabs.length-1:(current+(e.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;
+  tabs[next].focus(); activate(tabs[next].dataset.tab);
+});
 // Build a dated, country-grouped Markdown brief from the current (filtered) news.
 function buildBrief(){
   const matched=news.filter(newsMatches);
@@ -944,6 +991,7 @@ byId('countryFilter').addEventListener('change',()=>{updateHash();renderAll();})
 let searchDebounce=null;
 byId('search').addEventListener('input',()=>{ clearTimeout(searchDebounce); searchDebounce=setTimeout(()=>{updateHash();renderAll();},150); });
 byId('newsSource').addEventListener('change',refreshNews);
+byId('newsSort').addEventListener('change',renderNews);
 renderAll();
 // Load canonical feeds/country config from data/sources.json, then populate.
 loadSources().then(()=>{
@@ -965,10 +1013,22 @@ loadArchive();
 byId('watchAdd').addEventListener('click',()=>{ const v=byId('watchInput').value.trim(); if(v&&!watchTerms.includes(v)){ watchTerms.push(v); lsSet('watch',watchTerms); byId('watchInput').value=''; renderWorkbench(); renderNews(); } });
 byId('watchInput').addEventListener('keydown',e=>{ if(e.key==='Enter') byId('watchAdd').click(); });
 byId('stixExport').addEventListener('click',exportStix);
+byId('workbenchExport').addEventListener('click',exportWorkbench);
+byId('workbenchImport').addEventListener('click',()=>byId('workbenchFile').click());
+byId('workbenchFile').addEventListener('change',e=>{ const file=e.target.files?.[0]; if(file) importWorkbenchFile(file); e.target.value=''; });
 renderWorkbench();
 // Apply any shared deep link (#tab=…&q=…&c=…) once the static UI exists.
 applyHash();
 // Crosswalk modal close: button, backdrop click, Escape.
 byId('cwClose').addEventListener('click',closeCrosswalk);
 byId('crosswalkModal').addEventListener('click',e=>{ if(e.target===byId('crosswalkModal')) closeCrosswalk(); });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeCrosswalk(); });
+document.addEventListener('keydown',e=>{
+  const modal=byId('crosswalkModal'); if(modal.classList.contains('hidden')) return;
+  if(e.key==='Escape'){ closeCrosswalk(); return; }
+  if(e.key==='Tab'){
+    const focusable=[...modal.querySelectorAll('button,a[href],[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled);
+    if(!focusable.length) return; const first=focusable[0],last=focusable[focusable.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+  }
+});
