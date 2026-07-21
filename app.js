@@ -258,8 +258,8 @@ async function refreshNewsGdelt(){
   setStatus('Loading live news…');
   const days=byId('timespan').value; const all=[];
   for(const code of Object.keys(COUNTRIES)){
-    const q=queryFor(code);
-    const url=`https://api.gdeltproject.org/api/v2/doc/doc?query=${encodeURIComponent(q)}&mode=ArtList&format=json&maxrecords=25&sort=HybridRel&timespan=${days}d`;
+    const q=queryFor(code); const userQ=byId('search').value.trim(); const fullQ=userQ?q+' '+userQ:q;
+    const url=`https://api.gdeltproject.org/api/v2/doc/doc?query=${encodeURIComponent(fullQ)}&mode=ArtList&format=json&maxrecords=25&sort=HybridRel&timespan=${days}d`;
     try{
       const r=await fetchT(url); if(!r.ok) throw new Error(r.status+' '+r.statusText); const j=await r.json();
       for(const x of (j.articles||[])) all.push(...classifiedCopies({...x,sourceCountry:x.sourcecountry||x.domain||'GDELT'},x.title||'',x.summary||''));
@@ -377,7 +377,7 @@ async function fetchGoogleNews(){
   const days=parseInt(byId('timespan').value,10)||14;
   const collected=[]; let okQ=0;
   await Promise.all(Object.keys(COUNTRIES).map(async code=>{
-    const q=`${queryFor(code)} when:${days}d`;
+    const userQ=byId('search').value.trim(); const q=`${queryFor(code)}${userQ?' '+userQ:''} when:${days}d`;
     const url=`https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=en-US&gl=US&ceid=US:en`;
     try{
       const items=parseFeed(await fetchViaProxy(url)); okQ++;
@@ -989,7 +989,7 @@ byId('themeToggle').addEventListener('click',()=>{
 });
 byId('countryFilter').addEventListener('change',()=>{updateHash();renderAll();}); byId('timespan').addEventListener('change',refreshNews);
 let searchDebounce=null;
-byId('search').addEventListener('input',()=>{ clearTimeout(searchDebounce); searchDebounce=setTimeout(()=>{updateHash();renderAll();},150); });
+byId('search').addEventListener('input',()=>{ clearTimeout(searchDebounce); const src=byId('newsSource').value; const isLive=src==='gdelt'||src==='gnews'; searchDebounce=setTimeout(()=>{updateHash();isLive?refreshNews():renderAll();},isLive?1000:150); });
 byId('newsSource').addEventListener('change',refreshNews);
 byId('newsSort').addEventListener('change',renderNews);
 renderAll();
@@ -1000,6 +1000,9 @@ loadSources().then(()=>{
   refreshActors();
   // Auto-load the prebuilt hourly feed (default source) so the dashboard is populated on open.
   refreshNews();
+  // Periodically re-fetch the prebuilt feed so updates from the hourly workflow appear
+  // without requiring a manual refresh.  Only re-fetches when the tab is visible.
+  setInterval(()=>{ if(byId('newsSource').value==='prebuilt'&&document.visibilityState==='visible') fetchPrebuilt(); },30*60*1000);
 });
 // Load the CISA KEV catalog (independent of country config).
 loadKev();
